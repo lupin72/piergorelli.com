@@ -31,4 +31,3 @@ add_action( 'wp_head', 'load_google_fonts' , 1);
 if ( function_exists( 'add_image_size' ) ) { 
 	add_image_size( 'home-work', 360, 150, true); 	// work background in home
 }
-

@@ -16,14 +16,12 @@
 
 (function($) {
 
+
 // Use this variable to set up the common and page specific functions. If you 
 // rename this variable, you will also need to rename the namespace below.
-<<<<<<< HEAD
 	var init_ie_home = false;
 	var immersive = false;
 	var ie;
-=======
->>>>>>> 8415e162375a9419f3da3e0e9036f9fbf9a18b5f
 var Roots = {
   // All pages
   common: {
@@ -33,7 +31,6 @@ var Roots = {
   },
   // Home page
   home: {
-<<<<<<< HEAD
 	  isIe: function() {
 	        var e, t = -1;
 	        var n = window.navigator.userAgent;
@@ -328,11 +325,6 @@ var Roots = {
 	        }
 	    });
 	}
-=======
-    init: function() {
-      // JavaScript to be fired on the home page
-    }
->>>>>>> 8415e162375a9419f3da3e0e9036f9fbf9a18b5f
   },
   // About us page, note the change from about-us to about_us.
   about_us: {
