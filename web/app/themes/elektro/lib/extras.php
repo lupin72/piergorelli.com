@@ -20,6 +20,7 @@ function roots_wp_title($title) {
   return $title;
 }
 add_filter('wp_title', 'roots_wp_title', 10);
+<<<<<<< HEAD
 
 function load_google_fonts() {
 	if( ! defined( 'GOOGLE_FONTS' ) ) return;
@@ -31,3 +32,5 @@ add_action( 'wp_head', 'load_google_fonts' , 1);
 if ( function_exists( 'add_image_size' ) ) { 
 	add_image_size( 'home-work', 360, 150, true); 	// work background in home
 }
+=======
+>>>>>>> 8415e162375a9419f3da3e0e9036f9fbf9a18b5f
