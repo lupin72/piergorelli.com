@@ -38,13 +38,18 @@
 	<a class="trigger" href="/our-work/skydive-jurien-bay/">
 		<div class="feature one">
 			<div class="face cover">
+				<figure class="effect-ming">
 				<?php
 				if(has_post_thumbnail()):
 					the_post_thumbnail('home-work');
 				endif;	
 				?>
+				<figcaption>
+					<h2><?php the_title();?></h2>
+					<p>this is a <strong>test</strong></p>
+				</figcaption>	
+			</figure>
 			</div>
-			<div class="face hover"><p class="info">Get the rush with the all new responsive website for <strong>Skydive Jurien Bay</strong>.</p></div>
 		</div>
 	</a>
 	<?php
