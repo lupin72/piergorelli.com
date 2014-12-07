@@ -35,10 +35,10 @@
 		$works->the_post();
 		//print_r($post);
 	?>  
-	<a class="trigger" href="/our-work/skydive-jurien-bay/">
+	<a class="trigger" href="<?php the_permalink()?>">
 		<div class="feature one">
 			<div class="face cover">
-				<figure class="effect-ming">
+				<figure class="effect">
 				<?php
 				if(has_post_thumbnail()):
 					the_post_thumbnail('home-work');

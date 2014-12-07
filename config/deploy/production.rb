@@ -8,7 +8,8 @@ set :stage, :production
 
 # Extended Server Syntax
 # ======================
-server 'example.com', user: 'deploy', roles: %w{web app db}
+server 'piergorelli.com', user: 'root', roles: %w{web app db}
+set :deploy_to, -> { "/var/www/#{fetch(:application)}/public_html" }
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
