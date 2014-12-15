@@ -54,9 +54,10 @@ var Roots = {
 	    }
 		var e = 0;
         if ($(window).width() > 767 && $(window).height() > 600) {
-            e = $(window).height() / 2 - 235;
+            e = $(window).height() / 2 - 325;
         } else {
-            e = 135;
+            e = 55;
+			
         }
 		
         $(".claim").css({
@@ -84,16 +85,16 @@ var Roots = {
 	            width: $(window).width()
 	        });
 	        $(".claim").css({
-	            "padding-top": wHalfHeight-235
+	            "padding-top": wHalfHeight-325
 	        });
-			console.log(wHalfHeight-235);
+			console.log(wHalfHeight-325);
 	    } else {
 	        $("#cube").css({
 	            height: "auto",
 	            width: "auto"
 	        });
 	        $(".claim").css({
-	            "padding-top": 135
+	            "padding-top": 55
 	        });
 	    }
 	    if (ie !== undefined) {

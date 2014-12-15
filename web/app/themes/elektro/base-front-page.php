@@ -24,7 +24,7 @@
   <?php
   $args = array(
 	  'cat'				=> 3,
-	  'posts_per_page'	=> 4
+	  'posts_per_page'	=> 5
   );
   $works = new WP_Query($args);
   if($works->have_posts()):
@@ -35,7 +35,28 @@
 		$works->the_post();
 		//print_r($post);
 	?>  
-	<a class="trigger" href="<?php the_permalink()?>">
+	<div class="small-grid-item item">
+		<div class="item-classification">
+		</div>
+		<div class="item-title">
+			<a href="<?php the_permalink()?>"><?php the_title();?></a>	
+			<span class="item-title-mask">
+				<span class="item-title-mask-text"><?php the_title();?></span>
+			</span>
+		</div>
+		<?php
+		if(has_post_thumbnail()):
+		?>
+		<div class="item-thumbnail">
+			<a href="<?php the_permalink()?>">
+				<?php the_post_thumbnail('thumb-home');?>
+			</a>
+		</div>
+		<?php
+		endif;
+		?>
+	</div>	
+	<!--a class="trigger" href="<?php the_permalink()?>">
 		<div class="feature one">
 			<div class="face cover">
 				<figure class="effect">
@@ -51,7 +72,7 @@
 			</figure>
 			</div>
 		</div>
-	</a>
+	</a-->
 	<?php
 	endwhile;	
 	wp_reset_query();
