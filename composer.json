@@ -44,7 +44,8 @@
     "johnpbloch/wordpress": "4.0.1",
     "composer/installers": "v1.0.12",
     "vlucas/phpdotenv": "1.0.9",
-	"wpackagist-plugin/regenerate-thumbnails":"2.2.4"
+	"wpackagist-plugin/regenerate-thumbnails":"2.2.4",
+	"roots/soil": "3.0.0"
   },
   "extra": {
     "installer-paths": {
