@@ -2,7 +2,7 @@
   <div class="container">
     <?php dynamic_sidebar('sidebar-footer'); ?>
 	<div class="love">
-		<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+		<span class="glyphicon glyphicon-heart faa-pulse animated" aria-hidden="true"></span>
 		<p>Made with love in Valencia</p>
 	</div>
 	<p>
