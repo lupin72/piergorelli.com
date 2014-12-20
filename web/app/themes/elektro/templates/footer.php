@@ -11,7 +11,7 @@
 	</p>
 	<p class="social">
 		<a href="" class="twitter">Twitter</a>
-		<a href="" class="linkedin">Linkedin +</a>
+		<a href="" class="linkedin">Linkedin</a>
 	</p>
   </div>
 </footer>
