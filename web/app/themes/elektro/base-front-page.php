@@ -23,7 +23,7 @@
   </div><!-- /.wrap -->
   <?php
   $args = array(
-	  'cat'				=> 333,
+	  'cat'				=> 3,
 	  'posts_per_page'	=> 5
   );
   $works = new WP_Query($args);
