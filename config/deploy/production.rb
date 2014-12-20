@@ -23,3 +23,10 @@ set :deploy_to, -> { "/var/www/#{fetch(:application)}/public_html" }
 
 fetch(:default_env).merge!(wp_env: :production)
 
+set :npm_target_path, -> { release_path.join('web/app/themes/elektro') }
+set :npm_flags, '--silent'
+
+set :grunt_file, -> { release_path.join('web/app/themes/elektro/Gruntfile.js') }
+set :grunt_tasks, 'build'
+before 'deploy:updated', 'grunt'
+
