@@ -6,12 +6,12 @@
 		<p>Made with love in Valencia</p>
 	</div>
 	<p>
-		&copy;2014&nbsp;<a href="">Pier Gorelli</a>
+		&copy;2014&nbsp;<a href="/">Pier Gorelli</a>
 		<a href="/contact" class="contact">Contact</a>
 	</p>
 	<p class="social">
-		<a href="" class="twitter">Twitter</a>
-		<a href="" class="linkedin">Linkedin</a>
+		<a href="https://twitter.com/elektropier" target="_blank" class="twitter">Twitter</a>
+		<a href="http://it.linkedin.com/piergorelli" target="_blank" class="linkedin">Linkedin</a>
 	</p>
   </div>
 </footer>
