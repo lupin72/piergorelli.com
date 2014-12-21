@@ -11,7 +11,7 @@
 	</p>
 	<p class="social">
 		<a href="https://twitter.com/elektropier" target="_blank" class="twitter">Twitter</a>
-		<a href="http://it.linkedin.com/piergorelli" target="_blank" class="linkedin">Linkedin</a>
+		<a href="http://it.linkedin.com/in/piergorelli" target="_blank" class="linkedin">Linkedin</a>
 	</p>
   </div>
 </footer>
