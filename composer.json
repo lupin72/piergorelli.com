@@ -37,7 +37,11 @@
     {
       "type": "composer",
       "url": "http://wpackagist.org"
-    }
+    },
+	{
+	  "type": "git",
+	   "url": "https://github.com/UsabilityDynamics/wp-gravityforms"
+	}
   ],
   "require": {
     "php": ">=5.4",
@@ -46,7 +50,8 @@
     "vlucas/phpdotenv": "1.0.9",
 	"wpackagist-plugin/regenerate-thumbnails":"2.2.4",
 	"wpackagist-plugin/wordpress-seo":"1.7.1",
-	"roots/soil": "3.0.0"
+	"roots/soil": "3.0.0",
+	"usabilitydynamics/wp-gravityforms": ">1.8"
   },
   "extra": {
     "installer-paths": {

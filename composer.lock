@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ee16a584db9368bfa30d5228efddc566",
+    "hash": "6d745691a821439cee0fd5f7df087b79",
     "packages": [
         {
             "name": "composer/installers",
@@ -215,6 +215,28 @@
                 "wordpress"
             ],
             "time": "2014-04-01 01:30:23"
+        },
+        {
+            "name": "usabilitydynamics/wp-gravityforms",
+            "version": "1.8.19.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/UsabilityDynamics/wp-gravityforms",
+                "reference": "208464e4a2052a89256f6565762127e9d2d50207"
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3"
+            },
+            "type": "wordpress-plugin",
+            "extra": {
+                "installer-name": "gravityforms"
+            },
+            "license": [
+                "GPL-3.0"
+            ],
+            "description": "Fork of GravityForms repo so we can use it in our composer architecture.",
+            "time": "2014-11-23 18:09:02"
         },
         {
             "name": "vlucas/phpdotenv",
