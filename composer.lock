@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6d745691a821439cee0fd5f7df087b79",
+    "hash": "70fd4446db04df29467257ec42e8e2cc",
     "packages": [
         {
             "name": "composer/installers",
@@ -288,6 +288,26 @@
                 "environment"
             ],
             "time": "2014-10-16 14:50:21"
+        },
+        {
+            "name": "wpackagist-plugin/gravityforms-html5-placeholders",
+            "version": "2.7.3",
+            "source": {
+                "type": "svn",
+                "url": "http://plugins.svn.wordpress.org/gravityforms-html5-placeholders/",
+                "reference": "trunk"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://downloads.wordpress.org/plugin/gravityforms-html5-placeholders.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/gravityforms-html5-placeholders/"
         },
         {
             "name": "wpackagist-plugin/regenerate-thumbnails",
