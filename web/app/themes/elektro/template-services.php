@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Template Services
+Template Name: Template Servicess
 */
 ?>
 test
