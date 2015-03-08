@@ -6,6 +6,19 @@ module.exports = function(grunt) {
   require('time-grunt')(grunt);
 
   var jsFileList = [
+	'assets/vendor/gsap/src/minified/TweenMax.min.js',
+	'assets/vendor/sizzle/dist/sizzle.js',
+	'assets/vendor/jquery-mousewheel/jquery.mousewheel.min.js',
+	'assets/vendor/jquery.event.swipe/js/jquery.event.swipe.js', 
+	'assets/vendor/jquery.event.move/js/jquery.event.move.js',
+	'assets/vendor/jquery-snappish/jquery.snappish.js',
+	'assets/vendor/gsap/src/minified/TimelineLite.min.js',
+	'assets/vendor/gsap/src/minified/plugins/CSSPlugin.min.js',
+	'assets/vendor/gsap/src/minified/plugins/BezierPlugin.min.js',
+	'assets/vendor/gsap/src/minified/plugins/Translation.min.js',
+	'assets/vendor/gsap/src/minified/easing/EasePack.min.js',
+	'assets/vendor/letteringjs/jquery.lettering.js',
+	'assets/vendor/PhysicsJS/dist/physicsjs.js',
     'assets/vendor/bootstrap/js/transition.js',
     'assets/vendor/bootstrap/js/alert.js',
     'assets/vendor/bootstrap/js/button.js',
@@ -20,7 +33,7 @@ module.exports = function(grunt) {
     'assets/vendor/bootstrap/js/affix.js',
     'assets/js/plugins/*.js',
     'assets/js/_*.js',
-	'assets/vendor/formplate/js/formplate.js'
+	'assets/vendor/underscore/underscore-min.js'
   ];
 
   grunt.initConfig({

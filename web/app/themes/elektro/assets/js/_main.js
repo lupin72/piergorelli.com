@@ -337,6 +337,12 @@ var Roots = {
 	  init: function() {
 	  		$('body').formplate();
 	  }
+  },
+  services: {
+  	  init: function() {
+		  console.log("services");
+		Animation.init();
+  	  }
   }
 };
 

@@ -32,3 +32,9 @@ if ( function_exists( 'add_image_size' ) ) {
 	add_image_size( 'home-work', 360, 150, true);
 	add_image_size( 'thumb-home', 180, 180, false); 	// work background in home
 }
+
+add_filter("gform_init_scripts_footer", "init_scripts");
+
+function init_scripts() {
+	return true;
+}
