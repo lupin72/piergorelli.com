@@ -1,4 +1,4 @@
-set :application, 'piergorelli.com'
+set :application, 'piergorelli'
 set :repo_url, 'https://github.com/lupin72/piergorelli.com.git'
 
 # Branch options

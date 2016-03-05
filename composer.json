@@ -51,6 +51,7 @@
 	"wpackagist-plugin/regenerate-thumbnails":"2.2.4",
 	"wpackagist-plugin/wordpress-seo":"1.7.1",
 	"wpackagist-plugin/gravityforms-html5-placeholders":"2.7.3",
+	"wpackagist-plugin/wordpress-importer":"*",
 	"roots/soil": "3.0.0",
 	"usabilitydynamics/wp-gravityforms": ">1.8"
   },
