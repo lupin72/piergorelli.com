@@ -45,14 +45,14 @@
   ],
   "require": {
     "php": ">=5.4",
-    "johnpbloch/wordpress": "4.1",
+    "johnpbloch/wordpress": "*",
     "composer/installers": "v1.0.12",
     "vlucas/phpdotenv": "1.0.9",
-	"wpackagist-plugin/regenerate-thumbnails":"2.2.4",
-	"wpackagist-plugin/wordpress-seo":"1.7.1",
-	"wpackagist-plugin/gravityforms-html5-placeholders":"2.7.3",
+	"wpackagist-plugin/regenerate-thumbnails":"*",
+	"wpackagist-plugin/wordpress-seo":"*",
+	"wpackagist-plugin/gravityforms-html5-placeholders":"*",
 	"wpackagist-plugin/wordpress-importer":"*",
-	"roots/soil": "3.0.0",
+	"roots/soil": "*",
 	"usabilitydynamics/wp-gravityforms": ">1.8"
   },
   "extra": {

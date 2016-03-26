@@ -1,1 +1,18 @@
+.linee {
+	width:100vw;
+	position: fixed;
+	z-index: 10;
+	overflow:hidden;
+	.col-lg-1,.col-lg-2 {
+ 	   border-right: 1px solid rgba(0,0,0,.08);
+	   height:100vh;
+	}
+}
 
+.page-header {
+	border-bottom:none;
+	h1 {
+		text-transform:uppercase;
+		font-weight:900;
+	}
+}

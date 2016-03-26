@@ -1,5 +1,4 @@
 <footer class="content-info">
-  <div class="container">
     <?php dynamic_sidebar('sidebar-footer'); ?>
-  </div>
+	Made with <span class="glyphicon glyphicon-heart faa-pulse animated" aria-hidden="true"></span>  in Valencia
 </footer>

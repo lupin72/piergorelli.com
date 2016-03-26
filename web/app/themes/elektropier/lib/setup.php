@@ -83,8 +83,8 @@ function display_sidebar() {
   isset($display) || $display = !in_array(true, [
     // The sidebar will NOT be displayed if ANY of the following return true.
     // @link https://codex.wordpress.org/Conditional_Tags
+	// is_front_page(),
     is_404(),
-    is_front_page(),
     is_page_template('template-custom.php'),
   ]);
 
@@ -95,6 +95,7 @@ function display_sidebar() {
  * Theme assets
  */
 function assets() {
+  wp_enqueue_style('animate', get_template_directory_uri() . '/assets/styles/vendors/animate.css', false, null);
   wp_enqueue_style('sage/css', Assets\asset_path('styles/main.css'), false, null);
 
   if (is_single() && comments_open() && get_option('thread_comments')) {

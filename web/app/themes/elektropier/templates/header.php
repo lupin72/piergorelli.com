@@ -1,4 +1,4 @@
-<header class="banner">
+<header class="banner hidden-lg hidden-md hidden-sm">
   <div class="container">
     <a class="brand" href="<?= esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a>
     <nav class="nav-primary">
