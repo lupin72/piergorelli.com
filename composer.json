@@ -50,10 +50,7 @@
     "vlucas/phpdotenv": "1.0.9",
 	"wpackagist-plugin/regenerate-thumbnails":"*",
 	"wpackagist-plugin/wordpress-seo":"*",
-	"wpackagist-plugin/gravityforms-html5-placeholders":"*",
-	"wpackagist-plugin/wordpress-importer":"*",
-	"roots/soil": "*",
-	"usabilitydynamics/wp-gravityforms": ">1.8"
+	"roots/soil": "*"
   },
   "extra": {
     "installer-paths": {
