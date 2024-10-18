@@ -1,0 +1,39 @@
+---
+
+export interface ServiceItem {
+  title: string;
+  body: string;
+  icon: string;
+}
+
+const services: ServiceItem[] = [
+  { title: 'Web Development', body: 'I can help you build your next website or web application.', icon: ''},
+  { title: 'UI/UX Design', body: 'I can help you design a beautiful and user-friendly interface.', icon: ''},
+  { title: 'SEO Optimization', body: 'I can help you optimize your website for search engines.', icon: ''},
+];
+---
+<section class="w-full bg-white lg:pt-48">
+  <div class="container mx-auto">
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 border-t">
+        <div class="py-5 flex justify-between">
+          <span class="uppercase">(Services)</span>
+          <span class="">03</span>
+        </div>
+        <h2 class="text-5xl font-bold">Expertise</h2>
+        <div class="mt-16">
+        { services.map((item, index) => (
+          <div class="flex justify-between py-14 border-b first:border-t">
+            <div>{index + 1}</div>
+              <h3 class="text-3xl font-bold">{item.title}</h3>
+              <p class="text-lg">{
+                item.body
+              }</p>
+          
+          </div>
+        ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

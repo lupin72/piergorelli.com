@@ -1,0 +1,197 @@
+---
+import Claim from './Claim.astro'
+import { Image } from 'astro:assets';
+import arrowDownRightWhite from '../assets/images/arrow-down-right-white.svg';
+---
+
+<section class="flex flex-col justify-end main overflow-hidden bg-[#13151a]">
+  <div class="container mx-auto h-[70vh] lg:h-dvh flex flex-col justify-end relative border-white">
+    <div id="paddle-left" class="absolute left-0 top-0 w-2 bg-white opacity-0"></div>
+    <div id="paddle-right" class="absolute right-0 top-0 w-2 bg-white" ></div>
+    <div id="ball" class="absolute w-12 h-12 bg-white rounded-full top-0"></div>
+    <div class="flex w-full justify-end opacity-0" id="scroll-down"><span class="text-white text-base lg:text-2xl">Scroll down</span>
+      <Image src={arrowDownRightWhite} alt="Scroll down" />
+    </div>
+    <Claim/>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+
+
+  const getTextHeight = (text: string, font: string) => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    
+    if (!context) return { width: 0, height: 0, hangingBaseline: 0, originalWidth: 0, ascent: 0 };
+    context.font = font;
+    context.fontKerning = 'normal';
+    context.textRendering = 'geometricPrecision';
+    context.fillText(text, 0, 0);
+   
+    const metrics = context.measureText(text);
+    context.textRendering = 'geometricPrecision';
+    
+    return {
+      width: metrics.actualBoundingBoxLeft + metrics.actualBoundingBoxRight, // Larghezza effettiva del testo
+      height: metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent, // Altezza effettiva del testo
+      metrics: metrics
+    };
+  };
+
+  const getCharOffset = (container: HTMLElement, char: HTMLElement) => {
+    const containerRect = container.getBoundingClientRect();
+    const charRect = char.getBoundingClientRect();
+    console.log("CONTAINER RECT", containerRect.top);
+    console.log("CHAR RECT", charRect.top);
+    return charRect.top;
+  }
+
+  const header = document.querySelector('header');
+
+  const isSafari = () => {
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf('safari') != -1) {
+      if (ua.indexOf('chrome') > -1) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const animateGame = () => {
+    const tl = gsap.timeline();
+
+    const container = document.querySelector('.container') as HTMLElement;
+    const paddleLeft = document.getElementById('paddle-left') as HTMLElement;
+    const paddleRight = document.getElementById('paddle-right') as HTMLElement;
+    const ball = document.getElementById('ball') as HTMLElement;
+    const text = document.getElementById('text');
+    const char = document.getElementById('char') as HTMLElement;
+    const dot = document.getElementById('dot');
+
+    const paddleHeight = 137;
+    const fontStyle = window.getComputedStyle(char).font;
+    const charMetrics= getTextHeight('I', fontStyle);
+    const dotMetrics= getTextHeight('.', fontStyle);
+    
+    const coeffBall = 0.19;
+    const coeffChar = 0.30;
+
+    const containerWidth = container?.offsetWidth;
+    const containerHeight = container.offsetHeight;
+
+    const paddleWidth = isSafari() ? charMetrics.width - charMetrics.width *  coeffChar : charMetrics.width;
+    const ballWidth = isSafari() ? dotMetrics.width - dotMetrics.width *  coeffBall : dotMetrics.width;
+
+
+    paddleLeft.style.height = `${charMetrics.height}px`;
+    paddleLeft.style.width = `${paddleWidth}px`;
+
+    paddleRight.style.height = `${charMetrics.height}px`;
+    paddleRight.style.width = `${paddleWidth}px`;
+
+    ball.style.height = `${dotMetrics.height}px`;
+    ball.style.width = `${ballWidth}px`;
+
+    let dotX = 0;
+    let dotY = 0;
+    
+    if(dot && container) {
+      const containerRect = container.getBoundingClientRect();
+      const dotRect = dot.getBoundingClientRect();
+      dotX = Math.round(dotRect.left - containerRect.left + (dotRect.width - ballWidth) / 2);
+      dotY = dotRect.top + + dotMetrics.metrics.fontBoundingBoxAscent - dotMetrics.height + window.scrollY;
+    }
+
+    let paddleLeftY = 0;
+    let charOffsetY = 0;
+
+    if(paddleLeft && container && charMetrics !== undefined) {
+      const containerRect = container.getBoundingClientRect();
+      const charRect = char.getBoundingClientRect();
+      const paddleLeftRect = paddleLeft.getBoundingClientRect();
+      const xGap = isSafari() ? charMetrics.width - paddleWidth :
+        charMetrics?.metrics?.width - (charMetrics?.metrics?.actualBoundingBoxLeft + charMetrics?.metrics?.actualBoundingBoxRight);
+      const pLeft = xGap / 2;
+
+      paddleLeft.style.left = `${pLeft}px`;
+
+      charOffsetY = charRect.top - containerRect.top; 
+      paddleLeftY = charOffsetY + ((charRect.height - paddleLeftRect.height) / 2) + 2;
+    }
+   
+    const ballOffsetWidth = ball.offsetWidth;
+    const ballOffsetHeight = ball.offsetHeight;
+
+    const centerX = (containerWidth / 2) - (ballOffsetWidth / 2);
+    const centerY = (containerHeight / 2) - (ballOffsetHeight / 2);
+
+
+    gsap.set(paddleLeft, { y: (window.innerHeight / 2) - paddleHeight / 2, opacity: 1 });
+    gsap.set(paddleRight, { y: (window.innerHeight / 2) - paddleHeight / 2 });
+    gsap.set(ball, { y: centerY, x: centerX });
+  
+    tl.to(paddleRight, {
+      duration: 0.8,
+      y: window.innerHeight / 2 - 50,
+      ease: 'power2.inOut',
+    });
+
+    tl.to(ball, {
+      duration: 1.2,
+      x: containerWidth - (paddleWidth*2),
+      y: window.innerHeight / 2 - 50,
+      ease: 'linear',
+    }, "-=1.2");
+
+    
+    tl.to(ball, {
+      duration: 1,
+      x: dotX,
+      y: dotY,
+      ease: 'linear',
+    }, 0.8);
+  
+    tl.to(paddleLeft, {
+      duration: 1,
+      y: paddleLeftY,
+      ease: 'power2.inOut',
+    }, 1);
+
+    tl.to(paddleRight, {
+      duration: 1,
+      y: -paddleHeight,  
+      ease: 'power2.inOut',
+    }, 0.6);
+
+    tl.to(ball, {
+      duration: 1,
+     opacity: 0,
+     ease: 'power2.inOut',
+    }, 2);
+    
+    tl.to(text, {
+      duration: 1,
+      opacity: 1,
+      ease: 'power2.inOut',
+    }, 2);
+
+    tl.to(paddleLeft, {
+     opacity: 0,
+     duration: 1,
+      ease: 'power2.inOut',
+    }, 2);
+    
+    tl.to(header, {
+      duration: 1, 
+      opacity: 1,
+      ease: 'power2.inOut',
+    }, 2);
+  };
+  document.addEventListener('DOMContentLoaded', animateGame);
+
+</script>

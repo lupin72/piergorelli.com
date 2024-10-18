@@ -1,0 +1,62 @@
+---
+//import '@fontsource-variable/work-sans';
+import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+const pages = [
+	{ title: 'Documentation', href: 'https://docs.astro.build/', body: 'Learn how Astro works and explore the official API docs.' },
+	{ title: 'Integrations', href: 'https://astro.build/integrations/', body: 'Supercharge your project with new frameworks and libraries.' },
+	{ title: 'Themes', href: 'https://astro.build/themes/', body: 'Explore a galaxy of community-built starter themes.' },
+	{ title: 'Community', href: 'https://astro.build/chat/', body: 'Come say hi to our amazing Discord community. ❤️' },
+];
+
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<GoogleFontsOptimizer url="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"></GoogleFontsOptimizer>
+		<title>{title}</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+<style is:global>
+	:root {
+		--accent: 136, 58, 234;
+		--accent-light: 224, 204, 250;
+		--accent-dark: 49, 10, 101;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+	}
+	html {
+		background: #13151a;
+		background: #ffffff;
+		background-size: 224px;
+	}
+	code {
+		font-family:
+			Menlo,
+			Monaco,
+			Lucida Console,
+			Liberation Mono,
+			DejaVu Sans Mono,
+			Bitstream Vera Sans Mono,
+			Courier New,
+			monospace;
+	}
+</style>

@@ -1,0 +1,33 @@
+---
+export interface MenuItem {
+  href: string;
+  title: string;
+  body: string;
+}
+
+const { textColor = 'black', headerClasses = '' } = Astro.props;
+
+
+const pages: MenuItem[] = [
+	{ title: 'About me', href: '/about', body: 'Learn how Astro works and explore the official API docs.' },
+	{ title: 'Services', href: '/services', body: 'Supercharge your project with new frameworks and libraries.' },
+	{ title: 'Blog', href: '/blog', body: 'Explore a galaxy of community-built starter themes.' },
+	{ title: 'Contact', href: '/contact', body: 'Come say hi to our amazing Discord community. ❤️' },
+];
+
+---
+
+<header class={`absolute z-10 w-full ${headerClasses}`}>
+  <div class="container mx-auto py-4">
+    <div class="flex justify-between">
+      <a href="/" class={`text-${textColor} text-xl font-bold`}>Pier Gorelli</a>
+        <nav class="flex justify-between">
+          <ul class="flex">
+              { pages.map((item) => (
+                <li class={`mr-4 text-${textColor}`}><a href={item.href} class="group overflow-hidden relative inline-block ml-[1vw]" title={item.body} style="height:max-content;"><span data-hover={item.title} class="relative inline-block transition duration-300 before:content-[attr(data-hover)] before:absolute before:top-[100%] group-hover:translate-y-[-100%] before:translate-3d-0">{item.title}</span></a></li>
+              ))}
+            </ul>
+        </nav>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,42 @@
+---
+
+---
+
+<h1 id="text" class="opacity-0 text-white font-display uppercase font-black text-left w-full leading-none relative block tracking-normal" style="font-size: 10.7vw;">
+  <span id="char">I</span> do <span id="word">dev<span id="dot">.</span></span>
+</h1>
+
+<script>
+  import { gsap } from 'gsap';
+  const words = ['dev<span id="dot">.</span>', 'design.', 'sites.', 'tech.', 'things.'];
+  const scrollDown = document.getElementById('scroll-down');
+  const change = () => {
+    const word = document.getElementById('word');
+    const dot = document.getElementById('dot');
+    if(!word) return;
+
+    let wordIndex = -1;
+
+    const tl = gsap.timeline({
+      repeat: words.length,
+      repeatDelay: 0.8,
+      onRepeat: () => {
+        wordIndex = (wordIndex + 1) % words.length;
+        word.innerHTML = words[wordIndex];
+      },
+      onComplete: () => {
+        gsap.to(scrollDown, {
+        duration: 1,
+        opacity: 1,
+        onStart: () => scrollDown?.classList.remove('hidden'),
+          ease: 'power2.inOut',
+        });
+      }
+    });
+
+    tl.from(word, {duration: 1, opacity:0, scale:0, ease:"power1.inOut"}, '-=0.3');
+  };
+
+  window.addEventListener("load", change);
+
+</script>
