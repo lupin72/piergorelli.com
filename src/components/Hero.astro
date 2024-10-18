@@ -17,14 +17,54 @@ import arrowDownRightWhite from '../assets/images/arrow-down-right-white.svg';
 </section>
 
 <script>
-  import { gsap } from 'gsap';
+import { gsap } from 'gsap';
+
+  export interface Metrics {
+    width: number;
+    height: number;
+    hangingBaseline: number;
+    originalWidth: number;
+    actualBoundingBoxAscent: number;
+    actualBoundingBoxDescent: number;
+    fontBoundingBoxAscent: number;
+    actualBoundingBoxRight: number;
+    actualBoundingBoxLeft: number;
+  }
 
 
-  const getTextHeight = (text: string, font: string) => {
+  const DOM = {
+    container: () => document.querySelector('.container'),
+    paddleLeft: () => document.getElementById('paddle-left'),
+    paddleRight: () => document.getElementById('paddle-right'),
+    ball: () => document.getElementById('ball'),
+    text: () => document.getElementById('text'),
+    char: () => document.getElementById('char'),
+    dot: () => document.getElementById('dot'),
+    header: () => document.querySelector('header')
+  };
+
+  const gameConfig = {
+    coeffBall: 0.19,
+    coeffChar: 0.30,
+  }
+
+  const getCharMetrics = (text: string, font: string): Metrics => {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
+
+    const fontMetrics:  Metrics = {
+      width: 0,
+      height: 0,
+      hangingBaseline: 0,
+      originalWidth: 0,
+      actualBoundingBoxAscent: 0,
+      actualBoundingBoxDescent: 0,
+      fontBoundingBoxAscent: 0,
+      actualBoundingBoxRight: 0,
+      actualBoundingBoxLeft: 0,
+    }
     
-    if (!context) return { width: 0, height: 0, hangingBaseline: 0, originalWidth: 0, ascent: 0 };
+    if (!context) return fontMetrics;
     context.font = font;
     context.fontKerning = 'normal';
     context.textRendering = 'geometricPrecision';
@@ -32,23 +72,24 @@ import arrowDownRightWhite from '../assets/images/arrow-down-right-white.svg';
    
     const metrics = context.measureText(text);
     context.textRendering = 'geometricPrecision';
+
+    fontMetrics.width = metrics.actualBoundingBoxRight + metrics.actualBoundingBoxLeft;
+    fontMetrics.height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+    fontMetrics.hangingBaseline = metrics.hangingBaseline || 0;
+    fontMetrics.actualBoundingBoxAscent = metrics.actualBoundingBoxAscent || 0;
+    fontMetrics.actualBoundingBoxDescent = metrics.actualBoundingBoxDescent || 0;
+    fontMetrics.actualBoundingBoxRight = metrics.actualBoundingBoxRight || 0;
+    fontMetrics.actualBoundingBoxLeft = metrics.actualBoundingBoxLeft || 0;
+    fontMetrics.originalWidth = metrics.width;
+    fontMetrics.fontBoundingBoxAscent = metrics.fontBoundingBoxAscent || 0;
+  
+
+    console.log(fontMetrics);
     
-    return {
-      width: metrics.actualBoundingBoxLeft + metrics.actualBoundingBoxRight, // Larghezza effettiva del testo
-      height: metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent, // Altezza effettiva del testo
-      metrics: metrics
-    };
+    return fontMetrics;
   };
 
-  const getCharOffset = (container: HTMLElement, char: HTMLElement) => {
-    const containerRect = container.getBoundingClientRect();
-    const charRect = char.getBoundingClientRect();
-    console.log("CONTAINER RECT", containerRect.top);
-    console.log("CHAR RECT", charRect.top);
-    return charRect.top;
-  }
-
-  const header = document.querySelector('header');
+  const header = DOM.header();
 
   const isSafari = () => {
     const ua = navigator.userAgent.toLowerCase();
@@ -71,12 +112,12 @@ import arrowDownRightWhite from '../assets/images/arrow-down-right-white.svg';
     const ball = document.getElementById('ball') as HTMLElement;
     const text = document.getElementById('text');
     const char = document.getElementById('char') as HTMLElement;
-    const dot = document.getElementById('dot');
+    const dot = DOM.dot();
 
     const paddleHeight = 137;
     const fontStyle = window.getComputedStyle(char).font;
-    const charMetrics= getTextHeight('I', fontStyle);
-    const dotMetrics= getTextHeight('.', fontStyle);
+    const charMetrics= getCharMetrics('I', fontStyle);
+    const dotMetrics= getCharMetrics('.', fontStyle);
     
     const coeffBall = 0.19;
     const coeffChar = 0.30;
@@ -104,7 +145,7 @@ import arrowDownRightWhite from '../assets/images/arrow-down-right-white.svg';
       const containerRect = container.getBoundingClientRect();
       const dotRect = dot.getBoundingClientRect();
       dotX = Math.round(dotRect.left - containerRect.left + (dotRect.width - ballWidth) / 2);
-      dotY = dotRect.top + + dotMetrics.metrics.fontBoundingBoxAscent - dotMetrics.height + window.scrollY;
+      dotY = dotRect.top + + dotMetrics.fontBoundingBoxAscent - dotMetrics.height + window.scrollY;
     }
 
     let paddleLeftY = 0;
@@ -115,7 +156,7 @@ import arrowDownRightWhite from '../assets/images/arrow-down-right-white.svg';
       const charRect = char.getBoundingClientRect();
       const paddleLeftRect = paddleLeft.getBoundingClientRect();
       const xGap = isSafari() ? charMetrics.width - paddleWidth :
-        charMetrics?.metrics?.width - (charMetrics?.metrics?.actualBoundingBoxLeft + charMetrics?.metrics?.actualBoundingBoxRight);
+        charMetrics?.originalWidth - (charMetrics?.actualBoundingBoxLeft + charMetrics.actualBoundingBoxRight);
       const pLeft = xGap / 2;
 
       paddleLeft.style.left = `${pLeft}px`;
