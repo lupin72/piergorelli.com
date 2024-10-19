@@ -103,6 +103,7 @@ import { gsap } from 'gsap';
 
 
   const setupElements = () => {
+    
     const char = DOM.char();
 
     const fontStyle = window.getComputedStyle(char).font;
@@ -189,7 +190,36 @@ import { gsap } from 'gsap';
       .to(paddleLeft, { opacity: 0, duration: 1, ease: 'power2.inOut' }, 2);
   };
 
-  document.addEventListener('DOMContentLoaded', animateGame);
+
+  const waitForFonts = (callback: () => void) => {
+    if ('fonts' in document) {
+      document.fonts.ready.then(() => {
+        callback();
+      });
+    } else {
+      const checkFontLoading = () => {
+        if (document.body.classList.contains('fonts-loaded')) {
+          callback();
+        } else {
+          setTimeout(checkFontLoading, 50);
+        }
+      };
+      checkFontLoading();
+    }
+  };
+
+  const initGame = () => {
+    waitForFonts(() => {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', animateGame);
+      } else {
+        animateGame();
+      }
+    });
+  };
+
+initGame();
+  //document.addEventListener('DOMContentLoaded', animateGame);
 
   //window.addEventListener('resize', animateGame);
 
