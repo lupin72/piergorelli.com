@@ -5,7 +5,7 @@ import arrowDownRightWhite from '../assets/images/arrow-down-right-white.svg';
 ---
 
 <section class="flex flex-col justify-end main overflow-hidden bg-[#13151a]">
-  <div class="container mx-auto h-[70vh] lg:h-dvh flex flex-col justify-end relative border-white">
+  <div class="container mx-auto h-[70vh] lg:h-dvh flex flex-col justify-end relative border-white pb-16">
     <div id="paddle-left" class="absolute left-0 top-0 w-2 bg-white opacity-0"></div>
     <div id="paddle-right" class="absolute right-0 top-0 w-2 bg-white" ></div>
     <div id="ball" class="absolute w-12 h-12 bg-white rounded-full top-0"></div>
@@ -31,14 +31,21 @@ import { gsap } from 'gsap';
     actualBoundingBoxLeft: number;
   }
 
+  export interface Position {
+    x: number;
+    y: number;
+    gap: number;
+  }
+
 
   const DOM = {
-    container: () => document.querySelector('.container'),
+    container: () => document.querySelector('.main'),
+    innerContainer: () => document.querySelector('.container'),
     paddleLeft: () => document.getElementById('paddle-left'),
     paddleRight: () => document.getElementById('paddle-right'),
     ball: () => document.getElementById('ball'),
     text: () => document.getElementById('text'),
-    char: () => document.getElementById('char'),
+    char: () => document.getElementById('char') as HTMLElement,
     dot: () => document.getElementById('dot'),
     header: () => document.querySelector('header')
   };
@@ -47,123 +54,118 @@ import { gsap } from 'gsap';
     coeffBall: 0.19,
     coeffChar: 0.30,
   }
+  const utils = {
+    getCharMetrics: (text: string, font: string): Metrics => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
 
-  const getCharMetrics = (text: string, font: string): Metrics => {
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
+      const fontMetrics:  Metrics = {
+        width: 0,
+        height: 0,
+        hangingBaseline: 0,
+        originalWidth: 0,
+        actualBoundingBoxAscent: 0,
+        actualBoundingBoxDescent: 0,
+        fontBoundingBoxAscent: 0,
+        actualBoundingBoxRight: 0,
+        actualBoundingBoxLeft: 0,
+      }
+      
+      if (!context) return fontMetrics;
+      context.font = font;
+      context.fontKerning = 'normal';
+      context.textRendering = 'geometricPrecision';
+      context.fillText(text, 0, 0);
+    
+      const metrics = context.measureText(text);
+      context.textRendering = 'geometricPrecision';
 
-    const fontMetrics:  Metrics = {
-      width: 0,
-      height: 0,
-      hangingBaseline: 0,
-      originalWidth: 0,
-      actualBoundingBoxAscent: 0,
-      actualBoundingBoxDescent: 0,
-      fontBoundingBoxAscent: 0,
-      actualBoundingBoxRight: 0,
-      actualBoundingBoxLeft: 0,
+      fontMetrics.width = metrics.actualBoundingBoxRight + metrics.actualBoundingBoxLeft;
+      fontMetrics.height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+      fontMetrics.hangingBaseline = metrics.hangingBaseline || 0;
+      fontMetrics.actualBoundingBoxAscent = metrics.actualBoundingBoxAscent || 0;
+      fontMetrics.actualBoundingBoxDescent = metrics.actualBoundingBoxDescent || 0;
+      fontMetrics.actualBoundingBoxRight = metrics.actualBoundingBoxRight || 0;
+      fontMetrics.actualBoundingBoxLeft = metrics.actualBoundingBoxLeft || 0;
+      fontMetrics.originalWidth = metrics.width;
+      fontMetrics.fontBoundingBoxAscent = metrics.fontBoundingBoxAscent || 0;
+      
+      return fontMetrics;
+    },
+
+    isSafari: () => {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1;
     }
-    
-    if (!context) return fontMetrics;
-    context.font = font;
-    context.fontKerning = 'normal';
-    context.textRendering = 'geometricPrecision';
-    context.fillText(text, 0, 0);
-   
-    const metrics = context.measureText(text);
-    context.textRendering = 'geometricPrecision';
-
-    fontMetrics.width = metrics.actualBoundingBoxRight + metrics.actualBoundingBoxLeft;
-    fontMetrics.height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
-    fontMetrics.hangingBaseline = metrics.hangingBaseline || 0;
-    fontMetrics.actualBoundingBoxAscent = metrics.actualBoundingBoxAscent || 0;
-    fontMetrics.actualBoundingBoxDescent = metrics.actualBoundingBoxDescent || 0;
-    fontMetrics.actualBoundingBoxRight = metrics.actualBoundingBoxRight || 0;
-    fontMetrics.actualBoundingBoxLeft = metrics.actualBoundingBoxLeft || 0;
-    fontMetrics.originalWidth = metrics.width;
-    fontMetrics.fontBoundingBoxAscent = metrics.fontBoundingBoxAscent || 0;
-  
-
-    console.log(fontMetrics);
-    
-    return fontMetrics;
-  };
+  }
 
   const header = DOM.header();
 
-  const isSafari = () => {
-    const ua = navigator.userAgent.toLowerCase();
-    if (ua.indexOf('safari') != -1) {
-      if (ua.indexOf('chrome') > -1) {
-        return false;
-      } else {
-        return true;
-      }
+
+  const setupElements = () => {
+    const char = DOM.char();
+
+    const fontStyle = window.getComputedStyle(char).font;
+
+    const charMetrics= utils.getCharMetrics('I', fontStyle);
+    const dotMetrics= utils.getCharMetrics('.', fontStyle);
+
+    const paddleWidth = utils.isSafari() ? charMetrics.width - charMetrics.width * gameConfig.coeffChar : charMetrics.width;
+    const ballWidth = utils.isSafari() ? dotMetrics.width - dotMetrics.width * gameConfig.coeffBall : dotMetrics.width;
+
+    const elements = {
+      paddleLeft: DOM.paddleLeft(), 
+      paddleRight: DOM.paddleRight(),
+      ball: DOM.ball(),
     }
-    return false;
+
+    Object.entries(elements).forEach(([key, element]) => {
+      if (element) {
+        element.style.height = `${key.includes('paddle') ? charMetrics.height : dotMetrics.height}px`;
+        element.style.width = `${key.includes('paddle') ? paddleWidth : ballWidth}px`;
+      }
+    });
+
+    return { charMetrics, dotMetrics, paddleWidth, ballWidth };
+  }
+
+  const calculateCharPosition = (char: HTMLElement, metrics: Metrics, container: HTMLElement, width: number ): Position => {
+    const containerRect = container.getBoundingClientRect();
+    const charRect = char.getBoundingClientRect();
+    const containerLeft = containerRect.left;
+
+    const charPosition = {
+      x: Math.round(charRect.left - containerLeft + (charRect.width - width) / 2),
+      y: charRect.top + metrics.fontBoundingBoxAscent - metrics.height + window.scrollY,
+      gap: utils.isSafari() ? metrics.width - width :
+            metrics?.originalWidth - (metrics?.actualBoundingBoxLeft + metrics.actualBoundingBoxRight),
+    }
+
+    return charPosition;
   }
 
   const animateGame = () => {
     const tl = gsap.timeline();
 
-    const container = document.querySelector('.container') as HTMLElement;
-    const paddleLeft = document.getElementById('paddle-left') as HTMLElement;
-    const paddleRight = document.getElementById('paddle-right') as HTMLElement;
-    const ball = document.getElementById('ball') as HTMLElement;
-    const text = document.getElementById('text');
-    const char = document.getElementById('char') as HTMLElement;
-    const dot = DOM.dot();
+    const main = DOM.container() as HTMLElement;
+    const container = DOM.innerContainer() as HTMLElement;
+    const paddleLeft = DOM.paddleLeft() as HTMLElement;
+    const paddleRight = DOM.paddleRight() as HTMLElement;
+    const ball = DOM.ball() as HTMLElement;
+    const text = DOM.text() as HTMLElement;
+    const char = DOM.char() as HTMLElement;
+    const dot = DOM.dot() as HTMLElement;
 
-    const paddleHeight = 137;
-    const fontStyle = window.getComputedStyle(char).font;
-    const charMetrics= getCharMetrics('I', fontStyle);
-    const dotMetrics= getCharMetrics('.', fontStyle);
-    
-    const coeffBall = 0.19;
-    const coeffChar = 0.30;
+    const { charMetrics, dotMetrics, paddleWidth, ballWidth } = setupElements();
 
     const containerWidth = container?.offsetWidth;
     const containerHeight = container.offsetHeight;
 
-    const paddleWidth = isSafari() ? charMetrics.width - charMetrics.width *  coeffChar : charMetrics.width;
-    const ballWidth = isSafari() ? dotMetrics.width - dotMetrics.width *  coeffBall : dotMetrics.width;
-
-
-    paddleLeft.style.height = `${charMetrics.height}px`;
-    paddleLeft.style.width = `${paddleWidth}px`;
-
-    paddleRight.style.height = `${charMetrics.height}px`;
-    paddleRight.style.width = `${paddleWidth}px`;
-
-    ball.style.height = `${dotMetrics.height}px`;
-    ball.style.width = `${ballWidth}px`;
-
-    let dotX = 0;
-    let dotY = 0;
+    let { x: dotX, y: dotY } = calculateCharPosition(dot, dotMetrics, container, ballWidth);
+    let { y: paddleLeftY, gap: paddleLeftGap } = calculateCharPosition(char, charMetrics, container, paddleWidth);
     
-    if(dot && container) {
-      const containerRect = container.getBoundingClientRect();
-      const dotRect = dot.getBoundingClientRect();
-      dotX = Math.round(dotRect.left - containerRect.left + (dotRect.width - ballWidth) / 2);
-      dotY = dotRect.top + + dotMetrics.fontBoundingBoxAscent - dotMetrics.height + window.scrollY;
-    }
 
-    let paddleLeftY = 0;
-    let charOffsetY = 0;
-
-    if(paddleLeft && container && charMetrics !== undefined) {
-      const containerRect = container.getBoundingClientRect();
-      const charRect = char.getBoundingClientRect();
-      const paddleLeftRect = paddleLeft.getBoundingClientRect();
-      const xGap = isSafari() ? charMetrics.width - paddleWidth :
-        charMetrics?.originalWidth - (charMetrics?.actualBoundingBoxLeft + charMetrics.actualBoundingBoxRight);
-      const pLeft = xGap / 2;
-
-      paddleLeft.style.left = `${pLeft}px`;
-
-      charOffsetY = charRect.top - containerRect.top; 
-      paddleLeftY = charOffsetY + ((charRect.height - paddleLeftRect.height) / 2) + 2;
-    }
+    paddleLeft.style.left = `${paddleLeftGap / 2}px`;
    
     const ballOffsetWidth = ball.offsetWidth;
     const ballOffsetHeight = ball.offsetHeight;
@@ -172,67 +174,23 @@ import { gsap } from 'gsap';
     const centerY = (containerHeight / 2) - (ballOffsetHeight / 2);
 
 
-    gsap.set(paddleLeft, { y: (window.innerHeight / 2) - paddleHeight / 2, opacity: 1 });
-    gsap.set(paddleRight, { y: (window.innerHeight / 2) - paddleHeight / 2 });
+    gsap.set(paddleLeft, { y: (main.offsetHeight / 2) - charMetrics.height / 2, opacity: 1 });
+    gsap.set(paddleRight, { y: (main.offsetHeight / 2) - charMetrics.height / 2, opacity: 1 });
     gsap.set(ball, { y: centerY, x: centerX });
-  
-    tl.to(paddleRight, {
-      duration: 0.8,
-      y: window.innerHeight / 2 - 50,
-      ease: 'power2.inOut',
-    });
 
-    tl.to(ball, {
-      duration: 1.2,
-      x: containerWidth - (paddleWidth*2),
-      y: window.innerHeight / 2 - 50,
-      ease: 'linear',
-    }, "-=1.2");
 
-    
-    tl.to(ball, {
-      duration: 1,
-      x: dotX,
-      y: dotY,
-      ease: 'linear',
-    }, 0.8);
-  
-    tl.to(paddleLeft, {
-      duration: 1,
-      y: paddleLeftY,
-      ease: 'power2.inOut',
-    }, 1);
-
-    tl.to(paddleRight, {
-      duration: 1,
-      y: -paddleHeight,  
-      ease: 'power2.inOut',
-    }, 0.6);
-
-    tl.to(ball, {
-      duration: 1,
-     opacity: 0,
-     ease: 'power2.inOut',
-    }, 2);
-    
-    tl.to(text, {
-      duration: 1,
-      opacity: 1,
-      ease: 'power2.inOut',
-    }, 2);
-
-    tl.to(paddleLeft, {
-     opacity: 0,
-     duration: 1,
-      ease: 'power2.inOut',
-    }, 2);
-    
-    tl.to(header, {
-      duration: 1, 
-      opacity: 1,
-      ease: 'power2.inOut',
-    }, 2);
+    tl.to(paddleRight, { duration: 0.8, y: window.innerHeight / 2 - 50, ease: 'power2.inOut' })
+      .to(ball, { duration: 1.2, x: containerWidth - (paddleWidth * 2), y: window.innerHeight / 2 - 50, ease: 'linear' }, "-=1.2")
+      .to(ball, { duration: 1, x: dotX, y: dotY, ease: 'linear' }, 0.8)
+      .to(paddleLeft, { duration: 1, y: paddleLeftY, ease: 'power2.inOut' }, 1)
+      .to(paddleRight, { duration: 1, y: -charMetrics.height, ease: 'power2.inOut' }, 0.6)
+      .to(ball, { duration: 1, opacity: 0, ease: 'power2.inOut' }, 2)
+      .to([text, header], { duration: 1, opacity: 1, ease: 'power2.inOut' }, 2)
+      .to(paddleLeft, { opacity: 0, duration: 1, ease: 'power2.inOut' }, 2);
   };
+
   document.addEventListener('DOMContentLoaded', animateGame);
+
+  //window.addEventListener('resize', animateGame);
 
 </script>
