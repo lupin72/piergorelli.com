@@ -130,13 +130,13 @@ import { gsap } from 'gsap';
     return { charMetrics, dotMetrics, paddleWidth, ballWidth };
   }
 
-  const calculateCharPosition = (char: HTMLElement, metrics: Metrics, container: HTMLElement, width: number ): Position => {
+  const calculateCharPosition = (char: HTMLElement, metrics: Metrics, container: HTMLElement, width: number, padding: number = 0): Position => {
     const containerRect = container.getBoundingClientRect();
     const charRect = char.getBoundingClientRect();
     const containerLeft = containerRect.left;
 
     const charPosition = {
-      x: Math.round(charRect.left - containerLeft + (charRect.width - width) / 2),
+      x: Math.round(charRect.left - containerLeft + (charRect.width - width) / 2) - padding,
       y: charRect.top + metrics.fontBoundingBoxAscent - metrics.height + window.scrollY,
       gap: utils.isSafari() ? metrics.width - width :
             metrics?.originalWidth - (metrics?.actualBoundingBoxLeft + metrics.actualBoundingBoxRight),
@@ -162,11 +162,15 @@ import { gsap } from 'gsap';
     const containerWidth = container?.offsetWidth;
     const containerHeight = container.offsetHeight;
 
-    let { x: dotX, y: dotY } = calculateCharPosition(dot, dotMetrics, container, ballWidth);
-    let { y: paddleLeftY, gap: paddleLeftGap } = calculateCharPosition(char, charMetrics, container, paddleWidth);
+    const containerStyles = window.getComputedStyle(container);
+    const containerPaddingLeft = parseFloat(containerStyles.paddingLeft) || 0;
     
 
-    paddleLeft.style.left = `${paddleLeftGap / 2}px`;
+    let { x: dotX, y: dotY } = calculateCharPosition(dot, dotMetrics, container, ballWidth, containerPaddingLeft);
+    let { y: paddleLeftY, gap: paddleLeftGap } = calculateCharPosition(char, charMetrics, container, paddleWidth, containerPaddingLeft);
+    
+
+    paddleLeft.style.left = `${paddleLeftGap / 2 + containerPaddingLeft}px`;
    
     const ballOffsetWidth = ball.offsetWidth;
     const ballOffsetHeight = ball.offsetHeight;
@@ -181,7 +185,7 @@ import { gsap } from 'gsap';
 
 
     tl.to(paddleRight, { duration: 0.8, y: window.innerHeight / 2 - 50, ease: 'power2.inOut' })
-      .to(ball, { duration: 1.2, x: containerWidth - (paddleWidth * 2), y: window.innerHeight / 2 - 50, ease: 'linear' }, "-=1.2")
+      .to(ball, { duration: 1.2, x: containerWidth - (paddleWidth * 2) - containerPaddingLeft, y: window.innerHeight / 2 - 50, ease: 'linear' }, "-=1.2")
       .to(ball, { duration: 1, x: dotX, y: dotY, ease: 'linear' }, 0.8)
       .to(paddleLeft, { duration: 1, y: paddleLeftY, ease: 'power2.inOut' }, 1)
       .to(paddleRight, { duration: 1, y: -charMetrics.height, ease: 'power2.inOut' }, 0.6)

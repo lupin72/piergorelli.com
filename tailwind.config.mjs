@@ -6,6 +6,11 @@ export default {
 			sans: ['"Inter variable"', 'sans-serif'],
 			display: ['"Work Sans"', 'sans-serif'],
 		},
+		container: {
+			padding: {
+				DEFAULT: '1.25rem',
+			}
+		},
 		extend: {},
 	},
 	plugins: [
