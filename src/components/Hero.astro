@@ -37,7 +37,6 @@ import { gsap } from 'gsap';
     gap: number;
   }
 
-
   const DOM = {
     container: () => document.querySelector('.main'),
     innerContainer: () => document.querySelector('.container'),
@@ -54,6 +53,7 @@ import { gsap } from 'gsap';
     coeffBall: 0.19,
     coeffChar: 0.30,
   }
+
   const utils = {
     getCharMetrics: (text: string, font: string): Metrics => {
       const canvas = document.createElement('canvas');
@@ -101,11 +101,10 @@ import { gsap } from 'gsap';
 
   const header = DOM.header();
 
-
   const setupElements = () => {
     
     const char = DOM.char();
-
+    
     const fontStyle = window.getComputedStyle(char).font;
 
     const charMetrics= utils.getCharMetrics('I', fontStyle);
