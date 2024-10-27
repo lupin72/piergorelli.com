@@ -27,7 +27,7 @@ const pages: MenuItem[] = [
               <li class={`flex mr-4 text-${textColor}`}><a href={item.href} class="group overflow-hidden relative inline-block ml-[1vw]" title={item.body} style="height:max-content;"><span data-hover={item.title} class="relative inline-block transition duration-300 before:content-[attr(data-hover)] before:absolute before:top-[100%] group-hover:translate-y-[-100%] before:translate-3d-0">{item.title}</span></a></li>
             ))}
         </ul>
-        <button type="button" class="relative sm:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
+        <!--button type="button" class="relative sm:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
           <span class="absolute -inset-0.5"></span>
           <span class="sr-only">Open main menu</span>
           <svg class="block h-6 w-6 open-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
@@ -36,6 +36,12 @@ const pages: MenuItem[] = [
           <svg class="hidden h-6 w-6 close-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
           </svg>
+        </button-->
+        <button type="button" class="hamburger relative sm:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white w-8 h-8" aria-controls="mobile-menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
       </nav>
     </div>
@@ -49,7 +55,41 @@ const pages: MenuItem[] = [
   </div>
   
 </header>
+<style>
+.hamburger {
+  width: 2rem;
+  height: 18px;
+  transform: rotate(0deg);
+  transition: .5s ease-in-out;
+  cursor: pointer;
+  padding: relative;
+}
 
+.hamburger span {
+  display: block;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: white;
+  border-radius: 1.5px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: .25s ease-in-out;
+}
+
+.hamburger span:nth-child(1) {
+  top: 0;
+}
+
+.hamburger span:nth-child(2), .hamburger span:nth-child(3) {
+  top: 8px;
+}
+
+.hamburger span:nth-child(4) {
+  top: 16px;
+}
+</style>
 <script>
   const mobileMenu = document.getElementById('mobile-menu');
   const button = document.querySelector('button[aria-controls="mobile-menu"]');
@@ -62,18 +102,15 @@ const pages: MenuItem[] = [
       const expanded = button.getAttribute('aria-expanded') === 'true' || false;
       button.setAttribute('aria-expanded', String(!expanded));
       if (expanded) {
-        // Chiusura del menu (nascondere con animazione)
         mobileMenu.classList.add('-translate-y-full');
        
       } else {
-        // Apertura del menu (mostrare con animazione)
         mobileMenu.classList.remove('hidden');
         setTimeout(() => {
           mobileMenu.classList.remove('-translate-y-full');
-        }, 10); // Piccolo ritardo per avviare l'animazione
+        }, 10);
       }
 
-      //mobileMenu.classList.toggle('hidden');
       if(openIcon && closeIcon) {
         openIcon.classList.toggle('hidden');
         closeIcon.classList.toggle('hidden');

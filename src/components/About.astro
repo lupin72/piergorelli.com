@@ -5,12 +5,21 @@ import thinkBig from '../assets/images/think-big-scaled.jpg';
 <section class="w-full bg-white pt-28 lg:pt-48">
   <div class="container mx-auto">
     <div class="grid grid-cols-12 gap-4">
-      <div class="col-span-12 lg:col-span-7 border-t">
+      <div class="col-span-12 lg:col-span-7 border-t flex flex-col">
         <div class="py-5 flex justify-between">
           <span class="">(WHO)</span>
           <span class="">01</span>
         </div>
-        <h2 class="text-5xl font-bold">About me</h2>
+        <div class="mt-auto text-xl lg:text-3xl mb-12">
+          <h2 class="text-5xl font-bold mb-12 text-[80px]">About me</h2>
+          <p class="indent-14 leading-normal">
+            My journey on the web began when brutalism was the dominant style and HTML tables were the only tool for organizing layouts. Over the years, I turned the necessity of writing code into an art form, exploring that fine line between development and design. I learned the rules only to discover when to break them, finding in minimalism and attention to detail the perfect balance between functionality and aesthetics.
+          </p>  
+          <p class="mt-5">
+            <i>Creativity lies in making geometry feel like art</i>.
+          </p>
+        </div>
+        <a href="/about" class="rounded-full px-10 border border-black w-max text-base py-4 uppercase font-semibold">More about me</a>
       </div>
       <div class="col-span-12 lg:col-span-4 lg:col-end-13">
         <Image src={thinkBig} alt="About me"/>
