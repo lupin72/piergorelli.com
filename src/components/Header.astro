@@ -5,7 +5,7 @@ export interface MenuItem {
   body: string;
 }
 
-const { textColor = 'black', headerClasses = '', backgroundColor = 'bg-white' } = Astro.props;
+const { textColor = 'black', headerClasses = '', backgroundColor = 'bg-white', menuColor = '#ffffff' } = Astro.props;
 
 
 const pages: MenuItem[] = [
@@ -27,68 +27,33 @@ const pages: MenuItem[] = [
               <li class={`flex mr-4 text-${textColor}`}><a href={item.href} class="group overflow-hidden relative inline-block ml-[1vw] text-xl" title={item.body} style="height:max-content;"><span data-hover={item.title} class="relative inline-block transition duration-300 before:content-[attr(data-hover)] before:absolute before:top-[100%] group-hover:translate-y-[-100%] before:translate-3d-0">{item.title}</span></a></li>
             ))}
         </ul>
-        <!--button type="button" class="relative sm:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-          <span class="absolute -inset-0.5"></span>
-          <span class="sr-only">Open main menu</span>
-          <svg class="block h-6 w-6 open-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-          <svg class="hidden h-6 w-6 close-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-          </svg>
-        </button-->
-        <button type="button" class="hamburger relative sm:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white w-8 h-8" aria-controls="mobile-menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+
+        <button class="hamburger hamburger--squeeze relative sm:!hidden bg-white" type="button" aria-controls="mobile-menu" aria-expanded="false">
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
         </button>
       </nav>
     </div>
   </div>
-  <div class="hidden sm:hidden bg-[#13151a] transform transition-all duration-300 ease-in-out -translate-y-full z-10" id="mobile-menu">
-    <div class="space-y-1 px-2 pb-3 pt-2">
+  <div class="hidden sm:hidden { backgroundColor } transform transition-all duration-300 ease-in-out -translate-y-full z-10" id="mobile-menu">
+    <div class="space-y-1 px-5 pb-3 pt-2">
       { pages.map((item) => (
-        <a href={item.href} class="block rounded-md bg-[#13151a] px-3 py-2 text-base font-medium text-white" title={item.body}>{item.title}</a>
+        <a href={item.href} class={`block rounded-md ${backgroundColor} px-3 py-2 text-base font-medium text-${ textColor }`} title={item.body}>{item.title}</a>
       ))}
     </div>
   </div>
-  
 </header>
-<style>
-.hamburger {
-  width: 2rem;
-  height: 18px;
-  transform: rotate(0deg);
-  transition: .5s ease-in-out;
-  cursor: pointer;
-  padding: relative;
-}
 
-.hamburger span {
-  display: block;
-  position: absolute;
-  height: 2px;
-  width: 100%;
-  background: white;
-  border-radius: 1.5px;
-  opacity: 1;
-  left: 0;
-  transform: rotate(0deg);
-  transition: .25s ease-in-out;
-}
+<style define:vars={{ 'menuColor':menuColor }} lang="scss">
+  $hamburger-padding-x: 0;
+  $hamburger-padding-y: 0;
+  $hamburger-layer-height: 2px;
+  $hamburger-layer-color:  var(--menuColor);
+  $hamburger-layer-width: 32px;
+  
+  @import 'node_modules/hamburgers/_sass/hamburgers/hamburgers.scss';
 
-.hamburger span:nth-child(1) {
-  top: 0;
-}
-
-.hamburger span:nth-child(2), .hamburger span:nth-child(3) {
-  top: 8px;
-}
-
-.hamburger span:nth-child(4) {
-  top: 16px;
-}
 </style>
 <script>
   const mobileMenu = document.getElementById('mobile-menu');
@@ -115,6 +80,14 @@ const pages: MenuItem[] = [
         openIcon.classList.toggle('hidden');
         closeIcon.classList.toggle('hidden');
       }
+    });
+  }
+  const hamburgers = document.querySelectorAll(".hamburger");
+  if (hamburgers.length > 0) {
+    hamburgers.forEach(hamburger => {
+      hamburger.addEventListener("click", function(this: HTMLElement) {
+        this.classList.toggle("is-active");
+      }, false);
     });
   }
 </script>
