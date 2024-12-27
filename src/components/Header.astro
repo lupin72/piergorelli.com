@@ -18,13 +18,13 @@ const pages: MenuItem[] = [
 ---
 
 <header class={`absolute z-10 w-full ${headerClasses}`}>
-  <div class={`container mx-auto py-4 relative z-20 ${backgroundColor}`}>
+  <div class={`px-8 py-4 relative z-20 ${backgroundColor}`}>
     <div class="flex justify-between items-center">
       <a href="/" class={`text-${textColor} text-xl font-bold`}>Pier Gorelli</a>
       <nav class="flex justify-between items-center">
         <ul class="items-center hidden sm:flex">
             { pages.map((item) => (
-              <li class={`flex mr-4 text-${textColor}`}><a href={item.href} class="group overflow-hidden relative inline-block ml-[1vw]" title={item.body} style="height:max-content;"><span data-hover={item.title} class="relative inline-block transition duration-300 before:content-[attr(data-hover)] before:absolute before:top-[100%] group-hover:translate-y-[-100%] before:translate-3d-0">{item.title}</span></a></li>
+              <li class={`flex mr-4 text-${textColor}`}><a href={item.href} class="group overflow-hidden relative inline-block ml-[1vw] text-xl" title={item.body} style="height:max-content;"><span data-hover={item.title} class="relative inline-block transition duration-300 before:content-[attr(data-hover)] before:absolute before:top-[100%] group-hover:translate-y-[-100%] before:translate-3d-0">{item.title}</span></a></li>
             ))}
         </ul>
         <!--button type="button" class="relative sm:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">

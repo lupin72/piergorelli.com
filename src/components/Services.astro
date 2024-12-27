@@ -1,4 +1,5 @@
 ---
+import { CodeIcon, LayoutIcon, SearchIcon  } from 'astro-feather';
 
 export interface ServiceItem {
   title: string;
@@ -6,10 +7,22 @@ export interface ServiceItem {
   icon: string;
 }
 
+type Props = {
+  size: number;
+  strokeWidth: number;
+  customClasses: string;
+};
+
+const iconMap: { [key: string]: (_props: Props) => any } = {
+  code: CodeIcon,
+  layout: LayoutIcon,
+  search: SearchIcon,
+};
+
 const services: ServiceItem[] = [
-  { title: 'Web Development', body: 'I can help you build your next website or web application.', icon: ''},
-  { title: 'UI/UX Design', body: 'I can help you design a beautiful and user-friendly interface.', icon: ''},
-  { title: 'SEO Optimization', body: 'I can help you optimize your website for search engines.', icon: ''},
+  { title: 'Web<br/>Development', body: 'I can help you build your next website or web application.', icon: 'code' },
+  { title: 'UI/UX Design', body: 'I can help you design a beautiful and user-friendly interface.', icon: 'layout' },
+  { title: 'SEO<br/>Optimization', body: 'I can help you optimize your website for search engines.', icon: 'search'},
 ];
 ---
 <section class="w-full bg-white pt-28 lg:pt-48">
@@ -20,17 +33,26 @@ const services: ServiceItem[] = [
           <span class="uppercase">(Services)</span>
           <span class="">03</span>
         </div>
-        <h2 class="text-5xl font-bold">Expertise</h2>
+        <h2 class="text-4xl font-display font-bold">Expertise</h2>
         <div class="mt-16">
-          { services.map((item, index) => (
-            <div class="flex justify-between py-14 border-b first:border-t">
-              <div>{index + 1}</div>
-                <h3 class="text-3xl font-bold">{item.title}</h3>
-                <p class="text-lg">{
-                  item.body
-                }</p>
+          { services.map((item, index) => {
+            const IconComponent = iconMap[item.icon] || null;
+            return (
+            <div class="py-14 border-b first:border-t">
+              <div class="grid lg:grid-cols-4">
+                <span class="text-3xl font-semibold">{(index + 1).toString().padStart(2,'0')}.</span>
+                <h3 class="text-3xl font-semibold" set:html={item.title} />
+                <p class="text-xl text-boulder-500">{ item.body }</p>
+                <div class="flex justify-end text-end">
+                  {IconComponent ? (
+                      <IconComponent size={58} strokeWidth={1} customClasses="text-boulder-500" />
+                    ) : (
+                      <div>Icon not found</div>
+                    )}
+                </div>
+              </div>
             </div>
-          ))}
+          )})}
         </div>
       </div>
     </div>
