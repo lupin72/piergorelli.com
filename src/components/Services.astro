@@ -13,6 +13,8 @@ type Props = {
   customClasses: string;
 };
 
+const { size, strokeWidth, customClasses } = Astro.props;
+
 const iconMap: { [key: string]: (_props: Props) => any } = {
   code: CodeIcon,
   layout: LayoutIcon,
@@ -45,7 +47,7 @@ const services: ServiceItem[] = [
                 <p class="text-xl text-boulder-500">{ item.body }</p>
                 <div class="flex justify-end text-end">
                   {IconComponent ? (
-                      <IconComponent size={58} strokeWidth={1} customClasses="text-boulder-500" />
+                      <IconComponent size={size} strokeWidth={strokeWidth} customClasses={customClasses} />
                     ) : (
                       <div>Icon not found</div>
                     )}
