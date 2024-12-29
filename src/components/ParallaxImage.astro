@@ -1,0 +1,60 @@
+---
+
+// Define the props interface
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  speed?: number;
+  scale?: number;
+}
+
+// Destructure props with defaults
+const { 
+  src, 
+  alt,
+  class: className = "",
+  speed = 0.6,
+  scale = 1.2
+} = Astro.props;
+---
+
+<div class:list={["parallax-container", className]}>
+  <img 
+    src={src} 
+    alt={alt}
+    class="parallax-img"
+  />
+</div>
+
+<script>
+  import SimpleParallax from "simple-parallax-js/vanilla";
+   
+  function initParallax() {
+    const images = document.querySelectorAll('.parallax-img');
+    
+    images.forEach((image) => {
+      new SimpleParallax(image, {
+        scale: 1.2,
+        delay: 1,
+        transition: 'cubic-bezier(0,0,0,1)'
+      });
+    });
+  }
+  
+  document.addEventListener('DOMContentLoaded', initParallax);
+</script>
+
+<style>
+  .parallax-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .parallax-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

@@ -1,21 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Blog from '../components/Blog.astro';
-import Claim from '../components/Claim.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import Mission from '../components/Mission.astro';
-
-import { Image } from 'astro:assets';
-import arrowDownRightWhite from '../assets/images/arrow-down-right-white.svg';
+import ServicesComponent from '../components/Services.astro';
+import ParallaxImage from '../components/ParallaxImage.astro';
+import zen from '../assets/images/zen.jpg';
 
 ---
 
 
 <Layout title="Welcome to Piergorelli.com">
 	<Header textColor="black" headerClasses="" menuColor="#000000"/>
-	<main class="h-screen">
-
+	<main>
+		<div class="mx-8">
+			<ParallaxImage
+					src={zen.src}
+					alt="Services"
+					class="w-100 h-[46vw] object-cover"
+				/>
+			<ServicesComponent size={58} strokeWidth={0.5} customClasses='text-boulder-500'/>
+		</div>
 	</main>
   <Footer />
 </Layout>

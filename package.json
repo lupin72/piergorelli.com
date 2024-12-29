@@ -22,6 +22,7 @@
     "hamburgers": "^1.2.1",
     "sass": "^1.83.0",
     "sharp": "^0.33.5",
+    "simple-parallax-js": "^6.0.1",
     "tailwindcss": "^3.4.7",
     "typescript": "^5.5.4"
   },
