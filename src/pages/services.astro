@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import Title from '../components/Title.astro';
 import ServicesComponent from '../components/Services.astro';
 import ParallaxImage from '../components/ParallaxImage.astro';
 import zen from '../assets/images/zen.jpg';
@@ -12,14 +13,13 @@ import zen from '../assets/images/zen.jpg';
 <Layout title="Welcome to Piergorelli.com">
 	<Header textColor="black" headerClasses="" menuColor="#000000"/>
 	<main>
-		<div class="mx-8">
+			<Title title="Services" />
 			<ParallaxImage
 					src={zen.src}
 					alt="Services"
 					class="w-100 h-[46vw] object-cover"
 				/>
 			<ServicesComponent size={58} strokeWidth={0.5} customClasses='text-boulder-500'/>
-		</div>
 	</main>
   <Footer />
 </Layout>

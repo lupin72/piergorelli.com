@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import AboutComponent from '../components/About.astro';
 import Mission from '../components/Mission.astro';
 import ParallaxImage from '../components/ParallaxImage.astro';
+import Title from '../components/Title.astro';
 import catWithLaptop from '../assets/images/cat-with-laptop.jpg';
 
 ---
@@ -12,7 +13,8 @@ import catWithLaptop from '../assets/images/cat-with-laptop.jpg';
 
 <Layout title="Welcome to Piergorelli.com">
 	<Header textColor="black" headerClasses="bg-white" menuColor="#000000"/>
-	<main class="mx-8">
+	<main>
+		<Title title="Blog" />
 		<ParallaxImage
 			src={catWithLaptop.src}
 			alt="About me"

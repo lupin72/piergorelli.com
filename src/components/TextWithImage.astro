@@ -1,0 +1,11 @@
+---
+const { image } = Astro.props;
+---
+<section class="mx-8">
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 lg:col-span-6">
+      <img src={image} alt="Contact" class="w-full h-auto object-cover"/>
+    </div>
+    <div class="col-span-12 lg:col-span-5 lg:col-start-8 flex flex-col justify-end">Hola</div>
+  </div>
+</section>
