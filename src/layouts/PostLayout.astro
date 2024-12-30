@@ -1,0 +1,25 @@
+---
+import Layout from './Layout.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Title from '../components/Title.astro';
+import ParallaxImage from '../components/ParallaxImage.astro';
+
+const { frontmatter } = Astro.props;
+---
+
+<Layout title={frontmatter.title}>
+  <Header textColor="black" headerClasses="bg-white" menuColor="#000000"/>
+  <main>
+    <Title title={frontmatter.title} />
+		<ParallaxImage
+			src={frontmatter.image.url}
+			alt="About me"
+			class="w-100 h-[46vw] object-cover"
+		/>
+    <p>{frontmatter.pubDate.toString().slice(0,10)}</p>
+    <p><em>{frontmatter.description}</em></p>
+    <p>Written by: {frontmatter.author}</p>
+  </main>
+  <Footer />
+</Layout>

@@ -5,12 +5,8 @@ import arrowDownRightWhite from '../assets/images/arrow-down-right-white.svg';
 const { title } = Astro.props;
 ---
 <section class="w-full bg-white pt-28 lg:pt-48 pb-24 px-8">
-  <div>
-    <div class="flex w-full justify-end items-end leading-none" id="scroll-down"><span class="text-boulder-900 text-base lg:text-2xl">Scroll down</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-right"><line x1="7" y1="7" x2="17" y2="17"></line><polyline points="17 7 17 17 7 17"></polyline></svg>
-    </div>
-    <div class="">
-      <h1 class=" text-boulder-900 font-display uppercase font-extrabold text-left w-full leading-none relative block tracking-normal" style="font-size: 10.7vw;">{ title }</h1>
-    </div>
+  <h1 class=" text-boulder-900 font-display uppercase font-extrabold text-left w-full leading-none relative block tracking-normal text-[10.7vw]">{ title }</h1>
+  <div class="flex w-full justify-end items-end leading-none" id="scroll-down"><span class="text-boulder-900 text-base lg:text-2xl">Scroll down</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-right"><line x1="7" y1="7" x2="17" y2="17"></line><polyline points="17 7 17 17 7 17"></polyline></svg>
   </div>
 </section>
