@@ -1,12 +1,13 @@
 ---
-//import '@fontsource-variable/work-sans';
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
+import { SEO, type Props as SEOProps } from "astro-seo";
+import SiteData from "../constants/siteData.json";
 
 interface Props {
-	title: string;
+	seo?: SEOProps;
 }
 
-const { title } = Astro.props;
+const { seo } = Astro.props;
 const pages = [
 	{ title: 'Documentation', href: 'https://docs.astro.build/', body: 'Learn how Astro works and explore the official API docs.' },
 	{ title: 'Integrations', href: 'https://astro.build/integrations/', body: 'Supercharge your project with new frameworks and libraries.' },
@@ -20,14 +21,34 @@ const pages = [
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<GoogleFontsOptimizer url="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"></GoogleFontsOptimizer>
 		<GoogleFontsOptimizer url="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"></GoogleFontsOptimizer>
 		<!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/cd34a65fb91b26eb002d84d5/script.js"></script> <!-- End cookieyes banner -->
-		<title>{title}</title>
+		<SEO
+      {...seo}
+      title={seo?.title ?? SiteData.default.title}
+      description={seo?.description ?? SiteData.default.description}
+      openGraph={seo?.openGraph ?? {
+        basic: {
+          image: SiteData.default.openGraph.image,
+          title: SiteData.default.openGraph.title,
+          type: SiteData.default.openGraph.type,
+          url: SiteData.default.openGraph.url
+        },
+        optional: {
+          description: SiteData.default.openGraph.description,
+          siteName: SiteData.default.openGraph.title
+        }
+      }}
+      twitter={seo?.twitter ?? {
+        title: SiteData.default.twitter.title,
+        description: SiteData.default.twitter.description,
+        creator: SiteData.default.twitter.creator
+      }}
+    />
 	</head>
 	<body>
 		<slot />

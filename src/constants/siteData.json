@@ -1,0 +1,36 @@
+{
+  "default": {
+    "name": "piergorelli.com",
+    "title": "Pier Gorelli | Full Stack Developer",
+    "description": "Explore the journey of a developer blending code with design. Discover the perfect balance between functionality, minimalism, and creativity in web development.",
+    "openGraph": {
+      "title": "Pier Gorelli | Full Stack Developer",
+      "description": "Explore the journey of a developer blending code with design. Discover the perfect balance between functionality, minimalism, and creativity in web development.",
+      "type": "website",
+      "url": "https://piergorelli.com",
+      "image": "https://r44j.dev/raj.png"
+    },
+    "twitter": {
+      "title": "Pier Gorelli | Full Stack Developer",
+      "description": "Explore the journey of a developer blending code with design. Discover the perfect balance between functionality, minimalism, and creativity in web development.",
+      "creator": "@PGorelli91424"
+    }
+  },
+  "pages": {
+    "about": {
+      "title": "About Pier Gorelli",
+      "description": "Full-stack web dev with 1.5 years at a US startup. Skilled in React, Next.js, Tailwind, Chrome extensions & SEO. I Build engaging & scalable web apps. Looking to bring your vision to life? Let's connect"
+    },
+    "services": {
+      "title": "Services",
+      "description": "R44J offers a range of services including web development, SEO, Chrome extensions, and e-commerce. Specializing in Figma designs, scalable architectures, backend and frontend development, and collaborating on IOS apps, mobile apps, and PWAs."
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "R44J's blog covers a range of topics including web development, SEO, Chrome extensions, e-commerce, Figma designs, scalable architectures, backend and frontend development, and collaborating on IOS apps, mobile apps, and PWAs."
+    },
+    "contact": {
+      "title": "Contact Pier Gorelli"
+    }
+  }
+}

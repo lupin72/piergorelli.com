@@ -8,7 +8,7 @@ import ParallaxImage from '../components/ParallaxImage.astro';
 const { frontmatter } = Astro.props;
 ---
 
-<Layout title={frontmatter.title}>
+<Layout>
   <Header textColor="black" headerClasses="bg-white" menuColor="#000000"/>
   <main>
     <Title title={frontmatter.title} />

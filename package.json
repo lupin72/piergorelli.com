@@ -18,6 +18,7 @@
     "astro": "^4.12.2",
     "astro-feather": "^1.0.0",
     "astro-google-fonts-optimizer": "^0.2.2",
+    "astro-seo": "^0.8.4",
     "gsap": "^3.12.5",
     "hamburgers": "^1.2.1",
     "sass": "^1.83.0",

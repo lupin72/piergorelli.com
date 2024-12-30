@@ -6,11 +6,17 @@ import ContactForm from '../components/ContactForm.astro';
 import TextWithImage from '../components/TextWithImage.astro';
 import Title from '../components/Title.astro';
 import assaut from '../assets/images/assaut-2.jpg';
+import SiteData from "../constants/siteData.json";
 
 ---
 
 
-<Layout title="Contact">
+<Layout
+	seo={{
+		title: SiteData.pages.contact.title,
+		description: SiteData.default.description
+	}}
+>
 	<Header textColor="black" headerClasses="" menuColor="#000000"/>
 	<main>
 		<Title title="Let's talk" />

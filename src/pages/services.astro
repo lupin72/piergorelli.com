@@ -6,11 +6,17 @@ import Title from '../components/Title.astro';
 import ServicesComponent from '../components/Services.astro';
 import ParallaxImage from '../components/ParallaxImage.astro';
 import zen from '../assets/images/zen.jpg';
+import SiteData from "../constants/siteData.json";
 
 ---
 
 
-<Layout title="Welcome to Piergorelli.com">
+<Layout 
+seo={{
+		title: SiteData.pages.services.title,
+		description: SiteData.default.description
+	}}
+>
 	<Header textColor="black" headerClasses="" menuColor="#000000"/>
 	<main>
 			<Title title="Services" />

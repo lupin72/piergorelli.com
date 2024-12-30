@@ -6,13 +6,18 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Mission from '../components/Mission.astro';
 import Services from '../components/Services.astro';
-
 import Hero from '../components/Hero.astro';
+import SiteData from "../constants/siteData.json";
 
 ---
 
 
-<Layout title="Welcome to Piergorelli.com">
+<Layout 
+seo={{
+  title: SiteData.default.title,
+  description: SiteData.default.description
+}}
+>
 	<Header textColor="white" headerClasses="opacity-1" backgroundColor="bg-gray-900" menuColor="#ffffff"/>
 	<main>
 		<Hero/>
