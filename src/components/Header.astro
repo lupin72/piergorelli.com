@@ -36,8 +36,8 @@ const pages: MenuItem[] = [
       </nav>
     </div>
   </div>
-  <div class="hidden sm:hidden { backgroundColor } transform transition-all duration-300 ease-in-out -translate-y-full z-10" id="mobile-menu">
-    <div class="space-y-1 px-5 pb-3 pt-2">
+  <div class={`hidden sm:hidden ${backgroundColor} transform transition-all duration-300 ease-in-out -translate-y-full z-10`} id="mobile-menu">
+    <div class="px-5 pb-3 pt-2">
       { pages.map((item) => (
         <a href={item.href} class={`block rounded-md ${backgroundColor} px-3 py-2 text-base font-medium text-${ textColor }`} title={item.body}>{item.title}</a>
       ))}
