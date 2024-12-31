@@ -1,0 +1,31 @@
+---
+import * as AstroFeather from 'astro-feather'
+
+const networks = [
+  {
+    name: 'GitHub',
+    url: '',
+    icon: 'GithubIcon',
+  },
+  {
+    name: 'LinkedIn',
+    url: '',
+    icon: 'LinkedinIcon',
+  },
+];
+---
+<div class="flex flex-col">
+  {networks.map((network) => {
+    const Icon = AstroFeather[network.icon as keyof typeof AstroFeather];
+    return (
+    <a href
+      ={network.url}
+      class="text-white text-xl flex items-start gap-2 mb-5 font-semibold"
+      title={network.name}
+    >
+      {Icon && <Icon size={24} />}
+      {network.name}
+    </a>
+    );
+  })}
+</div>
