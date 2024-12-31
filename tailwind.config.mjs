@@ -24,6 +24,9 @@ export default {
 			}
 		},
 		extend: {
+			aspectRatio: {
+        '4/3': '4 / 3',
+      },
 			colors: {
 				'boulder': {
         '50': '#f5f6f6',
