@@ -4,14 +4,14 @@ import thinkBig from '../assets/images/think-big-scaled.jpg';
 ---
 <section class="w-full bg-white pt-28 lg:pt-48">
   <div class="container mx-auto">
-    <div class="grid grid-cols-12 gap-4">
+    <div class="grid grid-cols-12 gap-x-4 gap-y-12 lg:gap-y-4">
       <div class="col-span-12 lg:col-span-7 border-t flex flex-col">
         <div class="py-5 flex justify-between">
           <span class="">(ABOUT ME)</span>
           <span class="">01</span>
         </div>
         <div class="mt-auto text-xl lg:text-2xl mb-12">
-          <h2 class="text-3xl lg:text-4xl font-display font-extrabold mb-12">A long story short</h2>
+          <h2 class="text-3xl lg:text-4xl font-display font-extrabold mb-12 text-boulder-950">A long story short</h2>
           <p class="indent-14 leading-normal">
             My journey on the web began when brutalism was the dominant style and HTML tables were the only tool for organizing layouts. Over the years, I turned the necessity of writing code into an art form, exploring that fine line between development and design. I learned the rules only to discover when to break them, finding in minimalism and attention to detail the perfect balance between functionality and aesthetics.
           </p>  
@@ -27,74 +27,3 @@ import thinkBig from '../assets/images/think-big-scaled.jpg';
     </div>
   </div>
 </section>
-<style>
- .btn {
-    pointer-events: auto;
-	  cursor: pointer;
-	  background: #000;
-    color: #fff;
-	  margin: 0;
-	  font-family: inherit;
-	  font-size: inherit;
-	  position: relative;
-	  display: inline-block;
-    border-radius: 9999px;
-    overflow: hidden;
-  }
-
-  .btn::before,
-  .btn::after {
-	  position: absolute;
-	  top: 0;
-	  left: 0;
-	  width: 100%;
-	  height: 100%;
-  }
-
-.btn span {
-  display: block;
-	position: relative;
-}
-
-.btn > span {
-	overflow: hidden;
-}
-
-.btn > span > span {
-	overflow: hidden;
-	mix-blend-mode: difference;
-}
-
-.btn:hover > span > span {
-	animation: MoveUpInitial 0.2s forwards, MoveUpEnd 0.2s forwards 0.2s;
-}
-
-@keyframes MoveUpInitial {
-	to {
-		transform: translate3d(0,-105%,0);
-	}
-}
-
-@keyframes MoveUpEnd {
-	from {
-		transform: translate3d(0,100%,0);
-	}
-	to {
-		transform: translate3d(0,0,0);
-	}
-}
-
-.btn::before {
-	content: '';
-	background: #fff;
-	transition: transform 0.3s cubic-bezier(0.7, 0, 0.2, 1);
-	transform-origin: 100% 50%;
-  border-radius: 9999px;
-}
-
-.btn:hover::before {
-	transform: scale3d(0,1,1);
-	transform-origin: 0% 50%;
-  border-radius: 9999px;
-}
-</style>
