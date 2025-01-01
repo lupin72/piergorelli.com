@@ -8,8 +8,6 @@ import Mission from '../components/Mission.astro';
 import Services from '../components/Services.astro';
 import Hero from '../components/Hero.astro';
 import SiteData from "../constants/siteData.json";
-import LatestPost from '../components/LatestPost.astro';
-
 ---
 
 
@@ -24,7 +22,7 @@ seo={{
 		<Hero/>
     <About/>
     <Mission/>
-    <Services size={58} strokeWidth={0.5} customClasses='text-boulder-500'/>
+    <Services size={58} strokeWidth={0.5} customClasses='text-boulder-500' subtitle="03"/>
     <Blog/>
 	</main>
   <Footer />

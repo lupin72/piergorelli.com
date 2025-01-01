@@ -11,9 +11,10 @@ type Props = {
   size: number;
   strokeWidth: number;
   customClasses: string;
+  subtitle: string;
 };
 
-const { size, strokeWidth, customClasses } = Astro.props;
+const { size, strokeWidth, customClasses, subtitle = "" } = Astro.props;
 
 const iconMap: { [key: string]: (_props: Props) => any } = {
   code: CodeIcon,
@@ -33,7 +34,7 @@ const services: ServiceItem[] = [
       <div class="col-span-12 border-t">
         <div class="py-5 flex justify-between">
           <span class="uppercase">(Services)</span>
-          <span class="">03</span>
+          <span class="">{subtitle}</span>
         </div>
         <h2 class="text-3xl lg:text-4xl font-display font-bold">Expertise</h2>
         <div class="mt-16">
@@ -47,7 +48,7 @@ const services: ServiceItem[] = [
                 <p class="text-lg lg:text-xl text-boulder-500 lg:col-start-2 lg:row-start-2 xl:col-auto xl:row-auto order-3 row-start-3 row-end-4 col-start-1 col-end-4">{ item.body }</p>
                 <div class="flex lg:justify-end text-end order-1 lg:order-4 col-start-1 col-end-4 lg:col-start-auto lg:col-end-auto">
                   {IconComponent ? (
-                      <IconComponent size={size} strokeWidth={strokeWidth} customClasses={customClasses} />
+                      <IconComponent size={size} strokeWidth={strokeWidth} customClasses={customClasses} subtitle=""/>
                     ) : (
                       <div>Icon not found</div>
                     )}

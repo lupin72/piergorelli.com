@@ -44,6 +44,12 @@ export default {
 			}
 		},
 	},
+	variants: {
+    extend: {
+      backgroundColor: ['checked'],
+      ringColor: ['focus'],
+    },
+  },
 	plugins: [
 		require("@xpd/tailwind-3dtransforms")
 	],

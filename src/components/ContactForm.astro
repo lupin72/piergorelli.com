@@ -1,12 +1,12 @@
 ---
-
+const { subtitle = ""} = Astro.props;
 ---
 <section class="w-full bg-white pt-28 lg:pt-48">
   <div class="px-8">
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-12 border-b mb-10">
         <div class="py-5 flex flex-col justify-between">
-          <span class="">02</span>
+          <span class="">{subtitle}</span>
           <h2 class="text-3xl lg:text-4xl font-display font-bold">Email me</h2>
         </div>
       </div>
@@ -29,6 +29,10 @@
             <div class="flex flex-col mb-8">
               <label for="message" class="text-xl lg:text-2xl">Message:</label>
               <textarea id="message" name="message" class="text-xl lg:text-2xl border border-gray-300 p-2 mt-2 rounded-lg py-4 px-6" required></textarea>
+            </div>
+            <div class="flex mb-14 items-center">
+              <input type="checkbox" id="terms" name="terms" class="mr-4 w-8 h-8 rounded border-gray-300 accent-boulder-950" required>
+              <label for="terms" class="text-xl lg:text-2xl">I agree to the terms and conditions</label>
             </div>
             <button type="submit" class="btn rounded-full px-10 border border-black w-max text-xl lg:text-2xl py-4 uppercase font-semibold"><span><span>Send</span></span></button>
           </form>
