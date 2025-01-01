@@ -1,6 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import thinkBig from '../assets/images/think-big-scaled.jpg';
+
+const { actionText = "", actionLink = "" } = Astro.props;
 ---
 <section class="w-full bg-white pt-28 lg:pt-48">
   <div class="container mx-auto">
@@ -10,16 +12,16 @@ import thinkBig from '../assets/images/think-big-scaled.jpg';
           <span class="">(ABOUT ME)</span>
           <span class="">01</span>
         </div>
-        <div class="mt-auto text-xl lg:text-2xl mb-12">
-          <h2 class="text-3xl lg:text-4xl font-display font-extrabold mb-12 text-boulder-950">A long story short</h2>
-          <p class="indent-14 leading-normal">
+        <div class="mt-auto text-xl lg:text-2xl mb-12 trxt-boulder-900">
+          <h2 class="text-3xl lg:text-4xl font-display font-extrabold mb-12 text-boulder-900">A long story short</h2>
+          <p class="indent-14 leading-normal text-boulder-900">
             My journey on the web began when brutalism was the dominant style and HTML tables were the only tool for organizing layouts. Over the years, I turned the necessity of writing code into an art form, exploring that fine line between development and design. I learned the rules only to discover when to break them, finding in minimalism and attention to detail the perfect balance between functionality and aesthetics.
           </p>  
-          <p class="mt-5">
+          <p class="mt-5 text-boulder-900">
             <i>Creativity lies in making geometry feel like art</i>.
           </p>
         </div>
-        <a href="/about" class="btn rounded-full px-10 border border-black w-max text-base py-4 uppercase font-semibold"><span><span>More about me</span></span></a>
+        <a href={actionLink} class="btn rounded-full px-10 border border-boulder-900 text-boulder-900 w-max text-base py-4 uppercase font-semibold"><span><span>{actionText}</span></span></a>
       </div>
       <div class="col-span-12 lg:col-span-4 lg:col-end-13">
         <Image src={thinkBig} alt="About me"/>

@@ -23,7 +23,7 @@ const iconMap: { [key: string]: (_props: Props) => any } = {
 };
 
 const services: ServiceItem[] = [
-  { title: 'Web<br/>Development', body: 'I can help you build your next website or web application.', icon: 'code' },
+  { title: 'Web<br/>Development', body: 'Development is a constantly evolving laboratory. I leverage cutting-edge technologies and industry best practices to craft digital products that are high-performing, functional, and unforgettable.', icon: 'code' },
   { title: 'UI/UX Design', body: 'I can help you design a beautiful and user-friendly interface.', icon: 'layout' },
   { title: 'SEO<br/>Optimization', body: 'I can help you optimize your website for search engines.', icon: 'search'},
 ];
@@ -36,16 +36,16 @@ const services: ServiceItem[] = [
           <span class="uppercase">(Services)</span>
           <span class="">{subtitle}</span>
         </div>
-        <h2 class="text-3xl lg:text-4xl font-display font-bold">Expertise</h2>
+        <h2 class="text-3xl lg:text-4xl font-display font-bold text-boulder-900">Expertise</h2>
         <div class="mt-16">
           { services.map((item, index) => {
             const IconComponent = iconMap[item.icon] || null;
             return (
             <div class="py-14 border-b first:border-t transition-colors duration-300 ease-in-out">
-              <div class="grid grid-cols-[1fr_5fr_2fr] grid-rows-[auto_auto_auto] lg:grid-cols-3 lg:grid-row-none xl:grid-cols-4 lg:gap-4">
-                <span class="text-2xl lg:text-3xl font-semibold order-2 lg:order-1 row-span-1 col-span-1">{(index + 1).toString().padStart(2,'0')}.</span>
-                <h3 class="text-2xl lg:text-3xl font-semibold lg:col-span-1 xl:col-auto order-2 row-span-1 col-span-1 leading-tight" set:html={item.title} />
-                <p class="text-lg lg:text-xl text-boulder-500 lg:col-start-2 lg:row-start-2 xl:col-auto xl:row-auto order-3 row-start-3 row-end-4 col-start-1 col-end-4">{ item.body }</p>
+              <div class="grid grid-cols-[1fr_5fr_2fr] grid-rows-[auto_auto_auto] lg:grid-cols-3 lg:grid-row-none xl:grid-cols-[2fr_4fr_4fr_2fr] lg:gap-4">
+                <span class="text-2xl lg:text-3xl font-semibold order-2 lg:order-1 row-span-1 col-span-1 text-boulder-900">{(index + 1).toString().padStart(2,'0')}.</span>
+                <h3 class="text-2xl lg:text-3xl font-semibold lg:col-span-1 xl:col-auto order-2 row-span-1 col-span-1 leading-tight text-boulder-900" set:html={item.title} />
+                <p class="text-lg lg:text-xl text-boulder-400 lg:col-start-2 lg:row-start-2 xl:col-auto xl:row-auto order-3 row-start-3 row-end-4 col-start-1 col-end-4">{ item.body }</p>
                 <div class="flex lg:justify-end text-end order-1 lg:order-4 col-start-1 col-end-4 lg:col-start-auto lg:col-end-auto">
                   {IconComponent ? (
                       <IconComponent size={size} strokeWidth={strokeWidth} customClasses={customClasses} subtitle=""/>
