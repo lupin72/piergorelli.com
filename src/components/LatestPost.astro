@@ -2,11 +2,11 @@
 import { Image } from "astro:assets";
 import { getCollection } from 'astro:content';
 
-
+const { limit = null } = Astro.props;
 const allBlogPosts = await getCollection("blog");
-const recentPosts = allBlogPosts
+const recentPosts = limit ? allBlogPosts
   .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
-  .slice(0, 3);
+  .slice(0, limit) : allBlogPosts.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
 ---
 
 <section>

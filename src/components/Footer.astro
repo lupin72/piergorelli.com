@@ -2,6 +2,9 @@
 import FooterMenu from './FooterMenu.astro';
 import { HeartIcon  } from 'astro-feather';
 import Social from './Social.astro';
+
+const currentYear = new Date().getFullYear();
+
 ---
 <section class="bg-[#13151a] mt-48 px-8">
   <div class="grid grid-cols-12 h-full">
@@ -16,7 +19,7 @@ import Social from './Social.astro';
     </div>
     <div class="col-span-12 flex flex-col justify-center items-center py-12">
       <div class="flex justify-center text-lg lg:text-2xl">
-        <span class="text-white">© 2024. All rights reserved.</span>
+        <span class="text-white">©{ currentYear }. All rights reserved.</span>
       </div>
       <div class="mt-4 flex justify-center text-lg">
         <span class="flex items-center text-white">Made with <HeartIcon customClasses="fill-red-600 text-red-600 mx-3" /> in Valencia.</span>

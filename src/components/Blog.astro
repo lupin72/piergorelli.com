@@ -1,5 +1,6 @@
 ---
 import LatestPost from "./LatestPost.astro";
+const { limit = null } = Astro.props;
 ---
 
 <section class="w-full bg-white pt-28 lg:pt-48">
@@ -11,7 +12,7 @@ import LatestPost from "./LatestPost.astro";
           <span class="">04</span>
         </div>
         <h2 class="text-3xl lg:text-4xl font-display font-bold">Blog</h2>
-        <LatestPost />
+        <LatestPost limit={limit} />
       </div>
     </div>
   </div>
