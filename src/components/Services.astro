@@ -1,5 +1,5 @@
 ---
-import { CodeIcon, LayoutIcon, SearchIcon  } from 'astro-feather';
+import { CodeIcon, LayoutIcon, SearchIcon, SmartphoneIcon  } from 'astro-feather';
 
 export interface ServiceItem {
   title: string;
@@ -20,12 +20,14 @@ const iconMap: { [key: string]: (_props: Props) => any } = {
   code: CodeIcon,
   layout: LayoutIcon,
   search: SearchIcon,
+  phone: SmartphoneIcon,
 };
 
 const services: ServiceItem[] = [
   { title: 'Web<br/>Development', body: 'Development is a constantly evolving laboratory. I leverage cutting-edge technologies and industry best practices to craft digital products that are high-performing, functional, and unforgettable.', icon: 'code' },
-  { title: 'UI/UX Design', body: 'I can help you design a beautiful and user-friendly interface.', icon: 'layout' },
-  { title: 'SEO<br/>Optimization', body: 'I can help you optimize your website for search engines.', icon: 'search'},
+  { title: 'App<br/>Development', body: 'Whether it’s a hybrid app, a native solution, or a progressive web app (PWA), I focus on creating responsive, user-friendly, and efficient applications that work seamlessly across devices.', icon: 'phone' },
+  { title: 'UI/UX Design', body: 'I’m passionate about design and work hand-in-hand with skilled designers to craft intuitive interfaces and seamless user experiences. Together, we transform complexity into simplicity, ensuring every interaction is functional and enjoyable.', icon: 'layout' },
+  { title: 'SEO<br/>Optimization', body: 'Good design and functionality are only part of the story—visibility is key. I optimize digital products to rank higher in search engines, combining technical SEO with best practices to ensure your content gets noticed and reaches the right audience.', icon: 'search'},
 ];
 ---
 <section class="w-full bg-white pt-28 lg:pt-48">
