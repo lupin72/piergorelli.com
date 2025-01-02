@@ -49,6 +49,18 @@ const pages = [
         creator: SiteData.default.twitter.creator
       }}
     />
+		<script 
+			is:inline 
+			type="text/partytown"
+			async src="https://www.googletagmanager.com/gtag/js?id=G-BJ18EJYEET">
+		</script>
+		<script is:inline type="text/partytown">
+  		window.dataLayer = window.dataLayer || [];
+  		function gtag(){dataLayer.push(arguments);}
+  			gtag('js', new Date());
+
+  			gtag('config', 'G-BJ18EJYEET');
+		</script>
 		<style is:global>
 			.btn {
 				 pointer-events: auto;
