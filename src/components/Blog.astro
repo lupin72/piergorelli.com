@@ -4,14 +4,14 @@ const { limit = null } = Astro.props;
 ---
 
 <section class="w-full bg-white pt-28 lg:pt-48">
-  <div class="container mx-auto">
+  <div class="px-8">
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-12 border-t">
         <div class="py-5 flex justify-between">
-          <span class="uppercase">(Tech & tips)</span>
+          <span class="uppercase">(Blog)</span>
           <span class="">04</span>
         </div>
-        <h2 class="text-3xl lg:text-4xl font-display font-bold mb-16">Blog</h2>
+        <h2 class="text-3xl lg:text-4xl font-display font-extrabold mb-16">Tech & tips</h2>
         <LatestPost limit={limit} />
       </div>
     </div>
