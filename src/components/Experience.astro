@@ -1,0 +1,44 @@
+---
+const { subtitle } = Astro.props;
+---
+<section class="w-full bg-white pt-28 lg:pt-48">
+  <div class="px-8">
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 border-t">
+        <div class="py-5 flex justify-between">
+          <span class="uppercase">(About me)</span>
+          <span class="">{subtitle}</span>
+        </div>
+        <h2 class="text-3xl lg:text-4xl font-display font-bold text-boulder-900">Experience</h2>
+      </div>
+      <div class="col-span-12 lg:col-span-5 mt-8 lg:text-xl">
+        <p class="text-boulder-900">
+          Throughout my career, I’ve had the privilege of working with multinational corporations in the healthcare industry and collaborating with leading communication agencies. These experiences have not only shaped my skills but also helped me develop a clear and effective process to transform ideas into impactful digital projects.
+        </p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 mt-16 gap-4">
+      <div class="flex flex-col bg-boulder-50 p-12">
+        <span class="text-3xl lg:text-5xl font-extrabold leading-tight font-display text-boulder-900">01.</span>
+        <h3 class="text-xl lg:text-2xl font-bold leading-tight font-display mb-5 text-boulder-900">Every great project starts with understanding.</h3>
+        <p class="lg:text-xl text-boulder-900">
+          Together, we’ll dive deep into your goals, audience, and challenges to define the foundation of the project and ensure alignment from the very beginning.
+        </p>
+      </div>
+      <div class="flex flex-col bg-boulder-50 p-12">
+        <span class="text-3xl lg:text-5xl font-extrabold leading-tight font-display text-boulder-900">02.</span>
+        <h3 class="text-xl lg:text-2xl font-bold leading-tight font-display mb-5 text-boulder-900">Turning ideas into actionable plans.</h3>
+        <p class="lg:text-xl text-boulder-900">
+          This is where concepts take shape. I collaborate with designers and strategists to create a roadmap, wireframes, and a vision that balances functionality and aesthetics.
+        </p>
+      </div>
+      <div class="flex flex-col bg-boulder-50 p-12">
+        <span class="text-3xl lg:text-5xl font-extrabold leading-tight font-display text-boulder-900">03.</span>
+        <h3 class="text-xl lg:text-2xl font-bold leading-tight font-display mb-5 text-boulder-900">Building and bringing your vision to life.</h3>
+        <p class="lg:text-xl text-boulder-900">
+          Using cutting-edge technologies and best practices, I develop and deliver a digital product that’s fast, functional, and ready to impress — all while ensuring a smooth launch.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
