@@ -1,5 +1,5 @@
 import { defineConfig } from 'astro/config';
-import { partytown } from "partytown";
+import partytown from '@astrojs/partytown'
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
 
