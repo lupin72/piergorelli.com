@@ -1,0 +1,59 @@
+---
+import { Image } from "astro:assets";
+import { getCollection } from 'astro:content';
+
+
+const technologies = await getCollection("tech");
+
+---
+<section class="w-full bg-white pt-28 lg:pt-48">
+  <div class="px-8">
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 border-t">
+        <div class="py-5 flex justify-between">
+          <span class="uppercase">(Services)</span>
+          <span class="">02</span>
+        </div>
+        <h2 class="text-3xl lg:text-4xl font-display font-extrabold mb-4 text-boulder-900 leading-tight">Technologies I work with</h2>
+        <p class="text-boulder-900 lg:text-xl">To build fast, reliable, and stylish digital solutions, I leverage a range of cutting-edge technologies, including:</p>
+        <div class="tech-slider mt-16">
+          <div class="swiper">
+            <!-- Wrapper adicional requerido -->
+            <div class="swiper-wrapper">
+            {
+                technologies.map((tech) => (
+                  <div class="swiper-slide w-full flex flex-col items-center justify-center">
+                    <Image src={tech.data.image} alt={tech.data.name} alt={tech.data.name} class="grayscale hover:grayscale-0 opacity-20 hover:opacity-100 transform"/>
+                  </div>
+                ))
+            }
+            </div>
+            <!-- Botones de navegación -->
+            <div class="swiper-button-prev stroke-slate-50"></div>
+            <div class="swiper-button-next"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  // Core de Swiper y estilos
+  import Swiper from 'swiper';
+  import 'swiper/css';
+  // Módulo Navigation de Swiper y estilos
+  import { Navigation } from "swiper/modules";
+  import "swiper/css/navigation";
+
+  // Configurar Swiper
+  const swiper = new Swiper(".swiper", {
+    modules: [Navigation], // definir los módulos a usar
+    loop: true,            // definir si los slides estarán en bucle
+    slidesPerView: 7,      // agregar número de slides para la pantalla
+    spaceBetween: 40,      // separación entre slides en px
+    navigation: {          // definir botones next y prev para el módulo Navigation
+      prevEl: ".swiper-button-prev",
+      nextEl: ".swiper-button-next",
+    }
+  });
+</script>

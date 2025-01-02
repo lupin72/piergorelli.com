@@ -7,6 +7,7 @@ import ServicesComponent from '../components/Services.astro';
 import ParallaxImage from '../components/ParallaxImage.astro';
 import zen from '../assets/images/zen.jpg';
 import SiteData from "../constants/siteData.json";
+import Slider from '../components/Slider.astro';
 
 ---
 
@@ -26,6 +27,7 @@ seo={{
 					class="w-100 h-[46vw] object-cover"
 				/>
 			<ServicesComponent size={58} strokeWidth={0.5} customClasses='text-boulder-500' subtitle="01"/>
+			<Slider/>
 	</main>
   <Footer />
 </Layout>
