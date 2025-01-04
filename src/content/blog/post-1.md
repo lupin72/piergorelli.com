@@ -81,10 +81,10 @@ When faced with a blank page, the infinite range of options available might seem
   - Base: 16px
   - H6: 20px
   - H5: 25px
-  - H4: 31px
-  - H3: 40px
+  - H4: 31.25px
+  - H3: 38.75px
   - H2: 50px
-  - H1: 63px
+  - H1: 62.5px
 
 This example uses a scale that increases by a factor of **1.25**, but there are other scales you can explore, such as:
 - **The golden ratio (1.618)**: A classic scale based on mathematical harmony.
