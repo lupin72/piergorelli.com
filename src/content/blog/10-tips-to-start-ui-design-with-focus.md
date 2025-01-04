@@ -1,11 +1,11 @@
 ---
 title: '10 tips to start with UI without feeling lost'
-pubDate: 2022-07-01
-description: 'This is the first post of my new Astro blog.'
-author: 'Astro Learner'
+pubDate: 2025-01-04
+description: '10 tips to start your UI design journey with clarity. Overcome challenges, master principles, and explore resources to refine your skills.'
+author: 'Pier Gorelli'
 cover: "./images/white-paper.jpg"
-alt: 'The Astro logo on a dark background with a pink glow.'
-tags: ["astro", "blogging", "learning in public"]
+alt: 'Blank page'
+tags: ["design", "UI"]
 ---
 You've just finished your studies, you know design principles by heart, you've read tutorials on how to translate theory into practice, and now you're staring at a blank canvas. After spending an entire day designing the hero area, you've carefully chosen fonts, colors, images, and CTAs. You present the best version of your work, but the silence from your audience tells you something hasn't clicked.
 
@@ -78,6 +78,7 @@ When faced with a blank page, the infinite range of options available might seem
 ### Practical tips:
 - **Fonts:** Use no more than 1–2 fonts—one for headings and one for body text.
 - **Typographic scale:** Define a scale based on 16px:
+  - Small: 12px
   - Base: 16px
   - H6: 20px
   - H5: 25px
@@ -117,11 +118,19 @@ In music, we draw inspiration. In writing, we draw inspiration. And in web desig
 
 Drawing inspiration doesn’t mean blindly copying; it means observing, analyzing, and understanding why a solution works.
 
+### Tip: Organize your inspiration
+Use a tool like **[Raindrop](https://raindrop.io/)** to organize your bookmarks visually and tag them for easy access. With Raindrop, you can:
+- Save websites, articles, and design galleries in a structured way.
+- Tag your bookmarks (e.g., "Typography", "UI Patterns") for quick filtering.
+- Create visual collections that make it easy to review and reference your inspiration.
+
 ### Resources:
 - [Awwwards](https://www.awwwards.com/)
 - [Dribbble](https://www.dribbble.com/)
 - [Behance](https://www.behance.net/)
 - [CSS Design Awards](https://www.cssdesignawards.com/)
+
+
 ---
 
 ## 4. Don’t fear the void: white space is your best ally
@@ -176,22 +185,83 @@ Remember, patterns are starting points, not rigid rules. Adapt them to suit your
 ---
 ## 6. Use a grid
 
-A grid is the foundation of a balanced design. A **classic 12-column grid** is particularly versatile.
+A grid is the foundation of a balanced and visually cohesive design. It ensures that your layout feels organized and intuitive, providing a solid framework for arranging elements consistently across your project. A classic **12-column grid** is particularly versatile and widely used in responsive web design.
 
-### Why use it:
-- **Ensures alignment and symmetry**: Keeps elements visually organized.  
-- **Provides flexibility and adaptability**: Makes it easier to adjust layouts for different screens and devices. 
+### Why use a grid:
+1. **Ensures alignment and symmetry**  
+   - Keeps elements visually organized, reducing clutter and improving readability.  
+   - Helps maintain consistency across different pages or sections.  
+
+2. **Provides flexibility and adaptability**  
+   - Makes it easier to adjust layouts for various screen sizes and devices.  
+   - Facilitates responsive design by offering predefined breakpoints for scaling content.  
+
+3. **Speeds up the design process**  
+   - Establishes clear guidelines for placement, reducing guesswork.  
+   - Simplifies collaboration between designers and developers.  
+
+### How to use a grid:
+1. **Start with a 12-column grid**:  
+   - Define consistent gutters (spacing between columns) and margins.  
+   - Use tools like **[Bootstrap](https://getbootstrap.com/)** or **[Tailwind CSS](https://tailwindcss.com/)** for pre-built responsive grid systems.
+
+2. **Define breakpoints**:  
+   - Adjust the number of columns or element sizes for different devices (e.g., mobile: 4 columns, tablet: 8 columns, desktop: 12 columns).  
+
+3. **Align elements**:  
+   - Snap text, images, and buttons to the grid to maintain visual harmony.  
+
+4. **Experiment with asymmetry**:  
+   - While grids encourage symmetry, don’t be afraid to break the rules occasionally for emphasis or dynamism.
+
+### Tools for working with grids:
+- **[Figma](https://www.figma.com/)**: Offers customizable grids and rulers for pixel-perfect alignment.  
+- **[Adobe XD](https://www.adobe.com/products/xd.html)**: Supports layout grids and guides for streamlined design workflows.  
+
+### Pro tip:
+Use grids as a starting framework, but don’t let them limit your creativity. Once you’ve mastered the basics, experiment with breaking the grid intentionally to draw attention or create unique compositions.
 
 ---
 
-## 7. Typography: more than just text
+## 7. Typography: crafting rhythm and personality
 
-Typography is not just about readability—it’s about vertical rhythm, personality, and a crucial decorative element.
+Typography is not just about readability—it defines the tone, rhythm, and personality of your design. It’s a fundamental element that goes beyond the words themselves, shaping the overall aesthetic and user experience.
+
+### Why typography matters:
+1. **Visual hierarchy**: Good typography guides the user’s eye, making it easier to navigate content and understand priorities.  
+2. **Readability**: Thoughtful typography ensures that your content is easy to read, even across different devices and lighting conditions.  
+3. **Brand identity**: Fonts and typographic choices can reinforce your brand’s personality, whether formal, playful, modern, or classic.  
+4. **Emotional connection**: Typography can evoke feelings and set the mood, subtly influencing how users perceive your message.  
 
 ### How to get started:
-- **Use precise typographic scales**: Define sizes that create a visual hierarchy.  
-- **Play with vertical rhythm**: Maintain consistent spacing between text elements.  
-- **Experiment with sizes and colors**: Add emphasis and variation to make your design stand out.  
+1. **Use precise typographic scales**:  
+   - Define sizes that create a clear visual hierarchy, like a 25% increase between levels (e.g., Base: 16px, H6: 20px, H5: 25px).  
+   - Use tools like **[Type Scale](https://type-scale.com/)** to experiment with scales and see how they harmonize.  
+
+2. **Play with vertical rhythm**:  
+   - Maintain consistent line heights and spacing between text elements to create a sense of balance.  
+   - Align text to a baseline grid to ensure visual harmony across your layout.  
+
+3. **Experiment with sizes and colors**:  
+   - Use larger, bolder fonts for headlines to grab attention.  
+   - Use smaller, subtler fonts for secondary information.  
+   - Introduce color variations to differentiate text sections or emphasize key points.  
+
+### Practical tips:
+- **Limit your fonts**: Stick to 1–2 typefaces (e.g., one for headings, one for body text) to avoid visual clutter.  
+- **Choose accessible fonts**: Ensure your fonts are legible at all sizes and weights, especially for users with visual impairments.  
+- **Avoid over-styling**: Keep your font weights, sizes, and decorations consistent to maintain a cohesive design.
+
+### Resources to improve your typography:
+- **[Better Web Type](https://betterwebtype.com/)**  
+   A free online resource by Matej Latin that dives deep into practical typography for the web.  
+- **[Better Web Type: The Book](https://betterwebtype.com/web-typography-book/)**  
+   The companion book, which covers advanced concepts like responsive typography, baseline grids, and font pairing.  
+- **[Practical Typography](https://practicaltypography.com/)**  
+   A free online guide that emphasizes clear, user-centered typography choices.
+
+### Pro tip:
+Typography isn’t just about choosing a beautiful font—it’s about creating balance, establishing rhythm, highlighting your message, and, why not, adding a touch of decoration. Experiment with font pairings, line heights, and scales to find the perfect harmony that enhances both usability and aesthetics.
 
 ---
 
@@ -244,7 +314,7 @@ In complex projects, achieving total consistency can be challenging. This is whe
 
 By thinking in systems and following these practices, you can ensure a cohesive and professional design that enhances the user experience.
 
-## 10. Think in systems: Atoms, Molecules, Organisms
+## 10. Think in systems: Building from atoms to pages
 
 A well-structured design system helps you maintain consistency throughout the project, even as the team grows or requirements change. Thinking in systems means designing not just individual screens or isolated pages, but a complete ecosystem of modular components that work together.
 
@@ -290,3 +360,12 @@ The concept of Atomic Design, introduced by Brad Frost, enables you to create mo
 - **[Atlassian Design System](https://atlassian.design/)**  
    A system focused on creating simple, intuitive, and collaborative tools.
 
+### Conclusion
+
+These are 10 tips to help you start designing with a clear focus and a defined set of choices. Like anything worth doing, the process requires study, practice, frustration (yes, it’s there, and it’s valuable), and mistakes. Each misstep teaches you something new and brings you closer to mastery.
+
+To help ease this journey, I’ll leave you with two resources that should be treated as Bibles of UI practice:  
+- **[Refactoring UI](https://refactoringui.com/)** by Adam Wathan and Steve Schoger: A practical guide to designing beautiful interfaces with actionable tips and real-world examples.  
+- **[Practical UI](https://adhamdannaway.com/)** by Adham Dannaway: A resource-packed book and website covering essential principles of user interface design with clarity and depth.
+
+Embrace the process, explore these resources, and keep refining your craft. Great design isn’t about perfection—it’s about progress.
