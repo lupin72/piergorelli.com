@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import Title from '../../components/Title.astro';
+import ParallaxImage from '../../components/ParallaxImage.astro';
+
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+// 2. For your template, you can get the entry directly from the prop
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+<Layout
+seo={{
+	title: post.data.title,
+	description: post.data.description,
+  openGraph: {
+    basic: {
+      image: post.data.cover.src,
+      title: post.data.title,
+      type: 'article',
+      url: `https://piergorelli.com/blog/${post.slug}`,
+    },
+    optional: {
+      description: post.data.description,
+      siteName: 'PierGorelli.com',
+    },
+  },
+}}
+>
+  <Header textColor="black" headerClasses="bg-white" menuColor="#000000"/>
+  <main>
+    <Title title={post.data.title} />
+		<ParallaxImage
+			src={post.data.cover.src}
+			alt="About me"
+			class="w-100 h-[46vw] object-cover"
+		/>
+    <div class="container mx-auto">
+      <div class="flex justify-center pt-28 lg:pt-48 w-full">
+        <div class="flex flex-col  prose lg:prose-xl">
+          <Content />
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

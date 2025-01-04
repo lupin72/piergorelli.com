@@ -51,6 +51,7 @@ export default {
     },
   },
 	plugins: [
-		require("@xpd/tailwind-3dtransforms")
+		require("@xpd/tailwind-3dtransforms"),
+		require('@tailwindcss/typography'),
 	],
 }

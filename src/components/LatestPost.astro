@@ -14,12 +14,14 @@ const recentPosts = limit ? allBlogPosts
     {
       recentPosts.map((post) => (
        <div>
-        <div class="relative group aspect-[4/3] overflow-hidden mb-5">
-          <Image src={post.data.cover} alt={post.data.alt} class="aspect-[4/3] object-cover mb-5 transform transition-transform duration-500 group-hover:scale-125"/>
+        <a href={"/blog/" + post.slug}>
+          <div class="relative group aspect-[4/3] overflow-hidden mb-5">
+            <Image src={post.data.cover} alt={post.data.alt} class="aspect-[4/3] object-cover mb-5 transform transition-transform duration-500 group-hover:scale-125"/>
+          </div>
+          <h3 class="text-xl lg:text-2xl text-boulder-900">{post.data.title}</h3>
+        </a>
         </div>
-        <a href={"/blog/" + post.slug}><h3 class="text-xl lg:text-2xl text-boulder-900">{post.data.title}</h3></a>
-        </div>
-       
+
       ))
     }
   </div>

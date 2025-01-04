@@ -1,8 +1,8 @@
 ---
-const { title, border = false } = Astro.props;
+const { title, border = false, blog = true } = Astro.props;
 ---
 <section class={`bg-white pt-28 lg:pt-48 pb-12 mx-8 ${border ? 'border-b' : ''}`}>
-  <h1 class=" text-boulder-900 font-display uppercase font-extrabold text-left w-full leading-none relative block tracking-normal text-[10.7vw]">{ title }</h1>
+  <h1 class={`text-boulder-900 font-display font-extrabold text-left w-full leading-none relative block tracking-normal ${blog ? 'text-3xl lg:text-4xl 2xl:text-5xl' : 'text-[10.7vw] uppercase'}`}>{ title }</h1>
   <div class="flex w-full justify-end items-end leading-none" id="scroll-down"><span class="text-boulder-900 text-base lg:text-2xl">Scroll down</span>
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-right"><line x1="7" y1="7" x2="17" y2="17"></line><polyline points="17 7 17 17 7 17"></polyline></svg>
   </div>
