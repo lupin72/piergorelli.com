@@ -2,6 +2,7 @@
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
 import { SEO, type Props as SEOProps } from "astro-seo";
 import SiteData from "../constants/siteData.json";
+import { imageConfig } from "astro:assets";
 
 interface Props {
 	seo?: SEOProps;
@@ -46,7 +47,8 @@ const pages = [
       twitter={seo?.twitter ?? {
         title: SiteData.default.twitter.title,
         description: SiteData.default.twitter.description,
-        creator: SiteData.default.twitter.creator
+        creator: SiteData.default.twitter.creator,
+				image: SiteData.default.openGraph.image
       }}
     />
 		<script 
