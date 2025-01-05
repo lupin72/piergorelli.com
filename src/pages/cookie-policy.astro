@@ -2,13 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import AboutComponent from '../components/About.astro';
-import Mission from '../components/Mission.astro';
 import Title from '../components/Title.astro';
-import ParallaxImage from '../components/ParallaxImage.astro';
-import catWithLaptop from '../assets/images/cat-with-laptop.jpg';
 import SiteData from "../constants/siteData.json";
-import Experience from '../components/Experience.astro';
 
 ---
 
@@ -21,15 +16,8 @@ import Experience from '../components/Experience.astro';
 	>
 	<Header textColor="black" headerClasses="" menuColor="#000000"/>
 	<main>
-		<Title title="About me" />
-		<ParallaxImage
-			src={catWithLaptop.src}
-			alt="About me"
-			class="w-100 h-[46vw] object-cover"
-		/>
-		<AboutComponent actionLink="/services" actionText="Discover my services"/>
-    <Mission/>
-		<Experience subtitle="03"/>
+		<Title title="Cookie policy" border="true" />
+		
 	</main>
   <Footer />
 </Layout>

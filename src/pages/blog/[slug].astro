@@ -19,6 +19,12 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await post.render();
 const siteBaseURL = new URL(Astro.url);
+const pubDate = new Date(post.data.pubDate);
+const formattedDate = pubDate.toLocaleDateString('en-US', { 
+  year: 'numeric', 
+  month: 'long', 
+  day: 'numeric' 
+});
 ---
 <Layout
 seo={{
@@ -47,7 +53,7 @@ seo={{
 >
   <Header textColor="black" headerClasses="bg-white" menuColor="#000000"/>
   <main>
-    <Title title={post.data.title} />
+    <Title title={post.data.title} subTitle={formattedDate} />
 		<ParallaxImage
 			src={post.data.cover.src}
 			alt="About me"
