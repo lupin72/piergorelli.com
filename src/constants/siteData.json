@@ -8,7 +8,7 @@
       "description": "Explore the journey of a developer blending code with design. Discover the perfect balance between functionality, minimalism, and creativity in web development.",
       "type": "website",
       "url": "https://piergorelli.com",
-      "image": "https://r44j.dev/raj.png"
+      "image": "https://piergorelli.com/i-do-things.png"
     },
     "twitter": {
       "title": "Pier Gorelli | Full Stack Developer",
@@ -18,19 +18,25 @@
   },
   "pages": {
     "about": {
-      "title": "About Pier Gorelli",
-      "description": "Full-stack web dev with 1.5 years at a US startup. Skilled in React, Next.js, Tailwind, Chrome extensions & SEO. I Build engaging & scalable web apps. Looking to bring your vision to life? Let's connect"
+      "title": "About me",
+      "description": "With a passion for minimalism and detail, I transform ideas into fast, intuitive, and stylish digital products, blending development and design seamlessly."
     },
     "services": {
       "title": "Services",
-      "description": "R44J offers a range of services including web development, SEO, Chrome extensions, and e-commerce. Specializing in Figma designs, scalable architectures, backend and frontend development, and collaborating on IOS apps, mobile apps, and PWAs."
+      "description": "Web and app development, UI/UX design, SEO optimization: tailored digital solutions to meet every need."
     },
     "blog": {
       "title": "Blog",
-      "description": "R44J's blog covers a range of topics including web development, SEO, Chrome extensions, e-commerce, Figma designs, scalable architectures, backend and frontend development, and collaborating on IOS apps, mobile apps, and PWAs."
+      "description": "A space where I share my journey in development and design—a place to inspire and be inspired, exploring creativity one story at a time."
     },
     "contact": {
-      "title": "Contact Pier Gorelli"
+      "title": "Contact"
+    },
+    "privacy": {
+      "title": "Privacy Policy"
+    },
+    "cookie": {
+      "title": "Cookie Policy"
     }
   }
 }
