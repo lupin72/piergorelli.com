@@ -1,6 +1,6 @@
 ---
 title: 'Review: Hidden potential by Adam Grant'
-pubDate: 2024-12-15
+pubDate: 2024-12-28
 description: "Discover Adam Grant's Hidden Potential, a guide to unlocking growth, fostering talent, and achieving success beyond innate abilities. Inspiring and practical!"
 author: 'Pier Gorelli'
 cover: "./images/hidden-potential-adam-grant.png"

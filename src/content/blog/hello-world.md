@@ -1,6 +1,6 @@
 ---
 title: 'Hello World'
-pubDate: 2024-12-01
+pubDate: 2024-12-21
 description: 'Discover my journey from 25 years of creativity and code to my new personal site: a space to share, experiment, and inspire with passion and consistency.'
 author: 'Pier Gorelli'
 cover: "./images/hello-world.jpg"
