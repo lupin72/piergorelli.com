@@ -48,7 +48,8 @@ const pages = [
         title: SiteData.default.twitter.title,
         description: SiteData.default.twitter.description,
         creator: SiteData.default.twitter.creator,
-				image: SiteData.default.openGraph.image
+				image: SiteData.default.openGraph.image,
+				card:  SiteData.default.openGraph.image ? 'summary_large_image' : 'summary',
       }}
     />
 		<script 

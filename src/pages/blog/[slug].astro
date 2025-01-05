@@ -18,6 +18,7 @@ export async function getStaticPaths() {
 // 2. For your template, you can get the entry directly from the prop
 const { post } = Astro.props;
 const { Content } = await post.render();
+const siteBaseURL = new URL(Astro.url);
 ---
 <Layout
 seo={{
@@ -39,7 +40,7 @@ seo={{
       title: post.data.title,
       description: post.data.description,
       creator: '@PGorelli91424',
-      image: post.data.cover.src,
+      image: new URL(post.data.cover.src, siteBaseURL),
       card:  post.data.cover.src ? 'summary_large_image' : 'summary',
   }
 }}
