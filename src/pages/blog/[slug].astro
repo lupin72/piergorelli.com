@@ -25,7 +25,7 @@ seo={{
 	description: post.data.description,
   openGraph: {
     basic: {
-      image: post.data.cover.src,
+      image: post.data.cover.toString(),
       title: post.data.title,
       type: 'article',
       url: `https://piergorelli.com/blog/${post.slug}`,
@@ -40,6 +40,7 @@ seo={{
       description: post.data.description,
       creator: '@PGorelli91424',
       image: post.data.cover.src,
+      card:  post.data.cover.src ? 'summary_large_image' : 'summary',
   }
 }}
 >
