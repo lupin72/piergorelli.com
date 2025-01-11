@@ -23,7 +23,7 @@ WP Engine quickly pushed back, denying the allegations and claiming that its pra
 
 ## The community's reaction
 
-The community was deeply divided. On one side, many supported Mullenweg, arguing that drastic measures were necessary to protect the integrity of the WordPress brand. On the other, some questioned the level of control a single individual wields over a platform that powers **40% of the web** and dominates **60% of the CMS market**.
+The community was deeply divided. On one side, many supported Mullenweg, arguing that drastic measures were necessary to protect the integrity of the WordPress brand. On the other, some questioned the level of control a single individual wields over a platform that powers **40+% of the web** and dominates **60+% of the CMS market**.
 
 The fallout also hit Automattic hard: **159 developers and engineers**, 80% of whom were directly involved in WordPress development, resigned from the company. Many cited disagreements with Mullenweg’s vision and actions, both from technical and ethical perspectives.
 
@@ -43,7 +43,7 @@ Beyond the governance debate, a bigger question looms: **Is WordPress still a te
 
 WordPress was born 20 years ago as a blogging platform, disrupting a CMS market that was dominated by complex tools like Joomla and Mambo. Its defining trait? **Simplicity.** A user-friendly interface, fast installation, a growing ecosystem of plugins and themes, and a system of **hooks** that made extending its functionality easy. With just a few lines in `functions.php` (the (in)famous "just copy and paste in your functions.php"), you could tweak your site without breaking a sweat.
 
-Over the years, WordPress has evolved to meet new demands, introducing features like the **REST API** for headless setups and **Gutenberg**, which has made no-code content creation more accessible. However, these updates haven’t fundamentally changed its architecture, which still prioritizes backward compatibility. This approach has cemented WordPress’s dominance, powering over **40% of the web** and capturing **60% of the CMS market**.
+Over the years, WordPress has evolved to meet new demands, introducing features like the **REST API** for headless setups and **Gutenberg**, which has made no-code content creation more accessible. However, these updates haven’t fundamentally changed its architecture, which still prioritizes backward compatibility. This approach has cemented WordPress’s dominance, powering over **40+% of the web** and capturing **60+% of the CMS market**.
 
 But the real question isn’t, **“Can you use WordPress?”** It’s, **“Is WordPress the best choice?”** Being a "universal" platform doesn’t always make it the most efficient option.
 
