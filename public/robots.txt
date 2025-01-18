@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://piergorelli.com/sitemap-index.xml
