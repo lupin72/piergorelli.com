@@ -1,7 +1,7 @@
 ---
 title: 'Freelance and full remote: a guide to surviving. Part 1'
 pubDate: 2025-01-18
-description: 'Is WordPress still worth it in 2025? Explore its relevance, technical viability, alternatives like Laravel, JamStack, and the rise of Drupal CMS.'
+description: 'A practical guide to remote freelancing: tips to stay organized, manage stress, and boost productivity while working from home.'
 author: 'Pier Gorelli'
 cover: "./images/surfing.jpg"
 alt: 'Wordpress'
