@@ -25,6 +25,28 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
   month: 'long', 
   day: 'numeric' 
 });
+
+const article = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.data.title,
+  "description": post.data.description,
+  "image": post.data.cover.src,
+  "author": {
+    "@type": "Person",
+    "name": "Pier Gorelli"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Pier Gorelli",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://piergorelli.com/logo.png"
+    }
+  },
+  "datePublished": pubDate.toISOString(),
+  "dateModified": pubDate.toISOString()
+};
 ---
 <Layout
 seo={{
@@ -50,6 +72,8 @@ seo={{
       card:  post.data.cover.src ? 'summary_large_image' : 'summary',
   }
 }}
+
+schema={article}
 >
   <Header textColor="black" headerClasses="bg-white" menuColor="#000000"/>
   <main>

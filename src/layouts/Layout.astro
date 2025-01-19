@@ -1,14 +1,16 @@
 ---
 import { GoogleFontsOptimizer } from "astro-google-fonts-optimizer";
 import { SEO, type Props as SEOProps } from "astro-seo";
+import { Schema, type SchemaProps } from "astro-seo-schema";
+import type { Person, Article } from "schema-dts";
 import SiteData from "../constants/siteData.json";
-import { imageConfig } from "astro:assets";
 
 interface Props {
 	seo?: SEOProps;
+	schema?: any;
 }
 
-const { seo } = Astro.props;
+const { seo, schema } = Astro.props;
 const pages = [
 	{ title: 'Documentation', href: 'https://docs.astro.build/', body: 'Learn how Astro works and explore the official API docs.' },
 	{ title: 'Integrations', href: 'https://astro.build/integrations/', body: 'Supercharge your project with new frameworks and libraries.' },
@@ -52,6 +54,7 @@ const pages = [
 				card:  SiteData.default.openGraph.image ? 'summary_large_image' : 'summary',
       }}
     />
+		{schema && <Schema item={schema} />}
 		<script 
 			is:inline 
 			type="text/partytown"
