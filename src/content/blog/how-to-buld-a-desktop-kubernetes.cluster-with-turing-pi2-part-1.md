@@ -171,7 +171,8 @@ To access the CM4s via serial console (through the USB port on the BMC), UART mu
 
 ```bash
 ssh root@<bmc-ip>
-tpi advanced msd --node 1  # for node 1 - tpi adavanced msd --node x where x = 1 to 4
+# tpi adavanced msd --node x where x = 1 to 4
+tpi advanced msd --node 1 
 
 mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
