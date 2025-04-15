@@ -125,12 +125,17 @@ The Turing Pi 2 only has a 2-pin fan header, so I connected only the power pins.
 
 ## First Boot
 
-I connected a **D-Link Archer C6** in bridge mode to my Wi-Fi and ran a cable from it to the Turing Pi 2.
+I connected a **D-Link Archer C6** in bridge mode to my Wi-Fi and ran an Ethernet cable from it to the Turing Pi 2.
 
-To access the **BMC web interface**, I checked my router's device list for the assigned IP.
+To access the **BMC web interface**, you can use the hostname `turingpi.local` or the assigned IP address from your router.
 
-Although the BMC should be accessible via `turingpi.local`, on macOS it didn’t resolve (likely due to mDNS or Bonjour limitations).
+⚠️ On macOS, `turingpi.local` might not resolve due to mDNS or Bonjour limitations.  
+In that case, just add the IP to your `/etc/hosts` file like so:
 
+```text
+#(replace the IP with yours)
+192.168.1.123 turingpi.local
+```
 ---
 
 ## Firmware Upgrade
