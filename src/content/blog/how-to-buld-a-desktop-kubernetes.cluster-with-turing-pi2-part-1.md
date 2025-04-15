@@ -142,7 +142,7 @@ Upon logging into the BMC, I noticed it was running an early firmware version â€
 
 I upgraded from version 1.x to 2.x as follows:
 
-- Downloaded the image from [GitHub](https://github.com/turing-machines/turing-pi-bmc/releases)
+- Downloaded the image from [Turingpi](https://firmware.turingpi.com/turing-pi2/)
 - Flashed it to a 32GB microSD with [balenaEtcher](https://etcher.tortulandia.com/)
 - Powered off the Turing Pi 2, inserted the microSD, powered it back on
 - Waited for all 4 Ethernet LEDs to blink
