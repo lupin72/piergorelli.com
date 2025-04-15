@@ -133,7 +133,7 @@ To access the **BMC web interface**, you can use the hostname `turingpi.local` o
 In that case, just add the IP to your `/etc/hosts` file like so:
 
 ```text
-#(replace the IP with yours)
+# replace the IP with yours
 192.168.1.123 turingpi.local
 ```
 ---
