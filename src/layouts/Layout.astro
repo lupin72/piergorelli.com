@@ -12,9 +12,6 @@ interface Props {
 
 const { seo, schema } = Astro.props;
 
-// Get current page URL for canonical links
-const currentUrl = new URL(Astro.request.url);
-const canonicalUrl = currentUrl.origin + currentUrl.pathname;
 
 const pages = [
 	{ title: 'Documentation', href: 'https://docs.astro.build/', body: 'Learn how Astro works and explore the official API docs.' },
@@ -32,7 +29,6 @@ const pages = [
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<link rel="canonical" href={canonicalUrl} />
 		<GoogleFontsOptimizer url="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"></GoogleFontsOptimizer>
 		<GoogleFontsOptimizer url="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"></GoogleFontsOptimizer>
 		<!-- Start cookieyes banner --> 
