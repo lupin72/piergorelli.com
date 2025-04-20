@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /~partytown/
 
-Sitemap: https://piergorelli.com/sitemap-index.xml
+Sitemap: /sitemap-index.xml

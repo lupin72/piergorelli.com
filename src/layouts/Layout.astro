@@ -11,6 +11,11 @@ interface Props {
 }
 
 const { seo, schema } = Astro.props;
+
+// Get current page URL for canonical links
+const currentUrl = new URL(Astro.request.url);
+const canonicalUrl = currentUrl.origin + currentUrl.pathname;
+
 const pages = [
 	{ title: 'Documentation', href: 'https://docs.astro.build/', body: 'Learn how Astro works and explore the official API docs.' },
 	{ title: 'Integrations', href: 'https://astro.build/integrations/', body: 'Supercharge your project with new frameworks and libraries.' },
@@ -27,9 +32,12 @@ const pages = [
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="canonical" href={canonicalUrl} />
 		<GoogleFontsOptimizer url="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"></GoogleFontsOptimizer>
 		<GoogleFontsOptimizer url="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"></GoogleFontsOptimizer>
-		<!-- Start cookieyes banner --> <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/cd34a65fb91b26eb002d84d5/script.js"></script> <!-- End cookieyes banner -->
+		<!-- Start cookieyes banner --> 
+		<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/cd34a65fb91b26eb002d84d5/script.js"></script> 
+		<!-- End cookieyes banner -->
 		<SEO
       {...seo}
       title={seo?.title ?? SiteData.default.title}
@@ -43,7 +51,8 @@ const pages = [
         },
         optional: {
           description: SiteData.default.openGraph.description,
-          siteName: SiteData.default.openGraph.title
+          siteName: SiteData.default.openGraph.title,
+          locale: 'en_US'
         }
       }}
       twitter={seo?.twitter ?? {
@@ -55,17 +64,25 @@ const pages = [
       }}
     />
 		{schema && <Schema item={schema} />}
+		
+		<!-- Google Analytics with consent management -->
 		<script 
 			is:inline 
 			type="text/partytown"
-			async src="https://www.googletagmanager.com/gtag/js?id=G-BJ18EJYEET">
+			async 
+			src="https://www.googletagmanager.com/gtag/js?id=G-BJ18EJYEET"
+			data-cookieconsent="statistics"
+			data-partytown-config='{"debug": false, "forward": ["dataLayer.push"]}'>
 		</script>
-		<script is:inline type="text/partytown">
+		<script is:inline type="text/partytown" data-cookieconsent="statistics">
   		window.dataLayer = window.dataLayer || [];
   		function gtag(){dataLayer.push(arguments);}
-  			gtag('js', new Date());
-
-  			gtag('config', 'G-BJ18EJYEET');
+  		gtag('js', new Date());
+  		gtag('config', 'G-BJ18EJYEET', {
+				anonymize_ip: true,
+				allow_google_signals: false,
+				allow_ad_personalization_signals: false
+			});
 		</script>
 		<style is:global>
 			.btn {
