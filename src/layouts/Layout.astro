@@ -4,6 +4,7 @@ import { SEO, type Props as SEOProps } from "astro-seo";
 import { Schema, type SchemaProps } from "astro-seo-schema";
 import type { Person, Article } from "schema-dts";
 import SiteData from "../constants/siteData.json";
+import "../styles/global.css";
 
 interface Props {
 	seo?: SEOProps;
@@ -11,15 +12,6 @@ interface Props {
 }
 
 const { seo, schema } = Astro.props;
-
-
-const pages = [
-	{ title: 'Documentation', href: 'https://docs.astro.build/', body: 'Learn how Astro works and explore the official API docs.' },
-	{ title: 'Integrations', href: 'https://astro.build/integrations/', body: 'Supercharge your project with new frameworks and libraries.' },
-	{ title: 'Themes', href: 'https://astro.build/themes/', body: 'Explore a galaxy of community-built starter themes.' },
-	{ title: 'Community', href: 'https://astro.build/chat/', body: 'Come say hi to our amazing Discord community. ❤️' },
-];
-
 ---
 
 <!doctype html>
@@ -148,6 +140,24 @@ const pages = [
 			 transform-origin: 0% 50%;
 			 border-radius: 9999px;
 		 }
+
+/* Mobile specific styles */
+@media (max-width: 640px) {
+  .astro-code {
+		word-break: break-all;
+		white-space: pre-wrap;
+  }
+  
+  .astro-code code {
+		white-space: pre-wrap;
+  word-wrap: break-word;
+  }
+  
+  .astro-code .line {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+  }
+}
 		 </style>
 	</head>
 	<body>
