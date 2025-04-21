@@ -577,3 +577,16 @@ At this point, your Kubernetes cluster based on Turing Pi 2 and Raspberry Pi CM4
 * Prometheus and Grafana for monitoring and visualizing metrics
 
 This setup provides a solid foundation to experiment with Kubernetes, automate application delivery, monitor system health, and easily scale new features.
+
+---
+
+### References
+
+- [TuringPi](https://docs.turingpi.com/docs/turing-pi2-kubernetes-installation)
+- [K3s](https://k3s.io/)
+- [Helm](https://helm.sh/)
+- [MetalLB](https://metallb.universe.tf/)
+- [ArgoCD](https://argo-cd.readthedocs.io/)
+- [Prometheus](https://prometheus.io/)
+- [Grafana](https://grafana.com/)
+- [nfs-subdir-external-provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)
