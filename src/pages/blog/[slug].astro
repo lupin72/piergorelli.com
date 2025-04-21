@@ -5,7 +5,12 @@ import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import Title from '../../components/Title.astro';
 import ParallaxImage from '../../components/ParallaxImage.astro';
+import type { CollectionEntry } from 'astro:content';
+import ReadingTime from '../../components/ReadingTime.astro';
 
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -15,6 +20,7 @@ export async function getStaticPaths() {
     props: { post },
   }));
 }
+
 // 2. For your template, you can get the entry directly from the prop
 const { post } = Astro.props;
 const { Content } = await post.render();
@@ -72,7 +78,6 @@ seo={{
       card:  post.data.cover.src ? 'summary_large_image' : 'summary',
   }
 }}
-
 schema={article}
 >
   <Header textColor="black" headerClasses="bg-white" menuColor="#000000"/>
@@ -86,10 +91,24 @@ schema={article}
     <div class="container mx-auto">
       <div class="flex justify-center pt-28 lg:pt-48 w-full">
         <div class="flex flex-col  prose lg:prose-xl">
-          <Content />
+          <article>
+            <div class="post-meta">
+              <ReadingTime content={post.body} />
+            </div>
+            <Content />
+          </article>
         </div>
       </div>
     </div>
   </main>
   <Footer />
 </Layout>
+
+<style>
+  .post-meta {
+    display: flex;
+    gap: 1rem;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+</style>
