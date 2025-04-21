@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /~partytown/
 
-Sitemap: /sitemap-index.xml
+Sitemap: https://piergorelli.com/sitemap-index.xml
