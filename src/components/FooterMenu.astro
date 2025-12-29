@@ -5,10 +5,12 @@ const pages = [
   {
     name: 'Cookie Policy',
     url: '/cookie-policy/',
+    title: 'Read the Cookie Policy',
   },
   {
     name: 'Privacy Policy',
     url: '/privacy-policy/',
+    title: 'Read the Privacy Policy',
   },
 ];
 ---
@@ -18,7 +20,7 @@ const pages = [
     <a href
       ={page.url}
       class="text-white lg:text-xl flex items-start gap-2 mb-5 font-semibold"
-      title={page.name}
+      title={page.title}
     >
       {page.name}
     </a>

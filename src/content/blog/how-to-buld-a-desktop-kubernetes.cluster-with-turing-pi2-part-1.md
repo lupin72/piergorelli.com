@@ -4,7 +4,7 @@ pubDate: 2025-04-15
 description: "Learn how to assemble a compact, low-power Kubernetes cluster at home using Turing Pi 2 and Raspberry Pi CM4. Detailed, practical and fun!"
 author: 'Pier Gorelli'
 cover: "./images/turing-pi2.jpg"
-alt: 'Turing PI2 Mini ITS'
+alt: 'Turing PI2 Mini ITS - Part 1'
 tags: ["devops", "diy", ""]
 ---
 ## Introduction
