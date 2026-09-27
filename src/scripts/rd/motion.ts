@@ -163,16 +163,24 @@ function reveals() {
   });
 }
 
-/* Outlined "wireframe" text becomes solid as it scrolls through the viewport. */
+/* Outlined "wireframe" text becomes solid as it scrolls through the viewport.
+   The solid layer slides in from the left while its content slides the opposite way,
+   so the glyphs stay put and only the edge moves — transforms only, no repaint. */
 function wireframes() {
   gsap.utils.toArray<HTMLElement>("[data-wireframe]").forEach((section) => {
-    const solids = section.querySelectorAll<HTMLElement>("[data-wf-solid]");
+    const solids = gsap.utils.toArray<HTMLElement>("[data-wf-solid]", section);
+    const inners = solids.map((el) => el.firstElementChild as HTMLElement);
     const notes = section.querySelectorAll<HTMLElement>("[data-wf-note]");
+    gsap.set(solids, { xPercent: -101, force3D: true });
+    gsap.set(inners, { xPercent: 101, force3D: true });
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: section, start: "top 65%", end: "bottom 55%", scrub: 0.6 },
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: section, start: "top 65%", end: "bottom 60%", scrub: true },
     });
-    tl.fromTo(solids, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", ease: "none", stagger: 0.35 });
-    tl.to(notes, { opacity: 0.15, ease: "none" }, 0.4);
+    solids.forEach((solid, i) => {
+      tl.to(solid, { xPercent: 0 }, i * 0.6).to(inners[i], { xPercent: 0 }, i * 0.6);
+    });
+    tl.to(notes, { opacity: 0.15 }, 0.4);
   });
 }
 
@@ -182,7 +190,7 @@ function lines() {
       scaleX: 1,
       transformOrigin: "left center",
       ease: EASE_IN_OUT,
-      scrollTrigger: { trigger: el, start: "top 90%", end: "top 45%", scrub: 0.8 },
+      scrollTrigger: { trigger: el, start: "top 90%", end: "top 45%", scrub: true },
     });
   });
 }
@@ -192,6 +200,7 @@ function parallax() {
     const amount = Number(el.dataset.parallax) || 12;
     gsap.fromTo(el, { yPercent: -amount }, {
       yPercent: amount,
+      force3D: true,
       ease: "none",
       scrollTrigger: { trigger: el.parentElement ?? el, start: "top bottom", end: "bottom top", scrub: true },
     });

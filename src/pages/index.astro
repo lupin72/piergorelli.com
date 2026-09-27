@@ -113,11 +113,13 @@ const schema = [
       <span class="note" data-wf-note>fig. 01 — wireframe → production</span>
     </header>
     {["Design deserves", "engineering that", "never compromises."].map((line, i) => (
-      <p class="wf-line h1">
-        <span class="outline-text" aria-hidden="true">{line}</span>
-        <span class="wf-solid" data-wf-solid>{line}</span>
+      <div class="wf-row">
+        <p class="wf-line h1">
+          <span class="outline-text" aria-hidden="true">{line}</span>
+          <span class="wf-solid" data-wf-solid><span class="wf-solid__inner">{line}</span></span>
+        </p>
         <span class="wf-dim note" data-wf-note aria-hidden="true">{["↤ 12 col ↦", "font-size: var(--step-4)", "ls −0.05em"][i]}</span>
-      </p>
+      </div>
     ))}
     <div class="manifesto__body grid-12">
       <p class="lead" data-reveal="up">
@@ -260,31 +262,33 @@ const schema = [
   .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
   @media (max-width: 767px) { .hide-sm { display: none; } }
 
-  /* Manifesto */
-  .wf-line { position: relative; white-space: nowrap; }
+  /* Manifesto: outlined text with a solid copy revealed by two opposed translations
+     (transform-only, so it composites on the GPU instead of repainting giant glyphs). */
+  .wf-row { position: relative; }
+  .wf-line { position: relative; width: fit-content; white-space: nowrap; }
   .wf-solid {
     position: absolute;
-    inset: 0;
-    clip-path: inset(0 0 0 0);
+    top: -0.15em;
+    bottom: -0.3em;
+    left: 0;
+    right: 0;
+    padding-top: 0.15em;
+    overflow: hidden;
   }
+  .wf-solid__inner { display: block; }
   .wf-dim {
     position: absolute;
     right: 0;
-    top: 0.4em;
-    font-size: 0.65rem;
-    letter-spacing: 0.02em;
+    top: 0.6em;
     color: var(--accent-text);
   }
-  .wf-line:nth-of-type(2) { padding-left: 8vw; }
-  .wf-line:nth-of-type(3) { padding-left: 16vw; }
-  .wf-line:nth-of-type(2) .wf-solid { left: 8vw; }
-  .wf-line:nth-of-type(3) .wf-solid { left: 16vw; }
+  .wf-row:nth-of-type(2) .wf-line { margin-left: 8vw; }
+  .wf-row:nth-of-type(3) .wf-line { margin-left: 16vw; }
   .manifesto__body { margin-top: clamp(48px, 7vw, 112px); }
   .manifesto__body p { grid-column: 7 / -1; }
   @media (max-width: 767px) {
     .wf-line { white-space: normal; font-size: var(--step-3); }
-    .wf-line:nth-of-type(n) { padding-left: 0; }
-    .wf-line:nth-of-type(n) .wf-solid { left: 0; }
+    .wf-row:nth-of-type(n) .wf-line { margin-left: 0; }
     .wf-dim { display: none; }
     .manifesto__body p { grid-column: 1 / -1; }
   }
