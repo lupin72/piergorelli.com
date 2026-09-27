@@ -163,23 +163,19 @@ function reveals() {
   });
 }
 
-/* Outlined "wireframe" text becomes solid as it scrolls through the viewport.
-   The solid layer slides in from the left while its content slides the opposite way,
-   so the glyphs stay put and only the edge moves — transforms only, no repaint. */
+/* Outlined "wireframe" text fills letter by letter as it scrolls through the viewport.
+   Negative top/bottom insets so descenders (g, p) are filled too. */
 function wireframes() {
   gsap.utils.toArray<HTMLElement>("[data-wireframe]").forEach((section) => {
-    const solids = gsap.utils.toArray<HTMLElement>("[data-wf-solid]", section);
-    const inners = solids.map((el) => el.firstElementChild as HTMLElement);
+    const solids = section.querySelectorAll<HTMLElement>("[data-wf-solid]");
     const notes = section.querySelectorAll<HTMLElement>("[data-wf-note]");
-    gsap.set(solids, { xPercent: -101, force3D: true });
-    gsap.set(inners, { xPercent: 101, force3D: true });
     const tl = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: { trigger: section, start: "top 65%", end: "bottom 60%", scrub: true },
     });
-    solids.forEach((solid, i) => {
-      tl.to(solid, { xPercent: 0 }, i * 0.6).to(inners[i], { xPercent: 0 }, i * 0.6);
-    });
+    tl.fromTo(solids,
+      { clipPath: "inset(-0.35em 100% -0.45em 0em)" },
+      { clipPath: "inset(-0.35em 0% -0.45em 0em)", stagger: 0.6 });
     tl.to(notes, { opacity: 0.15 }, 0.4);
   });
 }

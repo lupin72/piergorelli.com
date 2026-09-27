@@ -268,12 +268,10 @@ const schema = [
   .wf-line { position: relative; width: fit-content; white-space: nowrap; }
   .wf-solid {
     position: absolute;
-    top: -0.15em;
-    bottom: -0.3em;
-    left: 0;
-    right: 0;
-    padding-top: 0.15em;
-    overflow: hidden;
+    inset: 0;
+    /* negative top/bottom insets keep ascenders and descenders (g, p) inside the clip */
+    clip-path: inset(-0.35em 0 -0.45em 0);
+    will-change: clip-path;
   }
   .wf-solid__inner { display: block; }
   .wf-dim {
