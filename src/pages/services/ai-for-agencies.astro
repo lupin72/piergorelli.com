@@ -1,0 +1,243 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const useCases = [
+  { n: "01", title: "Brief intake & research", body: "Client briefs, calls and decks turned into a structured brief, competitor scan and open questions — before the kick-off." },
+  { n: "02", title: "Multilingual content pipelines", body: "One source text, on-brand versions in IT / ES / EN for web and social, with a human approval step." },
+  { n: "03", title: "Client reporting", body: "Analytics, ads and SEO data pulled together every month and written up in your agency's voice." },
+  { n: "04", title: "Asset production", body: "Resizes, variants, alt text and naming handled by a workflow, not by your juniors at 7 pm." },
+  { n: "05", title: "Internal knowledge assistant", body: "Ask your past proposals, guidelines and case studies a question — answers with sources." },
+  { n: "06", title: "Proposal drafts", body: "First drafts of estimates and proposals from your own templates and historical data." },
+];
+
+const offer = [
+  { n: "A", title: "AI audit", body: "Two workshops with your team to map processes and pick the three automations with the best return." },
+  { n: "B", title: "Working prototype", body: "One workflow running on your real tools in about two weeks, so the team can judge it on actual work." },
+  { n: "C", title: "Rollout & training", body: "Hardening, documentation and hands-on training. Your team owns the workflows at the end." },
+];
+
+const stack = ["n8n", "Claude", "OpenAI", "Supabase · pgvector", "WordPress", "Google Workspace", "Notion", "Slack"];
+
+const faqs = [
+  { q: "Do we need a technical team?", a: "No. I build and host the workflows, and train whoever will look after them. Most agencies need one curious person, not a developer." },
+  { q: "What about client data and privacy?", a: "Workflows can run on your own infrastructure or EU-hosted services, with models that don't train on your data. We decide together what never leaves the building." },
+  { q: "Which AI models do you use?", a: "Whichever fits the task and the budget — usually Claude or OpenAI models, sometimes open models self-hosted. Workflows are built so the model can be swapped." },
+  { q: "Can you work white-label for our clients?", a: "Yes. I often build AI features that agencies sell to their own clients, under the agency's name and contract." },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "AI for creative agencies",
+    serviceType: "AI automation and adoption consulting",
+    provider: { "@type": "Person", "@id": "https://piergorelli.com/#person", name: "Pier Gorelli" },
+    areaServed: ["ES", "IT", "EU"],
+    url: "https://piergorelli.com/services/ai-for-agencies/",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://piergorelli.com/" },
+      { "@type": "ListItem", position: 2, name: "Services", item: "https://piergorelli.com/services/" },
+      { "@type": "ListItem", position: 3, name: "AI for agencies", item: "https://piergorelli.com/services/ai-for-agencies/" },
+    ],
+  },
+];
+---
+
+<Base
+  title="AI for Creative Agencies — n8n Automation & AI Adoption | Pier Gorelli"
+  description="AI automation for creative and marketing agencies: n8n workflows for briefs, multilingual content, reporting and assets, plus hands-on AI adoption for your team."
+  motion="showcase"
+  schema={schema}
+>
+  <section class="hero wrap">
+    <nav class="note crumbs" aria-label="Breadcrumb">
+      <a href="/" class="link">Home</a> / <a href="/services/" class="link">Services</a> / <span class="note--ink">AI for agencies</span>
+    </nav>
+    <p class="note hero__index">[Services / 02]</p>
+    <h1 class="h1 hero__title" data-hero-human>AI for creative agencies</h1>
+    <p class="h2 hero__machine" data-hero-generate>Automate the busywork. Keep the craft.</p>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine — generated · <span data-gen-tokens>9</span> tokens · <span data-gen-ms>820</span> ms</p>
+    <div class="hero__foot" data-hero-fade>
+      <p class="lead">
+        Your team should spend its hours on ideas, not on copy-pasting reports and resizing banners. I build the AI workflows that take the repetitive work off the table — and teach your people to run them.
+      </p>
+      <a href="/contact/" class="btn">Book an AI audit call <span class="arrow">→</span></a>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[01] Where AI actually helps an agency</span>
+      <span class="note">6 use cases · real, not hype</span>
+    </header>
+    <ol class="cases grid-12">
+      {useCases.map((c) => (
+        <li class="case" data-reveal="up">
+          <span class="note note--accent">{c.n}</span>
+          <h2 class="case__title">{c.title}</h2>
+          <p class="case__body">{c.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[02] What you get</span>
+      <span class="note">No fixed prices — scoped on your processes</span>
+    </header>
+    <h2 class="h2 offer__claim" data-reveal="lines">Start small, prove it on real work, then scale what pays back.</h2>
+    <div class="offer__line" data-draw></div>
+    <ol class="offer grid-12">
+      {offer.map((o) => (
+        <li class="offer__item" data-reveal="up">
+          <span class="offer__n">{o.n}</span>
+          <h3 class="h3">{o.title}</h3>
+          <p>{o.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[03] Stack</span>
+      <span class="note">Model-agnostic by design</span>
+    </header>
+    <ul class="stack" data-reveal="up">
+      {stack.map((s) => <li>{s}</li>)}
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[04] FAQ</span>
+      <span class="note">{faqs.length} questions</span>
+    </header>
+    <div class="faqs">
+      {faqs.map((f) => (
+        <details class="faq" data-reveal="up">
+          <summary><span class="h3">{f.q}</span><span class="faq__icon" aria-hidden="true"></span></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="section wrap cta">
+    <header class="section-head">
+      <span class="note note--ink">[05] Next</span>
+      <span class="note">30 minutes · no slides</span>
+    </header>
+    <h2 class="display cta__title" data-reveal="lines">Which task would you automate first?</h2>
+    <div class="cta__actions" data-reveal="up">
+      <a href="/contact/" class="btn">Book an AI audit call <span class="arrow">→</span></a>
+      <a href="/lab/site-audit/" class="btn btn--ghost">Try the Site Audit AI demo</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    min-height: 92svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1.25rem;
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+  }
+  .crumbs { margin-bottom: auto; }
+  .hero__title { max-width: 12ch; }
+  .hero__machine { max-width: 22ch; }
+  .hero__foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .hero__foot .lead { max-width: 44ch; color: var(--muted); }
+
+  .cases { row-gap: 0; border-top: 1px solid var(--line); }
+  .case {
+    grid-column: span 4;
+    padding: 2rem 0 2.5rem;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .case__title { font-size: var(--step-2); }
+  .case__body { color: var(--muted); max-width: 36ch; }
+  @media (max-width: 767px) { .case { grid-column: 1 / -1; } }
+
+  .offer__claim { max-width: 20ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .offer__line { height: 1px; background: var(--ink); transform-origin: left; }
+  .offer { row-gap: 2.5rem; padding-top: 2rem; }
+  .offer__item { grid-column: span 4; display: flex; flex-direction: column; gap: 0.75rem; }
+  .offer__item p { color: var(--muted); max-width: 34ch; }
+  .offer__n {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+  @media (max-width: 767px) { .offer__item { grid-column: 1 / -1; } }
+
+  .stack { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .stack li {
+    font-size: var(--step-1);
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  .stack li:hover { background: var(--ink); color: var(--bg); }
+
+  .faqs { border-top: 1px solid var(--line); }
+  .faq { border-bottom: 1px solid var(--line); }
+  .faq summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1.6rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq__icon { position: relative; flex: none; width: 1.25rem; height: 1.25rem; }
+  .faq__icon::before, .faq__icon::after {
+    content: "";
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform var(--dur-1) var(--ease-in-out);
+  }
+  .faq__icon::after { transform: rotate(90deg); }
+  .faq[open] .faq__icon::after { transform: rotate(0deg); }
+  .faq[open] summary { color: var(--accent-text); }
+  .faq p { max-width: 60ch; padding-bottom: 1.75rem; color: var(--muted); }
+
+  .cta__title { max-width: 14ch; }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: clamp(2rem, 4vw, 3.5rem); }
+</style>

@@ -1,31 +1,382 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import About from '../components/About.astro'; 
-import Blog from '../components/Blog.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import Mission from '../components/Mission.astro';
-import Services from '../components/Services.astro';
-import Hero from '../components/Hero.astro';
-import SiteData from "../constants/siteData.json";
+import Base from "../layouts/Base.astro";
+import WorkVisual from "../components/rd/WorkVisual.astro";
+import { work } from "../data/work";
+import { getPosts, pillarOf, postUrl, formatDate } from "../lib/blog";
+
+const posts = (await getPosts()).slice(0, 3);
+
+const services = [
+  {
+    n: "01",
+    title: "Web development for agencies",
+    href: "/services/web-development-for-agencies/",
+    body: "Award-level, animated sites and headless CMS builds — delivered white-label, on your timeline.",
+    tags: ["Astro", "GSAP", "WordPress", "Drupal"],
+  },
+  {
+    n: "02",
+    title: "AI for agencies",
+    href: "/services/ai-for-agencies/",
+    body: "Automate the busywork with n8n and LLMs, and help your team adopt AI without losing the craft.",
+    tags: ["n8n", "Workflows", "Training"],
+  },
+  {
+    n: "03",
+    title: "AI in products",
+    href: "/services/ai-product-integration/",
+    body: "LLM features inside your clients' sites and apps: RAG assistants, agents, semantic search.",
+    tags: ["RAG", "Agents", "LLM APIs"],
+  },
+];
+
+const steps = [
+  { n: "01", title: "Brief", body: "A call, your deck, the constraints. I reply with questions, scope and a date." },
+  { n: "02", title: "Prototype", body: "Motion and tech risks proven in code early — before anyone falls in love with a mock-up." },
+  { n: "03", title: "Build", body: "Staging from day one, weekly demos, your design system respected to the pixel." },
+  { n: "04", title: "Handover", body: "Docs, CMS training and a clean repo. Under your brand, if you prefer." },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "https://piergorelli.com/#person",
+    name: "Pier Gorelli",
+    jobTitle: "Freelance web & AI developer",
+    url: "https://piergorelli.com/",
+    email: "mailto:me@piergorelli.com",
+    address: { "@type": "PostalAddress", addressLocality: "Valencia", addressCountry: "ES" },
+    knowsLanguage: ["en", "es", "it"],
+    sameAs: ["https://www.linkedin.com/in/piergorelli/", "https://github.com/lupin72"],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Pier Gorelli — Web & AI development for creative agencies",
+    url: "https://piergorelli.com/",
+    founder: { "@id": "https://piergorelli.com/#person" },
+    areaServed: ["ES", "IT", "EU"],
+    serviceType: ["Web development", "AI automation", "LLM integration"],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Pier Gorelli",
+    url: "https://piergorelli.com/",
+  },
+];
 ---
 
-
-<Layout 
-seo={{
-  title: SiteData.default.title,
-  description: SiteData.default.description
-}}
+<Base
+  title="Freelance Web & AI Developer for Creative Agencies — Pier Gorelli"
+  description="Pier Gorelli builds award-level websites and AI automations for creative agencies: animated front-ends, headless CMS, n8n workflows and LLM features. Based in Valencia, working EN / ES / IT."
+  motion="showcase"
+  preloader
+  schema={schema}
 >
-	<Header textColor="white" headerClasses="opacity-100" backgroundColor="bg-boulder-950" menuColor="#ffffff"/>
-	<main>
-		<Hero/>
-    <About actionText="More about me" actionLink="/about/"/>
-    <Mission/>
-    <Services size={58} strokeWidth={0.5} customClasses='text-boulder-500' subtitle="03"/>
-    <Blog limit="3"/>
-	</main>
-  <Footer />
-</Layout>
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero wrap">
+    <div class="hero__top note">
+      <span>Pier Gorelli — freelance web &amp; AI developer</span>
+      <span class="hide-sm">39.47° N, 0.38° W · Valencia, ES</span>
+      <span>Available · Q4 2026</span>
+    </div>
 
+    <h1 class="hero__title">
+      <span class="hero__human display" data-hero-human>I do dev.</span>
+      <span class="hero__machine h2" data-hero-generate>Web &amp; AI development for creative agencies — shipped fast, animated, with AI inside.</span>
+    </h1>
 
+    <div class="hero__notes">
+      <p class="note" data-hero-fade><span class="note--accent">●</span> human — written by hand</p>
+      <p class="note" data-hero-fade>
+        <span class="note--accent">◆</span> machine — generated · <span data-gen-tokens>21</span> tokens · <span data-gen-ms>1840</span> ms
+      </p>
+    </div>
+
+    <div class="hero__foot">
+      <p class="hero__intro lead" data-hero-fade>
+        25 years building for agencies. Today I also bring AI into their workflows and into their clients' products. White-label welcome.
+      </p>
+      <div class="hero__ctas" data-hero-fade>
+        <a href="/contact/" class="btn">Book a call <span class="arrow">→</span></a>
+        <a href="#work" class="btn btn--ghost">See the work</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 01 Manifesto: wireframe → production ─────────────── -->
+  <section class="section wrap manifesto" data-wireframe>
+    <header class="section-head">
+      <span class="note note--ink">[01] Manifesto</span>
+      <span class="note" data-wf-note>fig. 01 — wireframe → production</span>
+    </header>
+    {["Design deserves", "engineering that", "never compromises."].map((line, i) => (
+      <p class="wf-line h1">
+        <span class="outline-text" aria-hidden="true">{line}</span>
+        <span class="wf-solid" data-wf-solid>{line}</span>
+        <span class="wf-dim note" data-wf-note aria-hidden="true">{["↤ 12 col ↦", "font-size: var(--step-4)", "ls −0.05em"][i]}</span>
+      </p>
+    ))}
+    <div class="manifesto__body grid-12">
+      <p class="lead" data-reveal="up">
+        Agencies bring the ideas. I make sure they survive production — accessible, fast, and moving exactly the way the designer imagined.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── 02 Services ──────────────────────────────────────── -->
+  <section class="section wrap" id="services">
+    <header class="section-head">
+      <span class="note note--ink">[02] Services</span>
+      <a href="/services/" class="note link">All services →</a>
+    </header>
+    <ol class="services">
+      {services.map((s) => (
+        <li class="service" data-reveal="up">
+          <a href={s.href} class="service__link grid-12">
+            <span class="service__n note">{s.n}</span>
+            <h2 class="service__title h2">{s.title}</h2>
+            <p class="service__body">{s.body}</p>
+            <ul class="service__tags">
+              {s.tags.map((t) => <li class="note">{t}</li>)}
+            </ul>
+            <span class="service__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 03 Work ──────────────────────────────────────────── -->
+  <section class="section wrap" id="work">
+    <header class="section-head">
+      <span class="note note--ink">[03] Selected work</span>
+      <span class="note">2024 — 2026</span>
+    </header>
+    <div class="work grid-12">
+      {work.map((w, i) => (
+        <article class:list={["work__item", `work__item--${i}`]} data-reveal="up">
+          <a href="#work" class="work__link">
+            <WorkVisual kind={w.visual} />
+            <div class="work__meta">
+              <span class="note">{String(i + 1).padStart(2, "0")} / {w.year}</span>
+              <span class="note">{w.stack.join(" · ")}</span>
+            </div>
+            <h3 class="h3 work__title">{w.title}</h3>
+            <p class="work__client note">{w.client}{w.placeholder && " · placeholder"}</p>
+            <p class="work__summary">{w.summary}</p>
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── 04 Process ───────────────────────────────────────── -->
+  <section class="section wrap" id="process">
+    <header class="section-head">
+      <span class="note note--ink">[04] How I work with agencies</span>
+      <a href="/agencies/" class="note link">NDA, white-label, tools →</a>
+    </header>
+    <h2 class="h2 process__claim" data-reveal="lines">Your brand on the front. My code underneath. Nobody has to know.</h2>
+    <div class="process__line" data-draw></div>
+    <ol class="process grid-12">
+      {steps.map((s) => (
+        <li class="step" data-reveal="up">
+          <span class="step__dot" aria-hidden="true"></span>
+          <span class="note">{s.n}</span>
+          <h3 class="step__title">{s.title}</h3>
+          <p class="step__body">{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 05 Blog ──────────────────────────────────────────── -->
+  <section class="section wrap" id="blog">
+    <header class="section-head">
+      <span class="note note--ink">[05] From the blog</span>
+      <a href="/blog/" class="note link">All posts →</a>
+    </header>
+    <ul class="posts">
+      {posts.map((p) => (
+        <li data-reveal="up">
+          <a href={postUrl(p)} class="post grid-12">
+            <span class="post__date note">{formatDate(p.data.pubDate)}</span>
+            <span class="post__title h3">{p.data.title}</span>
+            <span class="post__pillar note">{pillarOf(p)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ── 06 CTA ───────────────────────────────────────────── -->
+  <section class="section wrap cta">
+    <header class="section-head">
+      <span class="note note--ink">[06] Next</span>
+      <span class="note">Reply within 24h · EN / ES / IT</span>
+    </header>
+    <h2 class="display cta__title" data-reveal="lines">Got a brief? Let's make it move.</h2>
+    <div class="cta__actions" data-reveal="up">
+      <a href="/contact/" class="btn">Book a 30-min call <span class="arrow">→</span></a>
+      <a href="mailto:me@piergorelli.com" class="btn btn--ghost">me@piergorelli.com</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    padding-top: 6rem;
+    padding-bottom: 2rem;
+    gap: 1.5rem;
+  }
+  .hero__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line-strong);
+  }
+  .hero__title { align-self: end; display: flex; flex-direction: column; gap: 0.35em; font-weight: 500; }
+  .hero__human { display: block; margin-left: -0.05em; }
+  .hero__machine { display: block; max-width: 24ch; color: var(--ink); }
+  .hero__notes { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+  .hero__foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .hero__intro { max-width: 34ch; color: var(--muted); }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  @media (max-width: 767px) { .hide-sm { display: none; } }
+
+  /* Manifesto */
+  .wf-line { position: relative; white-space: nowrap; }
+  .wf-solid {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 0 0 0);
+  }
+  .wf-dim {
+    position: absolute;
+    right: 0;
+    top: 0.4em;
+    font-size: 0.65rem;
+    letter-spacing: 0.02em;
+    color: var(--accent-text);
+  }
+  .wf-line:nth-of-type(2) { padding-left: 8vw; }
+  .wf-line:nth-of-type(3) { padding-left: 16vw; }
+  .wf-line:nth-of-type(2) .wf-solid { left: 8vw; }
+  .wf-line:nth-of-type(3) .wf-solid { left: 16vw; }
+  .manifesto__body { margin-top: clamp(48px, 7vw, 112px); }
+  .manifesto__body p { grid-column: 7 / -1; }
+  @media (max-width: 767px) {
+    .wf-line { white-space: normal; font-size: var(--step-3); }
+    .wf-line:nth-of-type(n) { padding-left: 0; }
+    .wf-line:nth-of-type(n) .wf-solid { left: 0; }
+    .wf-dim { display: none; }
+    .manifesto__body p { grid-column: 1 / -1; }
+  }
+
+  /* Services */
+  .services { position: relative; isolation: isolate; border-bottom: 1px solid var(--line); }
+  .service { border-top: 1px solid var(--line); }
+  .service__link {
+    position: relative;
+    align-items: baseline;
+    row-gap: 0.75rem;
+    padding-block: clamp(1.5rem, 3vw, 2.75rem);
+    transition: color var(--dur-1) var(--ease-out);
+  }
+  .service__link::before {
+    content: "";
+    position: absolute;
+    inset: 0 calc(-1 * var(--gutter));
+    background: var(--ink);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--dur-2) var(--ease-in-out);
+    z-index: -1;
+  }
+  .service__link:hover { color: var(--bg); }
+  .service__link:hover::before { transform: scaleY(1); transform-origin: top; }
+  .service__link:hover .note { color: color-mix(in oklab, var(--bg) 65%, transparent); }
+  .service__n { grid-column: 1 / span 1; }
+  .service__title { grid-column: 2 / span 6; }
+  .service__body { grid-column: 8 / span 4; opacity: 0.8; }
+  .service__tags { grid-column: 8 / span 4; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
+  .service__arrow {
+    grid-column: 12;
+    grid-row: 1;
+    justify-self: end;
+    font-size: var(--step-2);
+    transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1);
+  }
+  .service__link:hover .service__arrow { transform: rotate(-45deg); color: var(--accent-text); }
+  @media (max-width: 767px) {
+    .service__n, .service__title, .service__body, .service__tags { grid-column: 1 / -1; }
+    .service__arrow { display: none; }
+  }
+
+  /* Work */
+  .work { row-gap: clamp(3rem, 6vw, 6rem); }
+  .work__item--0 { grid-column: 1 / span 7; }
+  .work__item--1 { grid-column: 9 / span 4; margin-top: 30%; }
+  .work__item--2 { grid-column: 3 / span 6; }
+  @media (max-width: 767px) {
+    .work__item--0, .work__item--1, .work__item--2 { grid-column: 1 / -1; margin-top: 0; }
+  }
+  .work__link { display: block; }
+  .work__link :global(.visual) { transition: border-radius var(--dur-2) var(--ease-in-out); }
+  .work__link:hover :global(.visual) { border-radius: 28px; }
+  .work__meta { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1rem; }
+  .work__title { margin-top: 0.9rem; }
+  .work__client { margin-top: 0.5rem; }
+  .work__summary { margin-top: 0.75rem; max-width: 42ch; color: var(--muted); }
+
+  /* Process */
+  .process__claim { max-width: 18ch; margin-bottom: clamp(3rem, 6vw, 5rem); }
+  .process__line { height: 1px; background: var(--ink); transform-origin: left; }
+  .process { row-gap: 2.5rem; }
+  .step { grid-column: span 3; position: relative; padding-top: 1.5rem; }
+  .step__dot {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 99px;
+    background: var(--accent);
+  }
+  .step__title { font-size: var(--step-1); margin: 0.6rem 0 0.5rem; }
+  .step__body { color: var(--muted); max-width: 30ch; }
+  @media (max-width: 767px) { .step { grid-column: span 2; } }
+
+  /* Blog */
+  .posts { border-bottom: 1px solid var(--line); }
+  .posts li { border-top: 1px solid var(--line); }
+  .post { align-items: baseline; padding-block: 1.6rem; row-gap: 0.4rem; }
+  .post__date { grid-column: 1 / span 2; }
+  .post__title { grid-column: 3 / span 7; transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1); }
+  .post__pillar { grid-column: 11 / span 2; justify-self: end; }
+  .post:hover .post__title { transform: translateX(1rem); color: var(--accent-text); }
+  @media (max-width: 767px) {
+    .post__date, .post__title { grid-column: 1 / -1; }
+    .post__pillar { grid-column: 1 / -1; justify-self: start; }
+  }
+
+  /* CTA */
+  .cta__title { max-width: 11ch; }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: clamp(2rem, 4vw, 3.5rem); }
+</style>

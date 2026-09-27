@@ -1,0 +1,85 @@
+---
+/** Generative blueprint visuals standing in for project imagery in the prototype. */
+interface Props { kind: "orbit" | "bars" | "audit" }
+const { kind } = Astro.props;
+const bars = [62, 88, 40, 74, 96, 52, 80, 34, 68, 90, 46, 76];
+const audit = [
+  { label: "Performance", value: 97 },
+  { label: "Accessibility", value: 92 },
+  { label: "SEO", value: 88 },
+  { label: "AI visibility", value: 61 },
+];
+---
+
+<div class:list={["visual", `visual--${kind}`]} aria-hidden="true">
+  <svg class="visual__grid" viewBox="0 0 400 300" preserveAspectRatio="none">
+    <defs>
+      <pattern id={`g-${kind}`} width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M20 0H0V20" fill="none" stroke="currentColor" stroke-opacity="0.12" stroke-width="1" />
+      </pattern>
+    </defs>
+    <rect width="400" height="300" fill={`url(#g-${kind})`} />
+  </svg>
+
+  {kind === "orbit" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+      {[110, 86, 62, 38].map((r, i) => (
+        <circle cx="200" cy="150" r={r} fill="none" stroke="currentColor" stroke-opacity={0.25 + i * 0.15} stroke-dasharray={i % 2 ? "3 6" : "none"} />
+      ))}
+      <circle cx="286" cy="80" r="10" class="accent-fill" />
+      <circle cx="200" cy="150" r="22" class="accent-fill" />
+      <path d="M40 250H360M200 20V280" stroke="currentColor" stroke-opacity="0.3" stroke-dasharray="2 4" />
+    </svg>
+  )}
+
+  {kind === "bars" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+      {bars.map((h, i) => (
+        <rect x={34 + i * 28} y={250 - h * 2} width="16" height={h * 2} fill={i === 4 ? "var(--accent)" : "currentColor"} fill-opacity={i === 4 ? 1 : 0.18 + (i % 3) * 0.12} />
+      ))}
+      <path d="M24 250H376" stroke="currentColor" stroke-opacity="0.5" />
+    </svg>
+  )}
+
+  {kind === "audit" && (
+    <div class="visual__audit" data-parallax="6">
+      <p class="note">$ audit https://your-client.com</p>
+      {audit.map((row) => (
+        <div class="audit-row">
+          <span class="note">{row.label}</span>
+          <span class="audit-bar"><span style={`--v:${row.value}%`} class:list={[{ low: row.value < 70 }]}></span></span>
+          <span class="note note--ink">{row.value}</span>
+        </div>
+      ))}
+      <p class="note">→ 3 fixes suggested · generated in 41s</p>
+    </div>
+  )}
+</div>
+
+<style>
+  .visual {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--bg-raised);
+    color: var(--ink);
+    border-radius: 4px;
+  }
+  .visual__grid, .visual__art { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .visual__art { transition: transform var(--dur-3) var(--ease-out); }
+  .accent-fill { fill: var(--accent); }
+
+  .visual__audit {
+    position: absolute;
+    inset: 12% 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.9rem;
+  }
+  .audit-row { display: grid; grid-template-columns: 8.5rem 1fr 2rem; align-items: center; gap: 0.75rem; }
+  .audit-bar { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; }
+  .audit-bar span { display: block; height: 100%; width: var(--v); background: var(--ink); border-radius: inherit; }
+  .audit-bar span.low { background: var(--accent); }
+  @media (max-width: 520px) { .audit-row { grid-template-columns: 6.5rem 1fr 2rem; } }
+</style>

@@ -20,6 +20,10 @@ import Lenis from "lenis";
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const EASE_OUT = "expo.out";
+
+/** Line masks clip descenders with tight leading: give them a little room. */
+const roomForDescenders = (split: SplitText) =>
+  (split.masks as HTMLElement[]).forEach((m) => { m.style.paddingBottom = "0.12em"; m.style.marginBottom = "-0.12em"; });
 const EASE_IN_OUT = "power4.inOut";
 
 export function initMotion(): () => void {
@@ -45,15 +49,20 @@ export function initMotion(): () => void {
 
   document.fonts.ready.then(() => {
     if (cancelled) return;
-    ctx.add(() => {
-      hero(heroDelay);
-      reveals();
-      wireframes();
-      lines();
-      parallax();
-    });
+    ctx.add(() => hero(heroDelay));
     root.classList.add("motion-ready");
-    ScrollTrigger.refresh();
+    // Below-the-fold work waits for an idle moment so the first paint stays responsive.
+    const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 200));
+    idle(() => {
+      if (cancelled) return;
+      ctx.add(() => {
+        reveals();
+        wireframes();
+        lines();
+        parallax();
+      });
+      ScrollTrigger.refresh();
+    });
   });
 
   return () => {
@@ -73,12 +82,13 @@ function hero(delay: number) {
   const tl = gsap.timeline({ delay });
 
   if (human) {
-    const split = SplitText.create(human, { type: "lines", mask: "lines" });
+    const split = SplitText.create(human, { type: "lines", mask: "lines", aria: "none" });
+    roomForDescenders(split);
     tl.from(split.lines, { yPercent: 110, duration: 1.2, ease: EASE_OUT, stagger: 0.08 });
   }
 
   if (machine) {
-    const split = SplitText.create(machine, { type: "words", wordsClass: "gen-word" });
+    const split = SplitText.create(machine, { type: "words", wordsClass: "gen-word", tag: "span", aria: "none" });
     const words = split.words as HTMLElement[];
     const caret = document.createElement("span");
     caret.className = "gen-caret";
@@ -130,15 +140,18 @@ function reveals() {
     SplitText.create(el, {
       type: "lines",
       mask: "lines",
+      aria: "none",
       autoSplit: true,
-      onSplit: (self) =>
-        gsap.from(self.lines, {
+      onSplit: (self) => {
+        roomForDescenders(self);
+        return gsap.from(self.lines, {
           yPercent: 110,
           duration: 1.1,
           ease: EASE_OUT,
           stagger: 0.07,
           scrollTrigger: { trigger: el, start: "top 85%", once: true },
-        }),
+        });
+      },
     });
   });
 

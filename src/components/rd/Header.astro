@@ -30,7 +30,7 @@ const path = Astro.url.pathname;
   </nav>
 
   <div class="tools">
-    <div class="lang note" aria-label="Language">
+    <div class="lang note" role="group" aria-label="Language">
       <span aria-current="true">EN</span>
       <span title="Coming soon">ES</span>
       <span title="Coming soon">IT</span>
@@ -86,12 +86,12 @@ const path = Astro.url.pathname;
     position: absolute;
     left: 0;
     top: 100%;
-    color: var(--accent);
+    color: var(--accent-text);
   }
   .nav__label, .nav__label::after { transition: transform var(--dur-1) var(--ease-in-out); }
   .nav__link:hover .nav__label { transform: translateY(-100%); }
   .nav__link:hover .nav__label::after { transform: translateY(0); }
-  .nav__link[aria-current="page"] .note { color: var(--accent); }
+  .nav__link[aria-current="page"] .note { color: var(--accent-text); }
 
   .tools { justify-self: end; display: flex; align-items: center; gap: 0.5rem; padding-right: 0.75rem; }
   .lang { display: flex; gap: 0.5rem; margin-right: 0.5rem; }
@@ -130,7 +130,6 @@ const path = Astro.url.pathname;
     .tool--menu { display: grid; }
   }
   @media (max-width: 480px) {
-    .tool--menu { display: none; width: auto; padding-inline: 0.9rem; color: var(--ink); }
-  .header-cta { display: none; }
+    .header-cta { display: none; }
   }
 </style>
