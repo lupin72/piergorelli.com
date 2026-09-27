@@ -1,0 +1,117 @@
+---
+import { ClientRouter } from "astro:transitions";
+import Header from "../components/rd/Header.astro";
+import Footer from "../components/rd/Footer.astro";
+import Preloader from "../components/rd/Preloader.astro";
+import "../styles/redesign.css";
+
+interface Props {
+  title: string;
+  description: string;
+  /** "showcase" loads Lenis + GSAP; "read" keeps the page free of animation JS. */
+  motion?: "showcase" | "read";
+  image?: string;
+  type?: "website" | "article";
+  schema?: Record<string, unknown>[];
+  preloader?: boolean;
+}
+
+const {
+  title,
+  description,
+  motion = "read",
+  image = "/i-do-things.png",
+  type = "website",
+  schema = [],
+  preloader = false,
+} = Astro.props;
+
+const site = Astro.site ?? new URL("https://piergorelli.com");
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL(image, site).href;
+---
+
+<!doctype html>
+<html lang="en" data-motion={motion} data-theme="light" data-accent="blue">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="Pier Gorelli — Blog" href="/rss.xml" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" id="favicon" />
+    <meta name="theme-color" content="#f4f4f0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Pier Gorelli" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@PGorelli91424" />
+
+    {schema.map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+    ))}
+
+    <!-- Theme + accent before first paint; re-applied after every client-side navigation. -->
+    <script is:inline>
+      (() => {
+        const read = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+        const apply = (doc) => {
+          const root = doc.documentElement;
+          const theme = read("pg-theme") ?? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          root.dataset.theme = theme;
+          root.dataset.accent = read("pg-accent") ?? "blue";
+          root.classList.add("js");
+          let seen = null;
+          try { seen = sessionStorage.getItem("pg-preloaded"); } catch {}
+          if (seen || matchMedia("(prefers-reduced-motion: reduce)").matches) root.dataset.preloaded = "yes";
+        };
+        apply(document);
+        document.addEventListener("astro:before-swap", (e) => apply(e.newDocument));
+      })();
+    </script>
+
+    <ClientRouter fallback="swap" />
+  </head>
+
+  <body class="frame">
+    <a href="#main" class="skip note">Skip to content</a>
+    {preloader && <Preloader />}
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <div class="grid-overlay" aria-hidden="true">
+      <div class="grid-12">{Array.from({ length: 12 }, () => <span />)}</div>
+    </div>
+
+    <script>
+      import "../scripts/rd/site";
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .skip {
+    position: fixed;
+    left: 1rem;
+    top: -3rem;
+    z-index: 100;
+    padding: 0.6rem 0.9rem;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 999px;
+    transition: top var(--dur-1) var(--ease-out);
+  }
+  .skip:focus { top: 1rem; }
+</style>

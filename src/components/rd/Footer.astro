@@ -1,0 +1,98 @@
+---
+const year = new Date().getFullYear();
+const cols = [
+  {
+    title: "Site",
+    links: [
+      { href: "/services/", label: "Services" },
+      { href: "/#work", label: "Work" },
+      { href: "/about/", label: "About" },
+      { href: "/blog/", label: "Blog" },
+    ],
+  },
+  {
+    title: "Elsewhere",
+    links: [
+      { href: "https://www.linkedin.com/in/piergorelli/", label: "LinkedIn" },
+      { href: "https://github.com/lupin72", label: "GitHub" },
+      { href: "/rss.xml", label: "RSS" },
+    ],
+  },
+  {
+    title: "Contact",
+    links: [
+      { href: "mailto:me@piergorelli.com", label: "me@piergorelli.com" },
+      { href: "/contact/", label: "Book a call" },
+    ],
+  },
+];
+---
+
+<footer class="site-footer wrap">
+  <div class="grid-12 footer-top">
+    <p class="footer-claim h3">Got a brief that needs to move? <a href="/contact/" class="link accent">Let's talk.</a></p>
+    {cols.map((col) => (
+      <div class="footer-col">
+        <p class="note">{col.title}</p>
+        <ul>
+          {col.links.map((l) => (
+            <li><a href={l.href} class="link">{l.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <p class="footer-mark" aria-hidden="true">I do dev.</p>
+
+  <div class="footer-bottom note">
+    <span>© {year} Pier Gorelli · Made with ♥ in Valencia</span>
+    <span class="hint">Press <kbd>G</kbd> for the grid · <kbd>⌘K</kbd> for everything else</span>
+    <a href="/privacy-policy/" class="link">Privacy</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    padding-top: var(--section);
+    padding-bottom: 1.25rem;
+    overflow: hidden;
+  }
+  .footer-top { row-gap: 2.5rem; padding-bottom: clamp(48px, 8vw, 120px); }
+  .footer-claim { grid-column: 1 / span 6; max-width: 16ch; }
+  .footer-claim .accent { color: var(--accent); }
+  .footer-col { grid-column: span 2; display: flex; flex-direction: column; gap: 0.9rem; }
+  .footer-col ul { display: flex; flex-direction: column; gap: 0.35rem; }
+  @media (max-width: 767px) {
+    .footer-claim { grid-column: 1 / -1; }
+    .footer-col { grid-column: span 2; }
+  }
+
+  .footer-mark {
+    font-size: clamp(4rem, 21vw, 26rem);
+    font-weight: 500;
+    letter-spacing: -0.065em;
+    line-height: 0.78;
+    margin-inline: -0.04em;
+    white-space: nowrap;
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  kbd {
+    font-family: inherit;
+    padding: 0.05em 0.4em;
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    color: var(--ink);
+  }
+  @media (hover: none) { .hint { display: none; } }
+</style>

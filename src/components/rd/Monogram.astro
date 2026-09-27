@@ -1,0 +1,57 @@
+---
+/**
+ * PG monogram — drawn as strokes so it can "plot" itself like a blueprint.
+ * The same paths feed the favicon (see src/scripts/rd/site.ts).
+ */
+interface Props {
+  class?: string;
+  label?: string;
+  transitionName?: string;
+}
+const { class: className, label = "Pier Gorelli", transitionName } = Astro.props;
+---
+
+<svg
+  class:list={["monogram", className]}
+  viewBox="0 0 68 40"
+  role="img"
+  aria-label={label}
+  style={transitionName ? `view-transition-name: ${transitionName}` : undefined}
+>
+  <path class="monogram__p" d="M6 37V3h12a9.5 9.5 0 0 1 0 19H6" pathLength="1" />
+  <path class="monogram__g" d="M57.3 8.7A16 16 0 1 0 62 20H48" pathLength="1" />
+  <circle class="monogram__dot" cx="64" cy="36" r="2.6" />
+</svg>
+
+<style>
+  .monogram {
+    display: block;
+    height: 1em;
+    width: auto;
+    overflow: visible;
+  }
+  .monogram path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 4.2;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  .monogram__dot {
+    fill: var(--accent);
+    transition: fill var(--dur-1) var(--ease-out);
+  }
+
+  /* Re-plot on every page load (class toggled by site.ts) */
+  :global(.monogram.is-plotting) path {
+    animation: plot var(--dur-3) var(--ease-in-out) both;
+  }
+  :global(.monogram.is-plotting) .monogram__g { animation-delay: 0.18s; }
+  :global(.monogram.is-plotting) .monogram__dot {
+    animation: pop var(--dur-1) var(--ease-out) 0.9s both;
+  }
+  @keyframes plot { from { stroke-dashoffset: 1; } }
+  @keyframes pop { from { transform: scale(0); transform-origin: 64px 36px; } }
+</style>

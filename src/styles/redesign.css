@@ -1,0 +1,266 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+/* ─────────────────────────────────────────────────────────────
+   Tokens — Blueprint design system
+   Colour, type, space and motion live here; Figma mirrors them.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  /* palette — light */
+  --bg: #f4f4f0;
+  --bg-raised: #ecece6;
+  --ink: #0e0e0d;
+  --muted: #6d6d67;
+  --line: rgb(14 14 13 / 0.14);
+  --line-strong: rgb(14 14 13 / 0.32);
+
+  /* accent (set by [data-accent]) */
+  --accent: #2f5bff;
+  --accent-ink: #ffffff;
+
+  /* type */
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SF Mono", monospace;
+  --step--1: clamp(0.8rem, 0.78rem + 0.1vw, 0.875rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step-1: clamp(1.25rem, 1.13rem + 0.6vw, 1.625rem);
+  --step-2: clamp(1.6rem, 1.3rem + 1.4vw, 2.5rem);
+  --step-3: clamp(2.2rem, 1.5rem + 3.2vw, 4.5rem);
+  --step-4: clamp(3rem, 1.6rem + 6.6vw, 8.5rem);
+  --step-5: clamp(3.6rem, 1.2rem + 11vw, 14rem);
+
+  /* space & grid */
+  --gutter: clamp(16px, 2.2vw, 32px);
+  --columns: 12;
+  --col-gap: clamp(12px, 1.4vw, 24px);
+  --section: clamp(96px, 14vw, 220px);
+
+  /* motion */
+  --dur-1: 0.4s;
+  --dur-2: 0.8s;
+  --dur-3: 1.2s;
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b0b0c;
+  --bg-raised: #151517;
+  --ink: #edede7;
+  --muted: #8b8b85;
+  --line: rgb(237 237 231 / 0.12);
+  --line-strong: rgb(237 237 231 / 0.3);
+  color-scheme: dark;
+}
+
+:root[data-accent="blue"] { --accent: #2f5bff; --accent-ink: #ffffff; }
+:root[data-theme="dark"][data-accent="blue"] { --accent: #5b7cff; }
+:root[data-accent="orange"] { --accent: #ff5a1f; --accent-ink: #0e0e0d; }
+:root[data-accent="lime"] { --accent: #c6f432; --accent-ink: #0e0e0d; }
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Base
+   ───────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 100%;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    font-size: var(--step-0);
+    line-height: 1.55;
+    min-height: 100dvh;
+    background: var(--bg);
+    transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  h1, h2, h3, h4 { font-weight: 500; letter-spacing: -0.035em; line-height: 0.95; text-wrap: balance; }
+  p { text-wrap: pretty; }
+}
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ─────────────────────────────────────────────────────────────
+   Layout primitives
+   ───────────────────────────────────────────────────────────── */
+
+@layer components {
+  .wrap { padding-inline: var(--gutter); }
+
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+    column-gap: var(--col-gap);
+  }
+  @media (max-width: 767px) {
+    .grid-12 { --columns: 4; }
+  }
+
+  /* Blueprint frame: two hairlines at the page margins, always visible */
+  .frame::before,
+  .frame::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--line);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .frame::before { left: var(--gutter); }
+  .frame::after { right: var(--gutter); }
+
+  .section { padding-block: var(--section); position: relative; }
+  .rule { border-top: 1px solid var(--line); }
+
+  /* Mono annotation — the blueprint voice */
+  .note {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .note--ink { color: var(--ink); }
+  .note--accent { color: var(--accent); }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line-strong);
+    margin-bottom: clamp(48px, 7vw, 112px);
+  }
+
+  .display { font-size: var(--step-5); letter-spacing: -0.055em; line-height: 0.86; }
+  .h1 { font-size: var(--step-4); letter-spacing: -0.05em; line-height: 0.9; }
+  .h2 { font-size: var(--step-3); letter-spacing: -0.045em; line-height: 0.95; }
+  .h3 { font-size: var(--step-2); letter-spacing: -0.03em; line-height: 1.05; }
+  .lead { font-size: var(--step-1); line-height: 1.35; letter-spacing: -0.015em; }
+
+  /* Buttons */
+  .btn {
+    --btn-bg: var(--ink);
+    --btn-fg: var(--bg);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 3.25rem;
+    padding-inline: 1.4rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    overflow: hidden;
+    isolation: isolate;
+    transition: color var(--dur-1) var(--ease-out);
+  }
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--accent);
+    transform: translateY(101%);
+    border-radius: 50% 50% 0 0;
+    transition: transform var(--dur-2) var(--ease-in-out), border-radius var(--dur-2) var(--ease-in-out);
+  }
+  .btn:hover::before { transform: translateY(0); border-radius: 0; }
+  .btn:hover { color: var(--accent-ink); }
+  .btn--ghost { --btn-bg: transparent; --btn-fg: var(--ink); box-shadow: inset 0 0 0 1px var(--line-strong); }
+  .btn .arrow { transition: transform var(--dur-1) var(--ease-out); }
+  .btn:hover .arrow { transform: translateX(3px) rotate(-45deg); }
+
+  /* Underline link */
+  .link {
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size var(--dur-1) var(--ease-out);
+  }
+  .link:hover { background-size: 100% 1px; }
+
+  /* Text that is "wireframe": outlined */
+  .outline-text {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--line-strong);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Grid overlay (press G)
+   ───────────────────────────────────────────────────────────── */
+
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  padding-inline: var(--gutter);
+  opacity: 0;
+  transition: opacity var(--dur-1) var(--ease-out);
+}
+.grid-overlay > div { height: 100%; }
+.grid-overlay span {
+  background: color-mix(in oklab, var(--accent) 9%, transparent);
+  border-inline: 1px solid color-mix(in oklab, var(--accent) 35%, transparent);
+}
+:root[data-grid="on"] .grid-overlay { opacity: 1; }
+@media (max-width: 767px) { .grid-overlay span:nth-child(n + 5) { display: none; } }
+
+/* ─────────────────────────────────────────────────────────────
+   Page transitions (native View Transitions via <ClientRouter />)
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes vt-out { to { opacity: 0; filter: blur(12px); transform: translateY(-2vh) scale(0.985); } }
+@keyframes vt-in { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+::view-transition-old(root) { animation: vt-out var(--dur-2) var(--ease-in-out) both; }
+::view-transition-new(root) { animation: vt-in var(--dur-3) var(--ease-in-out) both; }
+::view-transition-old(site-header), ::view-transition-new(site-header) { animation: none; mix-blend-mode: normal; }
+::view-transition-group(site-header) { animation-duration: var(--dur-2); animation-timing-function: var(--ease-in-out); }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* Showcase pages: hide what the motion layer will reveal, but only when JS runs,
+   and never for longer than 2.5s if the motion chunk fails to load. */
+@keyframes failsafe { to { visibility: visible; } }
+html.js[data-motion="showcase"]:not(.motion-ready) :is([data-hero-generate], [data-hero-human]) {
+  visibility: hidden;
+  animation: failsafe 0s 2.5s forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js[data-motion="showcase"]:not(.motion-ready) :is([data-hero-generate], [data-hero-human]) { visibility: visible; }
+}

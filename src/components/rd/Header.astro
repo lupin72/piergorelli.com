@@ -1,0 +1,136 @@
+---
+import Monogram from "./Monogram.astro";
+
+const nav = [
+  { href: "/services/", label: "Services", index: "01" },
+  { href: "/#work", label: "Work", index: "02" },
+  { href: "/about/", label: "About", index: "03" },
+  { href: "/blog/", label: "Blog", index: "04" },
+];
+const path = Astro.url.pathname;
+---
+
+<header class="site-header wrap">
+  <a href="/" class="brand" aria-label="Pier Gorelli — home">
+    <Monogram class="brand__mark" />
+    <span class="brand__name note note--ink">Pier Gorelli<span class="brand__role"> / web &amp; AI dev</span></span>
+  </a>
+
+  <nav class="nav" aria-label="Main">
+    <ul>
+      {nav.map((item) => (
+        <li>
+          <a href={item.href} class="nav__link" aria-current={path.startsWith(item.href) && item.href !== "/#work" ? "page" : undefined}>
+            <span class="note">{item.index}</span>
+            <span class="nav__label" data-label={item.label}>{item.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="tools">
+    <div class="lang note" aria-label="Language">
+      <span aria-current="true">EN</span>
+      <span title="Coming soon">ES</span>
+      <span title="Coming soon">IT</span>
+    </div>
+    <button class="tool" type="button" data-action="theme" aria-label="Toggle light / dark theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" /><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" /></svg>
+    </button>
+    <button class="tool" type="button" data-action="accent" aria-label="Change accent colour">
+      <span class="swatch" aria-hidden="true"></span>
+    </button>
+    <button class="tool tool--kbd note" type="button" data-action="palette" aria-label="Open command palette">⌘K</button>
+    <button class="tool tool--menu note" type="button" data-action="palette" aria-label="Open menu">Menu</button>
+    <a href="/contact/" class="btn header-cta">Let's talk</a>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    height: 4.5rem;
+    color: var(--ink);
+    view-transition-name: site-header;
+    /* soft paper fade so content can scroll beneath */
+    background: linear-gradient(var(--bg) 55%, transparent);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-self: start;
+    padding-left: 0.75rem;
+  }
+  .brand :global(.brand__mark) { font-size: 1.6rem; }
+  .brand__role { color: var(--muted); }
+
+  .nav ul { display: flex; gap: clamp(1rem, 2.4vw, 2.5rem); }
+  .nav__link { display: inline-flex; align-items: baseline; gap: 0.4rem; font-size: 0.95rem; }
+  .nav__label {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    line-height: 1.2;
+    vertical-align: bottom;
+  }
+  .nav__label::after {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    color: var(--accent);
+  }
+  .nav__label, .nav__label::after { transition: transform var(--dur-1) var(--ease-in-out); }
+  .nav__link:hover .nav__label { transform: translateY(-100%); }
+  .nav__link:hover .nav__label::after { transform: translateY(0); }
+  .nav__link[aria-current="page"] .note { color: var(--accent); }
+
+  .tools { justify-self: end; display: flex; align-items: center; gap: 0.5rem; padding-right: 0.75rem; }
+  .lang { display: flex; gap: 0.5rem; margin-right: 0.5rem; }
+  .lang span:not([aria-current]) { opacity: 0.45; cursor: not-allowed; }
+  .lang span[aria-current] { color: var(--ink); }
+
+  .tool {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: box-shadow var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+    cursor: pointer;
+  }
+  .tool:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+  .tool:active { transform: scale(0.92); }
+  .tool svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .tool svg path { fill: currentColor; stroke: none; }
+  .tool--kbd { width: auto; padding-inline: 0.7rem; color: var(--ink); }
+  .swatch {
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 999px;
+    background: var(--accent);
+    transition: background var(--dur-1) var(--ease-out);
+  }
+  .tool--menu { display: none; width: auto; padding-inline: 0.9rem; color: var(--ink); }
+  .header-cta { height: 2.25rem; padding-inline: 1rem; font-size: 0.85rem; margin-left: 0.25rem; }
+
+  @media (max-width: 960px) {
+    .site-header { grid-template-columns: 1fr auto; }
+    .nav { display: none; }
+    .brand__role, .lang, .tool--kbd { display: none; }
+    .tool--menu { display: grid; }
+  }
+  @media (max-width: 480px) {
+    .tool--menu { display: none; width: auto; padding-inline: 0.9rem; color: var(--ink); }
+  .header-cta { display: none; }
+  }
+</style>
