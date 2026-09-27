@@ -24,11 +24,11 @@ const pages: MenuItem[] = [
       <nav class="flex justify-between items-center">
         <ul class="items-center hidden sm:flex">
             { pages.map((item) => (
-              <li class={`flex mr-4 text-${textColor}`}><a href={item.href} class="group overflow-hidden relative inline-block ml-[1vw] text-xl" title={item.body} style="height:max-content;"><span data-hover={item.title} class="relative inline-block transition duration-300 before:content-[attr(data-hover)] before:absolute before:top-[100%] group-hover:translate-y-[-100%] before:translate-3d-0">{item.title}</span></a></li>
+              <li class={`flex mr-4 text-${textColor}`}><a href={item.href} class="group overflow-hidden relative inline-block ml-[1vw] text-xl" title={item.body} style="height:max-content;"><span data-hover={item.title} class="relative inline-block transition duration-300 before:content-[attr(data-hover)] before:absolute before:top-full group-hover:-translate-y-full before:translate-3d-0">{item.title}</span></a></li>
             ))}
         </ul>
 
-        <button class="hamburger hamburger--squeeze relative sm:!hidden bg-white" type="button" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle menu">
+        <button class="hamburger hamburger--squeeze relative sm:hidden! bg-white" type="button" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle menu">
           <span class="hamburger-box">
             <span class="hamburger-inner"></span>
           </span>
@@ -52,7 +52,7 @@ const pages: MenuItem[] = [
   $hamburger-layer-color:  var(--menuColor);
   $hamburger-layer-width: 32px;
   
-  @import 'node_modules/hamburgers/_sass/hamburgers/hamburgers.scss';
+  @import '../../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss';
 
 </style>
 <script>
