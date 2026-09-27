@@ -76,7 +76,7 @@ const schema = [
   schema={schema}
 >
   <!-- ── Hero ─────────────────────────────────────────────── -->
-  <section class="hero wrap">
+  <section class="hero wrap" data-hero>
     <div class="hero__top note">
       <span>Pier Gorelli — freelance web &amp; AI developer</span>
       <span class="hide-sm">39.47° N, 0.38° W · Valencia, ES</span>
@@ -84,8 +84,8 @@ const schema = [
     </div>
 
     <h1 class="hero__title">
-      <span class="hero__human display" data-hero-human>I do dev.</span>
-      <span class="hero__machine h2" data-hero-generate>Web &amp; AI development for creative agencies — shipped fast, animated, with AI inside.</span>
+      <span class="hero__human display" data-hero-human data-bp="h1.human">I do dev.</span>
+      <span class="hero__machine h2" data-hero-generate data-bp="h1.machine">Web &amp; AI development for creative agencies — shipped fast, animated, with AI inside.</span>
     </h1>
 
     <div class="hero__notes">
@@ -96,10 +96,10 @@ const schema = [
     </div>
 
     <div class="hero__foot">
-      <p class="hero__intro lead" data-hero-fade>
+      <p class="hero__intro lead" data-hero-fade data-bp="p.lead">
         25 years building for agencies. Today I also bring AI into their workflows and into their clients' products. White-label welcome.
       </p>
-      <div class="hero__ctas" data-hero-fade>
+      <div class="hero__ctas" data-hero-fade data-bp="nav.cta">
         <a href="/contact/" class="btn">Book a call <span class="arrow">→</span></a>
         <a href="#work" class="btn btn--ghost">See the work</a>
       </div>

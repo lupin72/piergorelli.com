@@ -3,7 +3,9 @@
  * Never imported by blog pages: they stay free of animation JS.
  *
  * Markup hooks:
- *  [data-hero-human]            lines slide up from a mask (the "hand-written" line)
+ *  [data-hero]                  hero container: gets the blueprint "compile" intro + WebGL contours
+ *  [data-bp="label"]            element measured and boxed by the blueprint layer
+ *  [data-hero-human]            outlined, then inked (the "hand-written" line)
  *  [data-hero-generate]         words appear token by token (the "machine" line)
  *  [data-gen-tokens] [data-gen-ms]  live counters for the generate effect
  *  [data-reveal="lines"]        masked line reveal on scroll
@@ -16,15 +18,19 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import Lenis from "lenis";
+import { initCursor } from "./cursor";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
 const EASE_OUT = "expo.out";
+const EASE_IN_OUT = "power4.inOut";
 
 /** Line masks clip descenders with tight leading: give them a little room. */
 const roomForDescenders = (split: SplitText) =>
   (split.masks as HTMLElement[]).forEach((m) => { m.style.paddingBottom = "0.12em"; m.style.marginBottom = "-0.12em"; });
-const EASE_IN_OUT = "power4.inOut";
+
+const idle = (cb: () => void) =>
+  "requestIdleCallback" in window ? window.requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 200);
 
 export function initMotion(): () => void {
   const root = document.documentElement;
@@ -41,18 +47,21 @@ export function initMotion(): () => void {
   gsap.ticker.add(tick);
   gsap.ticker.lagSmoothing(0);
 
-  // Wait for the preloader sheet (first visit) before the hero plays.
-  const heroDelay = root.dataset.preloaded ? 0.15 : 2.1;
+  const cleanups: (() => void)[] = [initCursor()];
+
+  // First visit: start compiling while the preloader sheet lifts.
+  const heroDelay = root.dataset.preloaded ? 0.1 : 1.45;
 
   const ctx = gsap.context(() => {});
   let cancelled = false;
 
   document.fonts.ready.then(() => {
     if (cancelled) return;
-    ctx.add(() => hero(heroDelay));
+    let intro: gsap.core.Timeline | undefined;
+    ctx.add(() => { intro = hero(heroDelay); });
     root.classList.add("motion-ready");
+
     // Below-the-fold work waits for an idle moment so the first paint stays responsive.
-    const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 200));
     idle(() => {
       if (cancelled) return;
       ctx.add(() => {
@@ -63,10 +72,23 @@ export function initMotion(): () => void {
       });
       ScrollTrigger.refresh();
     });
+
+    // The WebGL contours arrive last, and only where they can run smoothly.
+    const host = document.querySelector<HTMLElement>("[data-hero]");
+    const capable = matchMedia("(pointer: fine) and (min-width: 900px)").matches;
+    if (host && capable) {
+      const startGL = () => idle(async () => {
+        if (cancelled) return;
+        const { initHeroGL } = await import("./hero-gl");
+        if (!cancelled) cleanups.push(initHeroGL(host));
+      });
+      intro ? intro.then(startGL) : startGL();
+    }
   });
 
   return () => {
     cancelled = true;
+    cleanups.forEach((fn) => fn());
     ctx.revert();
     gsap.ticker.remove(tick);
     lenis.destroy();
@@ -74,19 +96,104 @@ export function initMotion(): () => void {
   };
 }
 
-/* ── hero: human line + machine line ────────────────────────── */
+/* ── hero: blueprint compile → human line → machine line ────── */
+
+const GLYPHS = "01<>/_#*+=-xyz";
+
+/** Types a label in, with a short tail of random characters, like a plotter warming up. */
+function scramble(el: HTMLElement, duration = 0.5) {
+  const text = el.dataset.text ?? "";
+  const state = { p: 0 };
+  el.textContent = "";
+  return gsap.to(state, {
+    p: 1,
+    duration,
+    ease: "none",
+    onUpdate: () => {
+      const n = Math.floor(state.p * text.length);
+      const tail = Array.from({ length: Math.min(4, text.length - n) }, () => GLYPHS[(Math.random() * GLYPHS.length) | 0]).join("");
+      el.textContent = text.slice(0, n) + tail;
+    },
+    onComplete: () => { el.textContent = text; },
+  });
+}
+
+/** Measures every [data-bp] element and draws construction boxes, guides and labels over it. */
+function blueprint(host: HTMLElement) {
+  const layer = document.createElement("div");
+  layer.className = "bp";
+  layer.setAttribute("aria-hidden", "true");
+  host.append(layer);
+
+  const hb = host.getBoundingClientRect();
+  const boxes: HTMLElement[] = [];
+  const labels: HTMLElement[] = [];
+  const ys = new Set<number>();
+  const xs = new Set<number>();
+
+  gsap.utils.toArray<HTMLElement>("[data-bp]", host).forEach((el) => {
+    const r = el.getBoundingClientRect();
+    const box = document.createElement("div");
+    box.className = "bp__box";
+    box.style.cssText = `left:${r.left - hb.left}px;top:${r.top - hb.top}px;width:${r.width}px;height:${r.height}px`;
+    const label = document.createElement("span");
+    label.className = "bp__label note";
+    label.dataset.text = `${el.dataset.bp} · ${Math.round(r.width)}×${Math.round(r.height)}`;
+    box.append(label);
+    layer.append(box);
+    boxes.push(box);
+    labels.push(label);
+    ys.add(Math.round(r.top - hb.top));
+    ys.add(Math.round(r.bottom - hb.top));
+    xs.add(Math.round(r.right - hb.left));
+  });
+
+  const guidesH = [...ys].map((y) => {
+    const g = document.createElement("span");
+    g.className = "bp__guide bp__guide--h";
+    g.style.top = `${y}px`;
+    layer.append(g);
+    return g;
+  });
+  const guidesV = [...xs].map((x) => {
+    const g = document.createElement("span");
+    g.className = "bp__guide bp__guide--v";
+    g.style.left = `${x}px`;
+    layer.append(g);
+    return g;
+  });
+
+  return { layer, boxes, labels, guidesH, guidesV };
+}
 
 function hero(delay: number) {
+  const host = document.querySelector<HTMLElement>("[data-hero]");
   const human = document.querySelector<HTMLElement>("[data-hero-human]");
   const machine = document.querySelector<HTMLElement>("[data-hero-generate]");
   const tl = gsap.timeline({ delay });
 
+  // 1 — construction lines, boxes and measurements
+  const bp = host ? blueprint(host) : undefined;
+  if (bp) {
+    gsap.set(bp.guidesH, { scaleX: 0 });
+    gsap.set(bp.guidesV, { scaleY: 0 });
+    gsap.set(bp.boxes, { opacity: 0 });
+    tl.to(bp.guidesH, { scaleX: 1, duration: 1, ease: "expo.inOut", stagger: 0.04 }, 0)
+      .to(bp.guidesV, { scaleY: 1, duration: 1, ease: "expo.inOut", stagger: 0.06 }, 0.1)
+      .to(bp.boxes, { opacity: 1, duration: 0.3, stagger: 0.07 }, 0.35);
+    bp.labels.forEach((label, i) => tl.add(scramble(label), 0.4 + i * 0.07));
+  }
+
+  // 2 — the hand-written line arrives as an outline, then gets inked
   if (human) {
     const split = SplitText.create(human, { type: "lines", mask: "lines", aria: "none" });
     roomForDescenders(split);
-    tl.from(split.lines, { yPercent: 110, duration: 1.2, ease: EASE_OUT, stagger: 0.08 });
+    gsap.set(human, { "--fill": 0 });
+    tl.from(split.lines, { yPercent: 110, duration: 1.1, ease: EASE_OUT, stagger: 0.08 }, bp ? 0.55 : 0)
+      .to(human, { "--fill": 1, duration: 0.7, ease: "power2.inOut" }, bp ? 1.35 : 0.8);
   }
 
+  // 3 — the machine line generates token by token
   if (machine) {
     const split = SplitText.create(machine, { type: "words", wordsClass: "gen-word", tag: "span", aria: "none" });
     const words = split.words as HTMLElement[];
@@ -117,19 +224,27 @@ function hero(delay: number) {
       t += gsap.utils.random(0.03, 0.12) + (/[.,—]$/.test(word.textContent ?? "") ? 0.22 : 0);
     });
     const counter = { ms: 0 };
-    const total = Math.round(t * 1000);
     gen.to(counter, {
-      ms: total,
+      ms: Math.round(t * 1000),
       duration: t,
       ease: "none",
       onUpdate: () => { if (msEl) msEl.textContent = String(Math.round(counter.ms)); },
     }, 0);
     gen.add(() => caret.classList.add("is-idle"));
 
-    tl.add(gen, human ? "-=0.7" : 0);
+    tl.add(gen, bp ? 1.6 : "-=0.7");
   }
 
   tl.from("[data-hero-fade]", { opacity: 0, y: 16, duration: 1, ease: EASE_OUT, stagger: 0.08 }, "-=0.6");
+
+  // 4 — the scaffolding goes away, the page is "compiled"
+  if (bp) {
+    tl.to(bp.labels, { opacity: 0, duration: 0.4, stagger: 0.03 }, "+=0.2")
+      .to(bp.boxes, { opacity: 0, duration: 0.6, stagger: 0.04 }, "<0.1")
+      .to(bp.guidesH, { scaleX: 0, transformOrigin: "right center", duration: 0.9, ease: "expo.inOut", stagger: 0.03 }, "<")
+      .to(bp.guidesV, { scaleY: 0, transformOrigin: "center bottom", duration: 0.9, ease: "expo.inOut" }, "<")
+      .add(() => bp.layer.remove());
+  }
   return tl;
 }
 

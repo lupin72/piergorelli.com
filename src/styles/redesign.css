@@ -245,8 +245,10 @@ html.lenis, html.lenis body { height: auto; }
 @keyframes vt-out { to { opacity: 0; filter: blur(12px); transform: translateY(-2vh) scale(0.985); } }
 @keyframes vt-in { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
 
-::view-transition-old(root) { animation: vt-out var(--dur-2) var(--ease-in-out) both; }
-::view-transition-new(root) { animation: vt-in var(--dur-3) var(--ease-in-out) both; }
+/* The monogram sheet (.pt) does the visible transition; the root snapshot swaps instantly
+   underneath it. Without JS motion (reduced motion) the swap is simply instant too. */
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; }
 ::view-transition-old(site-header), ::view-transition-new(site-header) { animation: none; mix-blend-mode: normal; }
 ::view-transition-group(site-header) { animation-duration: var(--dur-2); animation-timing-function: var(--ease-in-out); }
 
@@ -343,3 +345,117 @@ html.js[data-motion="showcase"]:not(.motion-ready) :is([data-hero-generate], [da
 .palette__list [aria-selected="true"] .note { color: inherit; opacity: 0.7; }
 .palette__group { padding: 0.9rem 0.75rem 0.35rem; }
 .palette__empty { padding: 1rem 0.75rem; }
+
+/* ─────────────────────────────────────────────────────────────
+   Hero: blueprint "compile" layer + inked headline + WebGL contours
+   ───────────────────────────────────────────────────────────── */
+
+[data-hero] { position: relative; isolation: isolate; }
+
+[data-hero-human] {
+  --fill: 1;
+  color: color-mix(in srgb, var(--ink) calc(var(--fill) * 100%), transparent);
+  -webkit-text-stroke: calc((1 - var(--fill)) * 1.5px) var(--ink);
+}
+
+.bp { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.bp__box {
+  position: absolute;
+  outline: 1px dashed color-mix(in oklab, var(--accent) 70%, transparent);
+  outline-offset: 4px;
+  background: color-mix(in oklab, var(--accent) 4%, transparent);
+}
+.bp__box::before, .bp__box::after {
+  /* corner ticks */
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: solid var(--accent-text);
+}
+.bp__box::before { top: -8px; left: -8px; border-width: 1px 0 0 1px; }
+.bp__box::after { bottom: -8px; right: -8px; border-width: 0 1px 1px 0; }
+.bp__label {
+  position: absolute;
+  left: -4px;
+  bottom: calc(100% + 8px);
+  white-space: nowrap;
+  color: var(--accent-text);
+  font-size: 0.65rem;
+}
+.bp__guide { position: absolute; background: color-mix(in oklab, var(--accent) 45%, transparent); }
+.bp__guide--h { left: calc(-1 * var(--gutter)); right: calc(-1 * var(--gutter)); height: 1px; transform-origin: left center; }
+.bp__guide--v { top: 0; bottom: 0; width: 1px; transform-origin: center top; }
+
+.hero-gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s var(--ease-out);
+}
+.hero-gl.is-on { opacity: 1; }
+
+/* ─────────────────────────────────────────────────────────────
+   Blueprint cursor (fine pointers, showcase pages)
+   ───────────────────────────────────────────────────────────── */
+
+html.has-cursor, html.has-cursor * { cursor: none !important; }
+.cursor { position: fixed; inset: 0; z-index: 97; pointer-events: none; opacity: 0; transition: opacity var(--dur-1); }
+.cursor.is-visible { opacity: 1; }
+.cursor__h, .cursor__v { position: absolute; background: var(--line-strong); }
+.cursor__h { left: 0; right: 0; top: 0; height: 1px; opacity: 0.55; }
+.cursor__v { top: 0; bottom: 0; left: 0; width: 1px; opacity: 0.55; }
+.cursor__pt { position: absolute; left: 0; top: 0; }
+.cursor__ring {
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--ink);
+  background: var(--accent);
+  transition: transform var(--dur-1) var(--ease-out), border-radius var(--dur-1) var(--ease-out), background var(--dur-1);
+}
+.cursor.is-hover .cursor__ring { transform: scale(4.2) rotate(45deg); border-radius: 50%; background: transparent; border-color: var(--accent); }
+.cursor.is-down .cursor__ring { transform: scale(0.6); }
+.cursor__label { position: absolute; left: 14px; top: 12px; white-space: nowrap; color: var(--ink); font-size: 0.62rem; }
+.cursor.is-hover .cursor__label { left: 30px; top: -6px; color: var(--accent-text); }
+
+/* ─────────────────────────────────────────────────────────────
+   Page-transition sheet (persisted across navigations)
+   ───────────────────────────────────────────────────────────── */
+
+.pt {
+  position: fixed;
+  inset: 0;
+  z-index: 98;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: var(--bg);
+  visibility: hidden;
+  clip-path: inset(100% 0 0 0);
+  overflow: hidden;
+  pointer-events: none;
+}
+.pt__lens { width: clamp(8rem, 18vw, 14rem); }
+.pt__lens svg { display: block; width: 100%; height: auto; overflow: visible; }
+.pt__lens path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4.2;
+  stroke-linecap: square;
+  stroke-dasharray: 1;
+}
+.pt__dot { fill: var(--accent); }
+.pt__to, .pt__brand {
+  position: absolute;
+  bottom: 1.25rem;
+  color: color-mix(in oklab, var(--bg) 65%, transparent);
+}
+.pt__to { right: var(--gutter); }
+.pt__brand { left: var(--gutter); }

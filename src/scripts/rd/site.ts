@@ -91,6 +91,33 @@ Built with Astro, GSAP & a lot of coffee → me@piergorelli.com`,
   "font-family:monospace",
 );
 
+/* ── page transitions (monogram sheet) ───────────────────────── */
+
+type TransitionModule = typeof import("./transition");
+let transition: Promise<TransitionModule> | undefined;
+const loadTransition = () => (transition ??= import("./transition"));
+const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Reading pages fetch the transition code only when a link is about to be used.
+const onIntent = (e: Event) => {
+  const a = (e.target as HTMLElement).closest?.("a[href]") as HTMLAnchorElement | null;
+  if (a && a.origin === location.origin) loadTransition();
+};
+document.addEventListener("pointerover", onIntent, { passive: true });
+document.addEventListener("focusin", onIntent);
+
+document.addEventListener("astro:before-preparation", (e) => {
+  if (reducedMotion()) return;
+  const original = e.loader;
+  e.loader = async () => {
+    const t = await loadTransition();
+    await Promise.all([t.cover(e.to), original()]);
+  };
+});
+document.addEventListener("astro:after-swap", () => {
+  if (transition && !reducedMotion()) transition.then((t) => t.reveal());
+});
+
 /* ── per-page setup ─────────────────────────────────────────── */
 
 let cleanupMotion: (() => void) | undefined;
@@ -111,6 +138,7 @@ document.addEventListener("astro:page-load", async () => {
   }
 
   if (root.dataset.motion === "showcase") {
+    loadTransition();
     const { initMotion } = await import("./motion");
     cleanupMotion = initMotion();
   }

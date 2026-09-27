@@ -91,6 +91,18 @@ const ogImage = new URL(image, site).href;
     </main>
     <Footer />
 
+    <div class="pt" transition:persist="pt" aria-hidden="true">
+      <div class="pt__lens">
+        <svg viewBox="0 0 68 40">
+          <path class="pt__p" d="M6 37V3h12a9.5 9.5 0 0 1 0 19H6" pathLength="1" />
+          <path class="pt__g" d="M57.3 8.7A16 16 0 1 0 62 20H48" pathLength="1" />
+          <circle class="pt__dot" cx="64" cy="36" r="2.6" />
+        </svg>
+      </div>
+      <p class="pt__brand note">Pier Gorelli — web &amp; AI dev</p>
+      <p class="pt__to note"></p>
+    </div>
+
     <div class="grid-overlay" aria-hidden="true">
       <div class="grid-12">{Array.from({ length: 12 }, () => <span />)}</div>
     </div>
