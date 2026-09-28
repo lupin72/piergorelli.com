@@ -1,0 +1,573 @@
+---
+import Base from "../../layouts/Base.astro";
+import ServiceFigure from "../../components/rd/ServiceFigure.astro";
+import WorkVisual from "../../components/rd/WorkVisual.astro";
+import { getCollection } from "astro:content";
+import { postUrl, pillarOf } from "../../lib/blog";
+import { work } from "../../data/work";
+
+const SITE = "https://piergorelli.com";
+const PAGE = `${SITE}/services/web-development-for-agencies/`;
+const updated = new Date("2026-09-28");
+
+const pains = [
+  { pain: "The concept moved in the pitch deck. The built site doesn't.", fix: "Motion is prototyped in week one and signed off by your designers before the build." },
+  { pain: "The freelancer vanished two weeks before launch.", fix: "One senior developer, a staging link from day one, a written plan and answers within 24 hours." },
+  { pain: "It looked great, then Lighthouse said 34.", fix: "Performance budgets are set at kick-off: Lighthouse 95+ on mobile, LCP under 2 s, 60 fps motion." },
+  { pain: "The client's editors broke the layout in a week.", fix: "CMS models built around how the editors actually work, with guardrails and a training session." },
+];
+
+const builds = [
+  { n: "01", title: "Campaign & launch sites", body: "Scroll-driven storytelling, WebGL moments and page transitions for products, brands and events. Built to be shortlisted, and to load fast on a train." },
+  { n: "02", title: "Corporate & brand sites", body: "Multilingual, accessible sites that the client's team can run for years: design system in code, components your designers recognise." },
+  { n: "03", title: "Headless & classic CMS", body: "Astro with a headless CMS when speed and motion matter; WordPress or Drupal when editors, plugins or multi-site setups call for them." },
+  { n: "04", title: "Web apps & platforms", body: "Portals, configurators, booking and member areas on Laravel or Angular, plus hybrid mobile apps with Ionic when one codebase is enough." },
+  { n: "05", title: "Takeovers & rescues", body: "Inherited a site nobody dares touch? A short audit first, then fixes, upgrades and a maintenance plan with clear priorities." },
+  { n: "06", title: "Prototypes for pitches", body: "A clickable, animated prototype of the key idea so your pitch shows the experience, not a video of it." },
+];
+
+// Easing lab: CSS only. Curves drawn in a 200×200 box (y flipped), control points from each cubic-bezier.
+const eases = [
+  { id: "linear", name: "linear", use: "The fallback nobody chose", bezier: [0, 0, 1, 1] },
+  { id: "inout", name: "power4.inOut", use: "Page transitions, sheets", bezier: [0.76, 0, 0.24, 1] },
+  { id: "expo", name: "expo.out", use: "Reveals, headlines", bezier: [0.16, 1, 0.3, 1] },
+  { id: "back", name: "back.out", use: "Buttons, small UI", bezier: [0.34, 1.56, 0.64, 1] },
+].map((e) => {
+  const [x1, y1, x2, y2] = e.bezier;
+  const p = (v: number) => +(v * 200).toFixed(1);
+  return {
+    ...e,
+    css: `cubic-bezier(${e.bezier.join(", ")})`,
+    d: `M0 200 C ${p(x1)} ${200 - p(y1)}, ${p(x2)} ${200 - p(y2)}, 200 0`,
+  };
+});
+const defaultEase = "expo";
+
+const steps = [
+  { n: "01", when: "Week 0", title: "Design review", body: "I go through your Figma files with the designers: what's hard to build, what motion needs a prototype, what the CMS must allow." },
+  { n: "02", when: "Week 1", title: "Motion prototype", body: "The riskiest interactions built first, in the browser, so everyone judges the real thing." },
+  { n: "03", when: "Weeks 2 to n", title: "Build on staging", body: "Components, templates and CMS on a staging link your team and the client can open any day." },
+  { n: "04", when: "Pre-launch", title: "QA", body: "Real devices, keyboard and screen readers, reduced motion, Lighthouse and cross-browser checks, with a written report." },
+  { n: "05", when: "Launch +", title: "Handover", body: "Go-live, documentation, editor training and a clean repository. Maintenance if you want it, no lock-in if you don't." },
+];
+
+const stack = [
+  { k: "Front-end", v: ["Astro", "TypeScript", "Tailwind CSS", "Vanilla JS when it's enough"] },
+  { k: "Motion", v: ["GSAP", "ScrollTrigger", "WebGL", "View Transitions", "Lenis"] },
+  { k: "CMS", v: ["WordPress", "Headless WordPress", "Drupal", "Markdown / Git-based"] },
+  { k: "Apps", v: ["Laravel", "Angular", "Ionic", "REST APIs"] },
+  { k: "Delivery", v: ["Git", "Netlify", "Figma Dev Mode", "Staging per branch"] },
+];
+
+const cases = work.filter((w) => w.slug !== "site-audit-ai");
+
+const all = await getCollection("blog");
+const reading = ["is-it-still-worth-developing-on-wordpress-in-2025", "10-tips-to-start-ui-design-with-focus"]
+  .map((id) => all.find((p) => p.id === id))
+  .filter((p) => p !== undefined);
+
+const faqs = [
+  { q: "What does white-label web development mean?", a: "I build the site, your agency delivers it. I work under NDA and under your name: your client talks to you, sees your brand on the staging link and in the documentation, and never needs to know I exist." },
+  { q: "Can you build exactly what our designers drew?", a: "That's the point. I build from your Figma files and bring the designers into the review of every page. When something would hurt performance or accessibility, I say so early and propose an alternative that keeps the idea." },
+  { q: "Which animation tools do you use?", a: "GSAP with ScrollTrigger for most scroll and timeline work, native View Transitions for page changes, and light WebGL for backgrounds and hero moments. Everything respects reduced-motion settings and has a static fallback." },
+  { q: "Astro, WordPress or Drupal?", a: "Astro, often with a headless CMS, for fast, motion-heavy marketing sites. WordPress when the client's editors know it or need its plugins. Drupal for complex, multi-site or enterprise setups. I'll recommend one in the first call and explain why." },
+  { q: "How long does a project take?", a: "A campaign site usually takes four to eight weeks from signed designs to launch; larger sites and platforms are planned in milestones. You get dates in the quote, before we start." },
+  { q: "Do you maintain the sites after launch?", a: "If you want: updates, monitoring, small evolutions and support for your team on a monthly retainer. If you'd rather take it in-house, the handover includes everything you need." },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${PAGE}#service`,
+    name: "White-label web development for creative agencies",
+    serviceType: "Web development",
+    description: "Animated front-ends, headless and classic CMS builds and web apps, delivered white-label for creative and digital agencies.",
+    provider: { "@type": "Person", "@id": `${SITE}/#person`, name: "Pier Gorelli" },
+    audience: { "@type": "BusinessAudience", audienceType: "Creative and digital agencies" },
+    areaServed: ["ES", "IT", "EU"],
+    availableLanguage: ["en", "es", "it"],
+    url: PAGE,
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "What I build",
+      itemListElement: builds.map((b) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: b.title, description: b.body } })),
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE}/services/` },
+      { "@type": "ListItem", position: 3, name: "Web development for agencies", item: PAGE },
+    ],
+  },
+];
+---
+
+<Base
+  title="White-Label Web Development for Agencies | Pier Gorelli"
+  description="Senior white-label web developer for creative agencies: GSAP and WebGL animation, Astro, WordPress and Drupal, built as designed. Valencia, EN / ES / IT."
+  motion="showcase"
+  schema={schema}
+>
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero wrap" data-hero>
+    <nav class="note crumbs" aria-label="Breadcrumb">
+      <a href="/" class="link">Home</a> / <a href="/services/" class="link">Services</a> / <span class="note--ink">Web development</span>
+    </nav>
+    <p class="note">[Services / 01]</p>
+    <h1 class="hero__title">
+      <span class="display hero__human" data-hero-human data-bp="h1.human">Built as drawn.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">White-label web development for creative agencies: animated front-ends, Astro, WordPress and Drupal.</span>
+    </h1>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>19</span> tokens · <span data-gen-ms>1480</span> ms</p>
+
+    <div class="hero__foot" data-hero-fade>
+      <p class="lead">
+        You sold a concept that moves. I'm the senior developer who builds it without flattening the design, on your deadline, under your brand.
+      </p>
+      <dl class="spec" data-bp="dl.tolerances">
+        <div><dt class="note">Lighthouse</dt><dd>95+ mobile</dd></div>
+        <div><dt class="note">Motion</dt><dd>60 fps</dd></div>
+        <div><dt class="note">Access</dt><dd>WCAG 2.2 AA</dd></div>
+        <div><dt class="note">Brand</dt><dd>Yours</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ── 01 Problem ───────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[01] Where agency builds break</span>
+      <span class="note">Pain → fix</span>
+    </header>
+    <h2 class="h2 claim" data-reveal="lines">Great design dies in the build. Not on my watch.</h2>
+    <ol class="pains">
+      {pains.map((p, i) => (
+        <li class="pain grid-12" data-reveal="up">
+          <span class="note pain__n">0{i + 1}</span>
+          <p class="h3 pain__text">{p.pain}</p>
+          <p class="pain__fix"><span class="note note--accent">fix →</span> {p.fix}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 02 What I build ──────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[02] What I build for agencies</span>
+      <span class="note">{builds.length} types · white-label</span>
+    </header>
+    <div class="builds grid-12">
+      <div class="builds__figure">
+        <ServiceFigure kind="web" caption="fig. 01 · motion curve on a 12-column grid" />
+      </div>
+      <ol class="builds__list">
+        {builds.map((b) => (
+          <li class="build" data-reveal="up">
+            <span class="note note--accent">{b.n}</span>
+            <h3 class="h3">{b.title}</h3>
+            <p>{b.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ── 03 Easing lab ────────────────────────────────────── -->
+  <section class="section wrap" aria-labelledby="lab-title">
+    <header class="section-head">
+      <span class="note note--ink">[03] Motion, spec'd</span>
+      <span class="note">Try it · 0 KB of JavaScript</span>
+    </header>
+    <div class="lab-intro grid-12">
+      <h2 class="h2 lab-intro__title" id="lab-title" data-reveal="lines">Motion is designed, not guessed.</h2>
+      <p class="lead lab-intro__text" data-reveal="up">
+        The difference between “it moves” and “it feels right” is a curve and a duration. I agree them with your designers as tokens, like colours and type, so every reveal on the site speaks the same language.
+      </p>
+    </div>
+
+    <div class="lab" data-reveal="up">
+      <fieldset class="lab__eases">
+        <legend class="note note--ink">Easing</legend>
+        {eases.map((e) => (
+          <label class="lab__ease" data-cursor="select">
+            <input type="radio" name="ease" value={e.id} id={`ease-${e.id}`} checked={e.id === defaultEase} />
+            <span class="lab__ease-name">{e.name}</span>
+            <span class="note">{e.use}</span>
+          </label>
+        ))}
+      </fieldset>
+
+      <div class="lab__stage">
+        <svg class="lab__graph" viewBox="-12 -48 224 270" role="img" aria-label="Easing curves: progress over time">
+          <path class="lab__axis" d="M0 0 V200 H200" />
+          <path class="lab__guide" d="M0 0 H200 M100 0 V200" />
+          {eases.map((e) => <path class:list={["lab__curve", `lab__curve--${e.id}`]} d={e.d} />)}
+          <text x="0" y="216">t</text>
+          <text x="-10" y="4">x</text>
+        </svg>
+
+        <div class="lab__run">
+          <div class="lab__rail" aria-hidden="true">
+            <div class="lab__runner"><span class="lab__ball"></span></div>
+          </div>
+          <div class="lab__ticks" aria-hidden="true">{Array.from({ length: 11 }, () => <span />)}</div>
+          <label class="btn lab__play" data-cursor="play">
+            <input type="checkbox" class="lab__toggle" />
+            <span class="lab__play-on">Play</span><span class="lab__play-off">Rewind</span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </label>
+        </div>
+
+        <pre class="lab__code" aria-live="polite">{eases.map((e) => (
+          <code class:list={["lab__token", `lab__token--${e.id}`]}>--ease: {e.css};{"\n"}--dur: 1.2s;</code>
+        ))}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 Process ───────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[04] How a build runs</span>
+      <a href="/agencies/" class="note link">Working with agencies →</a>
+    </header>
+    <h2 class="h2 claim" data-reveal="lines">A staging link from week one. No black box.</h2>
+    <div class="process__line" data-draw></div>
+    <ol class="process grid-12">
+      {steps.map((s) => (
+        <li class="step" data-reveal="up">
+          <span class="step__n">{s.n}</span>
+          <span class="note">{s.when}</span>
+          <h3 class="step__title">{s.title}</h3>
+          <p>{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 05 Stack ─────────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[05] Stack</span>
+      <span class="note">Chosen per project · no religion</span>
+    </header>
+    <dl class="stack-table">
+      {stack.map((s) => (
+        <div class="stack-row grid-12" data-reveal="up">
+          <dt class="h3">{s.k}</dt>
+          <dd><ul class="stack">{s.v.map((t) => <li>{t}</li>)}</ul></dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- ── 06 Proof ─────────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[06] Proof</span>
+      <span class="note">Client names under NDA</span>
+    </header>
+    <div class="cases grid-12">
+      {cases.map((w, i) => (
+        <article class:list={["case", `case--${i}`]} data-reveal="up">
+          <WorkVisual kind={w.visual} />
+          <div class="case__meta note"><span>{w.year}</span><span>{w.stack.join(" · ")}</span></div>
+          <h3 class="h3">{w.title}</h3>
+          <p class="note">{w.client}{w.placeholder && " · placeholder"}</p>
+          <p class="case__summary">{w.summary}</p>
+        </article>
+      ))}
+    </div>
+    <p class="self lead" data-reveal="up">
+      And the page you're reading: Astro, GSAP, WebGL and View Transitions, with Lighthouse 95+ on mobile and a blog that ships almost no JavaScript.<span class="self__grid"> Press <kbd>G</kbd> to see the grid.</span>
+    </p>
+  </section>
+
+  <!-- ── 07 Reading ───────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[07] Read before you call</span>
+      <a href="/blog/topic/dev/" class="note link">All dev posts →</a>
+    </header>
+    <ul class="posts">
+      {reading.map((p) => (
+        <li data-reveal="up">
+          <a href={postUrl(p)} class="post grid-12">
+            <span class="post__pillar note">{pillarOf(p)}</span>
+            <span class="post__title h3">{p.data.title}</span>
+            <span class="post__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ── 08 FAQ ───────────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[08] FAQ</span>
+      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>28 Sep 2026</time></span>
+    </header>
+    <div class="faqs">
+      {faqs.map((f) => (
+        <details class="faq" data-reveal="up">
+          <summary><span class="h3">{f.q}</span><span class="faq__icon" aria-hidden="true"></span></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── 09 CTA ───────────────────────────────────────────── -->
+  <section class="section wrap cta">
+    <header class="section-head">
+      <span class="note note--ink">[09] Next</span>
+      <span class="note">30 minutes · EN / ES / IT</span>
+    </header>
+    <h2 class="display cta__title" data-reveal="lines">Send me the Figma.</h2>
+    <div class="cta__actions" data-reveal="up">
+      <a href="/contact/" class="btn">Book a 30-min call <span class="arrow">→</span></a>
+      <a href="/services/" class="btn btn--ghost">All services</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    min-height: 92svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1.25rem;
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+  }
+  .crumbs { margin-bottom: auto; }
+  .hero__title { display: flex; flex-direction: column; gap: 0.35em; font-weight: 500; }
+  .hero__human { display: block; margin-left: -0.05em; }
+  .hero__machine { display: block; max-width: 24ch; }
+  .hero__foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem 3rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .hero__foot .lead { max-width: 40ch; color: var(--muted); }
+  .spec { display: grid; grid-template-columns: repeat(2, minmax(9rem, 1fr)); min-width: min(100%, 22rem); border-top: 1px solid var(--line); }
+  .spec div { display: flex; justify-content: space-between; gap: 1rem; padding-block: 0.7rem; border-bottom: 1px solid var(--line); }
+  .spec div:nth-child(odd) { padding-right: 1rem; box-shadow: inset -1px 0 var(--line); }
+  .spec div:nth-child(even) { padding-left: 1rem; }
+
+  .claim { max-width: 18ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+
+  /* Pains */
+  .pains { border-top: 1px solid var(--line); }
+  .pain { align-items: baseline; row-gap: 0.75rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
+  .pain__n { grid-column: 1; }
+  .pain__text { grid-column: 2 / span 6; }
+  .pain__fix { grid-column: 9 / -1; color: var(--muted); }
+  @media (max-width: 767px) {
+    .pain__n, .pain__text, .pain__fix { grid-column: 1 / -1; }
+  }
+
+  /* Builds */
+  .builds { row-gap: 2.5rem; }
+  .builds__figure { grid-column: 1 / span 5; }
+  .builds__figure > :global(.sfig) { position: sticky; top: 6rem; }
+  .builds__list { grid-column: 7 / -1; border-top: 1px solid var(--line); }
+  .build { display: grid; grid-template-columns: 3.5rem 1fr; column-gap: 1rem; row-gap: 0.6rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
+  .build .note { grid-row: span 2; padding-top: 0.5em; }
+  .build p { color: var(--muted); max-width: 48ch; }
+  @media (max-width: 899px) {
+    .builds__figure, .builds__list { grid-column: 1 / -1; }
+    .builds__figure > :global(.sfig) { position: static; max-width: 32rem; }
+  }
+
+  /* Easing lab */
+  .lab-intro { row-gap: 1.5rem; align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .lab-intro__title { grid-column: 1 / span 6; max-width: 14ch; }
+  .lab-intro__text { grid-column: 8 / -1; color: var(--muted); max-width: 40ch; }
+  @media (max-width: 899px) { .lab-intro__title, .lab-intro__text { grid-column: 1 / -1; } }
+
+  .lab {
+    --lab-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    display: grid;
+    grid-template-columns: minmax(16rem, 4fr) 8fr;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+  }
+  .lab:has(#ease-linear:checked) { --lab-ease: cubic-bezier(0, 0, 1, 1); }
+  .lab:has(#ease-inout:checked) { --lab-ease: cubic-bezier(0.76, 0, 0.24, 1); }
+  .lab:has(#ease-back:checked) { --lab-ease: cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  .lab__eases { border: 0; margin: 0; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.25rem; box-shadow: inset -1px 0 var(--line-strong); }
+  .lab__eases legend { float: left; width: 100%; margin-bottom: 1rem; }
+  .lab__ease {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  .lab__ease input { position: absolute; opacity: 0; pointer-events: none; }
+  .lab__ease-name { font-family: var(--font-mono); font-size: var(--step-0); }
+  .lab__ease:hover { background: var(--bg-raised); }
+  .lab__ease:has(:checked) { background: var(--ink); color: var(--bg); }
+  .lab__ease:has(:checked) .note { color: color-mix(in oklab, var(--bg) 70%, transparent); }
+  .lab__ease:has(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .lab__stage {
+    display: grid;
+    grid-template-columns: minmax(10rem, 17rem) 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 1.5rem 2rem;
+    padding: 1.5rem;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 20px 20px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 20px 20px;
+  }
+  .lab__graph { width: 100%; height: auto; overflow: visible; }
+  .lab__graph path { fill: none; stroke-linecap: round; }
+  .lab__axis { stroke: var(--ink); stroke-width: 1.25; }
+  .lab__guide { stroke: var(--line-strong); stroke-dasharray: 3 5; }
+  .lab__curve { stroke: var(--line-strong); stroke-width: 1.25; transition: stroke var(--dur-1), stroke-width var(--dur-1); }
+  .lab__graph text { font-family: var(--font-mono); font-size: 11px; fill: var(--muted); }
+  .lab:has(#ease-linear:checked) .lab__curve--linear,
+  .lab:has(#ease-inout:checked) .lab__curve--inout,
+  .lab:has(#ease-expo:checked) .lab__curve--expo,
+  .lab:has(#ease-back:checked) .lab__curve--back { stroke: var(--accent); stroke-width: 3; }
+
+  .lab__run { display: flex; flex-direction: column; justify-content: center; gap: 0.75rem; min-width: 0; }
+  .lab__rail { height: 3.5rem; margin-right: 2rem; container-type: inline-size; }
+  .lab__runner { width: 3.5rem; transition: transform 1.2s var(--lab-ease); }
+  .lab:has(.lab__toggle:checked) .lab__runner { transform: translateX(calc(100cqw - 3.5rem)); }
+  .lab__ball { display: block; width: 3.5rem; height: 3.5rem; border-radius: 999px; background: var(--accent); box-shadow: inset 0 0 0 1px var(--ink); }
+  .lab__ticks { display: flex; justify-content: space-between; margin-inline: 1.75rem 3.75rem; }
+  .lab__ticks span { width: 1px; height: 0.6rem; background: var(--line-strong); }
+  .lab__ticks span:nth-child(5n + 1) { height: 1rem; background: var(--ink); }
+  .lab__play { align-self: start; margin-top: 1rem; cursor: pointer; }
+  .lab__play input { position: absolute; opacity: 0; pointer-events: none; }
+  .lab__play:has(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .lab__play-off, .lab__play:has(:checked) .lab__play-on { display: none; }
+  .lab__play:has(:checked) .lab__play-off { display: inline; }
+
+  .lab__code {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 1rem 1.25rem;
+    background: var(--bg);
+    box-shadow: inset 0 0 0 1px var(--line);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    white-space: pre-wrap;
+  }
+  .lab__token { display: none; }
+  .lab:has(#ease-linear:checked) .lab__token--linear,
+  .lab:has(#ease-inout:checked) .lab__token--inout,
+  .lab:has(#ease-expo:checked) .lab__token--expo,
+  .lab:has(#ease-back:checked) .lab__token--back { display: block; }
+
+  @media (max-width: 1099px) {
+    .lab { grid-template-columns: 1fr; }
+    .lab__eases { box-shadow: inset 0 -1px var(--line-strong); display: grid; grid-template-columns: repeat(2, 1fr); }
+    .lab__eases legend { grid-column: 1 / -1; }
+  }
+  @media (max-width: 599px) {
+    .lab__stage { grid-template-columns: 1fr; }
+    .lab__graph { max-width: 14rem; }
+    .lab__eases { grid-template-columns: 1fr; padding: 1rem; }
+    .lab__stage { padding: 1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lab__runner { transition-duration: 0.01s; }
+  }
+
+  /* Process */
+  .process__line { height: 1px; background: var(--ink); transform-origin: left; }
+  .process { row-gap: 2.5rem; padding-top: 2rem; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .step { display: flex; flex-direction: column; gap: 0.6rem; }
+  .step__title { font-size: var(--step-1); letter-spacing: -0.02em; }
+  .step p { color: var(--muted); max-width: 30ch; }
+  .step__n {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+  @media (max-width: 1099px) { .process { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 599px) { .process { grid-template-columns: 1fr; } }
+
+  /* Stack */
+  .stack-table { border-top: 1px solid var(--line); }
+  .stack-row { align-items: center; row-gap: 1rem; padding-block: 1.4rem; border-bottom: 1px solid var(--line); }
+  .stack-row dt { grid-column: 1 / span 4; }
+  .stack-row dd { grid-column: 5 / -1; }
+  @media (max-width: 767px) { .stack-row dt, .stack-row dd { grid-column: 1 / -1; } }
+  .stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .stack li {
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  .stack li:hover { background: var(--ink); color: var(--bg); }
+
+  /* Proof */
+  .cases { row-gap: clamp(3rem, 6vw, 5rem); }
+  .case { display: flex; flex-direction: column; gap: 0.75rem; }
+  .case--0 { grid-column: 1 / span 7; }
+  .case--1 { grid-column: 9 / span 4; margin-top: 30%; }
+  .case__meta { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.5rem; }
+  .case__summary { color: var(--muted); max-width: 44ch; }
+  @media (max-width: 899px) { .case--0, .case--1 { grid-column: 1 / -1; margin-top: 0; } }
+  .self { max-width: 46ch; margin-top: clamp(3rem, 6vw, 5rem); padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--muted); }
+  @media (pointer: coarse) { .self__grid { display: none; } }
+  .self kbd {
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    padding: 0.1em 0.45em;
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    color: var(--ink);
+  }
+
+  /* Reading */
+  .posts { border-bottom: 1px solid var(--line); }
+  .posts li { border-top: 1px solid var(--line); }
+  .post { align-items: baseline; padding-block: 1.6rem; row-gap: 0.4rem; }
+  .post__pillar { grid-column: 1 / span 2; }
+  .post__title { grid-column: 3 / span 8; transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1); }
+  .post__arrow { grid-column: 12; justify-self: end; font-size: var(--step-1); }
+  .post:hover .post__title { transform: translateX(1rem); color: var(--accent-text); }
+  @media (max-width: 767px) {
+    .post__pillar, .post__title { grid-column: 1 / -1; }
+    .post__arrow { display: none; }
+  }
+
+  /* CTA */
+  .cta__title { max-width: 12ch; }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: clamp(2rem, 4vw, 3.5rem); }
+</style>
