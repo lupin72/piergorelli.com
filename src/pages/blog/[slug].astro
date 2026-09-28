@@ -60,7 +60,7 @@ const meta = [
 ];
 ---
 
-<Base title={`${post.data.title} — Pier Gorelli`} description={post.data.description} motion="read" type="article" image={og.src} schema={schema}>
+<Base title={`${post.data.title} | Pier Gorelli`} description={post.data.description} motion="read" type="article" image={og.src} schema={schema}>
   <article class="article wrap">
     <header class="article__head">
       <nav class="note crumbs" aria-label="Breadcrumb">
@@ -77,7 +77,7 @@ const meta = [
 
     <figure class="article__cover">
       <Image src={post.data.cover} alt={post.data.alt} widths={[640, 1024, 1600]} sizes="(min-width: 1024px) 80vw, 100vw" loading="eager" fetchpriority="high" />
-      <figcaption class="note">fig. 00 — {post.data.alt}</figcaption>
+      <figcaption class="note">fig. 00 · {post.data.alt}</figcaption>
     </figure>
 
     <div class="article__body grid-12">
@@ -114,7 +114,7 @@ const meta = [
 <style>
   .article { padding-top: 7rem; }
   .article__head { display: flex; flex-direction: column; gap: 1.5rem; }
-  .article__title { font-size: clamp(2.4rem, 1.2rem + 5vw, 6.5rem); max-width: 18ch; view-transition-name: article-title; }
+  .article__title { font-size: clamp(2.4rem, 1.2rem + 5vw, 6.5rem); max-width: 18ch; }
   .article__desc { max-width: 52ch; color: var(--muted); }
   .article__meta {
     margin-top: 1rem;
