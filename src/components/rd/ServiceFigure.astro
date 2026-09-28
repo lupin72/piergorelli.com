@@ -1,0 +1,119 @@
+---
+/**
+ * Blueprint schematics for the three services. Strokes with pathLength="1" are
+ * plotted on scroll by motion.ts (data-plot); without JS they are simply drawn.
+ */
+interface Props {
+  kind: "web" | "automation" | "product";
+  caption: string;
+}
+const { kind, caption } = Astro.props;
+---
+
+<figure class="sfig">
+  <svg class="sfig__svg" viewBox="0 0 400 300" role="img" aria-label={caption} data-plot>
+    {kind === "web" && (
+      <g>
+        <!-- browser sheet -->
+        <rect x="20" y="20" width="360" height="260" rx="6" pathLength="1" />
+        <path d="M20 46 H380" pathLength="1" />
+        <circle cx="36" cy="33" r="3.5" class="fill" data-plot-dot />
+        <circle cx="50" cy="33" r="3.5" data-plot-dot />
+        <circle cx="64" cy="33" r="3.5" data-plot-dot />
+        <!-- 12-col guides -->
+        <path class="guide" d="M50 60 V266 M110 60 V266 M170 60 V266 M230 60 V266 M290 60 V266 M350 60 V266" />
+        <!-- easing curve + keyframes -->
+        <path d="M50 240 H350" class="thin" pathLength="1" />
+        <path d="M50 240 C 120 240, 150 90, 350 86" class="accent" pathLength="1" />
+        <circle cx="50" cy="240" r="5" class="fill" data-plot-dot />
+        <circle cx="168" cy="140" r="5" class="fill" data-plot-dot />
+        <circle cx="350" cy="86" r="5" class="fill" data-plot-dot />
+        <text x="58" y="258">t = 0</text>
+        <text x="300" y="78">t = 1</text>
+        <text x="196" y="206">expo.out · 60 fps</text>
+      </g>
+    )}
+    {kind === "automation" && (
+      <g>
+        <!-- brief → llm → human review → client -->
+        <path d="M92 150 C 118 150, 118 90, 146 90" pathLength="1" />
+        <path d="M186 114 V186" pathLength="1" />
+        <path d="M226 210 C 252 210, 252 150, 278 150" pathLength="1" />
+        <rect x="24" y="126" width="68" height="48" rx="24" pathLength="1" />
+        <rect x="146" y="66" width="80" height="48" rx="6" class="accent" pathLength="1" />
+        <rect x="146" y="186" width="80" height="48" rx="6" pathLength="1" />
+        <rect x="278" y="126" width="98" height="48" rx="6" pathLength="1" />
+        <circle cx="92" cy="150" r="4" class="fill" data-plot-dot />
+        <circle cx="146" cy="90" r="4" class="fill" data-plot-dot />
+        <circle cx="186" cy="186" r="4" class="fill" data-plot-dot />
+        <circle cx="226" cy="210" r="4" class="fill" data-plot-dot />
+        <circle cx="278" cy="150" r="4" class="fill" data-plot-dot />
+        <text x="40" y="154">brief</text>
+        <text x="170" y="94">llm</text>
+        <text x="158" y="214">human ✓</text>
+        <text x="292" y="154">client ↗</text>
+        <text x="146" y="48">n8n · 4 nodes</text>
+        <text x="146" y="262">runs every monday 07:00</text>
+      </g>
+    )}
+    {kind === "product" && (
+      <g>
+        <!-- vector space -->
+        <path class="guide" d="M170 270 V30 M170 270 H380" />
+        <circle cx="330" cy="70" r="36" class="accent" pathLength="1" />
+        <circle cx="144" cy="150" r="4" class="fill" data-plot-dot />
+        <path d="M144 150 C 190 150, 240 110, 312 72" pathLength="1" />
+        <path d="M144 150 C 200 150, 260 100, 340 58" pathLength="1" />
+        <path d="M144 150 C 210 156, 270 120, 348 88" pathLength="1" />
+        {[[312, 72], [340, 58], [348, 88]].map(([x, y]) => <circle cx={x} cy={y} r="5" class="fill" data-plot-dot />)}
+        {[[220, 230], [250, 190], [290, 240], [330, 200], [210, 90], [360, 150], [260, 140], [240, 60]].map(([x, y]) => (
+          <circle cx={x} cy={y} r="3.5" data-plot-dot />
+        ))}
+        <!-- chat bubble -->
+        <path d="M24 122 H144 V178 H64 L44 196 V178 H24 Z" pathLength="1" />
+        <text x="36" y="146">“do you ship</text>
+        <text x="36" y="164">to Canarias?”</text>
+        <text x="300" y="126">top-k = 3</text>
+        <text x="186" y="284">embeddings · pgvector</text>
+        <text x="24" y="226">answer + sources ↗</text>
+      </g>
+    )}
+  </svg>
+  <figcaption class="note">{caption}</figcaption>
+</figure>
+
+<style>
+  .sfig { display: flex; flex-direction: column; gap: 0.75rem; }
+  .sfig__svg {
+    width: 100%;
+    height: auto;
+    padding: clamp(0.5rem, 2vw, 1.25rem);
+    box-shadow: inset 0 0 0 1px var(--line);
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 20px 20px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 20px 20px;
+    background-color: var(--bg);
+    overflow: visible;
+  }
+  .sfig__svg rect, .sfig__svg path, .sfig__svg circle {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .sfig__svg [pathLength="1"] { stroke-dasharray: 1; }
+  .sfig__svg .thin { stroke: var(--line-strong); }
+  .sfig__svg .guide { stroke: var(--line-strong); stroke-dasharray: 3 5; }
+  .sfig__svg .accent { stroke: var(--accent); stroke-width: 2; }
+  .sfig__svg circle { fill: var(--bg); }
+  .sfig__svg .fill { fill: var(--accent); stroke: var(--ink); }
+  .sfig__svg text {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    fill: var(--muted);
+    stroke: none;
+  }
+</style>

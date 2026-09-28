@@ -13,6 +13,7 @@
  *  [data-wireframe]             outlined → solid text, scrubbed by scroll
  *  [data-draw]                  hairline that draws itself (scaleX), scrubbed
  *  [data-parallax="<percent>"]  scrubbed vertical drift
+ *  [data-plot]                  SVG figure: [pathLength="1"] strokes plot themselves, [data-plot-dot] pop in, scrubbed
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -69,6 +70,7 @@ export function initMotion(): () => void {
         wireframes();
         lines();
         parallax();
+        plots();
       });
       ScrollTrigger.refresh();
     });
@@ -315,5 +317,22 @@ function parallax() {
       ease: "none",
       scrollTrigger: { trigger: el.parentElement ?? el, start: "top bottom", end: "bottom top", scrub: true },
     });
+  });
+}
+
+/* Blueprint figures: strokes are plotted as the figure crosses the viewport.
+   Without JS (or with reduced motion) the figure is simply drawn. */
+function plots() {
+  gsap.utils.toArray<SVGSVGElement>("[data-plot]").forEach((svg) => {
+    const strokes = svg.querySelectorAll('[pathLength="1"]');
+    const dots = svg.querySelectorAll("[data-plot-dot]");
+    const labels = svg.querySelectorAll("text");
+    const tl = gsap.timeline({
+      defaults: { ease: "none" },
+      scrollTrigger: { trigger: svg, start: "top 85%", end: "bottom 60%", scrub: true },
+    });
+    tl.fromTo(strokes, { strokeDashoffset: 1 }, { strokeDashoffset: 0, stagger: 0.12 }, 0)
+      .fromTo(dots, { scale: 0 }, { scale: 1, transformOrigin: "50% 50%", stagger: 0.06, ease: "back.out(3)" }, 0.3)
+      .fromTo(labels, { opacity: 0 }, { opacity: 1, stagger: 0.05 }, 0.4);
   });
 }

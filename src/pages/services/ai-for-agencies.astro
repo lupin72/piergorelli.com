@@ -212,31 +212,6 @@ const schema = [
   }
   .stack li:hover { background: var(--ink); color: var(--bg); }
 
-  .faqs { border-top: 1px solid var(--line); }
-  .faq { border-bottom: 1px solid var(--line); }
-  .faq summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    padding-block: 1.6rem;
-    cursor: pointer;
-    list-style: none;
-  }
-  .faq summary::-webkit-details-marker { display: none; }
-  .faq__icon { position: relative; flex: none; width: 1.25rem; height: 1.25rem; }
-  .faq__icon::before, .faq__icon::after {
-    content: "";
-    position: absolute;
-    inset: 50% 0 auto;
-    height: 1.5px;
-    background: currentColor;
-    transition: transform var(--dur-1) var(--ease-in-out);
-  }
-  .faq__icon::after { transform: rotate(90deg); }
-  .faq[open] .faq__icon::after { transform: rotate(0deg); }
-  .faq[open] summary { color: var(--accent-text); }
-  .faq p { max-width: 60ch; padding-bottom: 1.75rem; color: var(--muted); }
 
   .cta__title { max-width: 14ch; }
   .cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: clamp(2rem, 4vw, 3.5rem); }
