@@ -1,6 +1,6 @@
 /**
- * PLACEHOLDER case studies for the prototype (decision Q36-A).
- * Replace with real, NDA-cleared projects before launch — see docs/redesign-status.md.
+ * Case studies. Entries with `placeholder: true` stand in for the prototype (decision Q36-A):
+ * replace them with real, NDA-cleared projects before launch, see docs/redesign-status.md.
  */
 export type Work = {
   slug: string;
@@ -9,20 +9,20 @@ export type Work = {
   year: string;
   stack: string[];
   summary: string;
-  visual: "orbit" | "bars" | "audit";
-  placeholder: true;
+  visual: "orbit" | "bars" | "audit" | "blueprint";
+  placeholder: boolean;
 };
 
 export const work: Work[] = [
   {
-    slug: "pharma-launch",
-    title: "Launch site for a pharma brand",
-    client: "For a creative agency · Milan",
-    year: "2025",
+    slug: "piergorelli-com",
+    title: "piergorelli.com, redesigned",
+    client: "Own studio · Valencia",
+    year: "2026",
     stack: ["Astro", "GSAP", "WebGL"],
-    summary: "Scroll-driven storytelling, shipped white-label in six weeks, 98 on Lighthouse.",
-    visual: "orbit",
-    placeholder: true,
+    summary: "Blueprint concept, compile intro and View Transitions on showcase pages, a blog with almost no JavaScript, 97+ on Lighthouse mobile.",
+    visual: "blueprint",
+    placeholder: false,
   },
   {
     slug: "fashion-headless",
