@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "qa:motion": "node tools/qa/motion.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
@@ -37,7 +38,8 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.20",
-    "@xpd/tailwind-3dtransforms": "^1.0.3"
+    "@xpd/tailwind-3dtransforms": "^1.0.3",
+    "playwright-core": "^1.63.0"
   },
   "volta": {
     "node": "22.18.0"
