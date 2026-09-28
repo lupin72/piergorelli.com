@@ -4,7 +4,7 @@ pubDate: 2025-06-09
 description: 'Learn how to build a custom n8n node for WordPress to support Custom Post Types (CPTs), handle REST API pagination, and improve automation workflows without relying on HTTP requests.'
 author: 'Pier Gorelli'
 cover: "./images/n8n-nodes.png"
-alt: 'Wordpress'
+alt: 'n8n workflow canvas with custom nodes'
 tags: ["n8n", "node", "automation", "WordPress"]
 ---
 In these last days of spring, before summer officially begins, I started experimenting with automation to create a chatbot capable of interacting with WordPress site content. The challenge was to build a stable MVP, quick to implement, with a good quality/time-cost ratio. The choice fell on **n8n**.

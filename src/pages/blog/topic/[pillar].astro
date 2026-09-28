@@ -1,0 +1,51 @@
+---
+import Base from "../../../layouts/Base.astro";
+import BlogIndex from "../../../components/rd/BlogIndex.astro";
+import { getPosts, pillarKeyOf, postUrl, topicUrl, PILLARS, PILLAR_INFO, type PillarKey } from "../../../lib/blog";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  // No empty topic pages: a pillar gets its URL with its first post.
+  const keys = (Object.keys(PILLARS) as PillarKey[]).filter((k) => posts.some((p) => pillarKeyOf(p) === k));
+  return keys.map((key) => ({ params: { pillar: PILLAR_INFO[key].slug }, props: { key, posts } }));
+}
+
+interface Props {
+  key: PillarKey;
+  posts: Awaited<ReturnType<typeof getPosts>>;
+}
+
+const { key, posts } = Astro.props;
+const info = PILLAR_INFO[key];
+const site = Astro.site ?? new URL("https://piergorelli.com");
+const url = new URL(topicUrl(key), site).href;
+const items = posts.filter((p) => pillarKeyOf(p) === key);
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `${PILLARS[key]} — Pier Gorelli blog`,
+    description: info.seoDescription,
+    url,
+    isPartOf: { "@id": "https://piergorelli.com/blog/#blog" },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: items.map((p, i) => ({ "@type": "ListItem", position: i + 1, url: new URL(postUrl(p), site).href, name: p.data.title })),
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://piergorelli.com/" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://piergorelli.com/blog/" },
+      { "@type": "ListItem", position: 3, name: PILLARS[key], item: url },
+    ],
+  },
+];
+---
+
+<Base title={info.seoTitle} description={info.seoDescription} motion="read" schema={schema}>
+  <BlogIndex posts={posts} active={key} />
+</Base>
