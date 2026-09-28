@@ -1,0 +1,392 @@
+---
+/**
+ * Contact brief: a Netlify form laid out like a spec sheet, with a live `brief.json`
+ * readout that "compiles" what the visitor types (the Human + Machine layer).
+ * Without JS the form posts natively and Netlify redirects to /contact/thanks/.
+ * Field names `name`, `email`, `message`, `terms` are kept from the old form so
+ * submissions stay in the same Netlify form ("contact").
+ */
+const needs = ["Web development", "AI for agencies", "AI in products", "Not sure yet"];
+const timelines = ["ASAP", "1–3 months", "Later this year", "Just exploring"];
+
+// Readout lines: [key, readout id]. Rendered as rows so the braces stay out of Astro expressions.
+const readout = [
+  ["from", "name"],
+  ["email", "email"],
+  ["company", "company"],
+  ["needs", "needs"],
+  ["timeline", "timeline"],
+  ["nda", "nda"],
+  ["words", "words"],
+];
+---
+
+<div class="brief-wrap grid-12">
+  <form
+    class="brief"
+    name="contact"
+    method="POST"
+    action="/contact/thanks/"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    data-brief
+  >
+    <input type="hidden" name="form-name" value="contact" />
+    <p class="brief__hp" hidden>
+      <label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+    </p>
+
+    <div class="field" data-reveal="up">
+      <label for="f-name" class="field__label">
+        <span class="note note--accent">01</span><span class="note note--ink">Your name</span><span class="note">Required</span>
+      </label>
+      <input id="f-name" name="name" class="field__input" autocomplete="name" required placeholder="Ada Lovelace" />
+    </div>
+
+    <div class="field" data-reveal="up">
+      <label for="f-email" class="field__label">
+        <span class="note note--accent">02</span><span class="note note--ink">Email</span><span class="note">Required</span>
+      </label>
+      <input id="f-email" name="email" type="email" class="field__input" autocomplete="email" required placeholder="ada@agency.studio" />
+    </div>
+
+    <div class="field" data-reveal="up">
+      <label for="f-company" class="field__label">
+        <span class="note note--accent">03</span><span class="note note--ink">Agency or company</span><span class="note">Optional</span>
+      </label>
+      <input id="f-company" name="company" class="field__input" autocomplete="organization" placeholder="Analytical Engines Ltd." />
+    </div>
+
+    <fieldset class="field" data-reveal="up">
+      <legend class="field__label">
+        <span class="note note--accent">04</span><span class="note note--ink">What do you need?</span><span class="note">Pick any</span>
+      </legend>
+      <div class="chips">
+        {needs.map((n) => (
+          <label class="chip"><input type="checkbox" name="needs[]" value={n} /><span>{n}</span></label>
+        ))}
+      </div>
+    </fieldset>
+
+    <fieldset class="field" data-reveal="up">
+      <legend class="field__label">
+        <span class="note note--accent">05</span><span class="note note--ink">Timeline</span><span class="note">Pick one</span>
+      </legend>
+      <div class="chips">
+        {timelines.map((t) => (
+          <label class="chip"><input type="radio" name="timeline" value={t} /><span>{t}</span></label>
+        ))}
+      </div>
+    </fieldset>
+
+    <div class="field" data-reveal="up">
+      <label for="f-message" class="field__label">
+        <span class="note note--accent">06</span><span class="note note--ink">The brief</span><span class="note">Required</span>
+      </label>
+      <textarea
+        id="f-message"
+        name="message"
+        class="field__input field__input--area"
+        rows="5"
+        required
+        placeholder="What are you building, for whom, and what makes it hard? Links to a deck or Figma are welcome."
+      ></textarea>
+    </div>
+
+    <div class="checks" data-reveal="up">
+      <label class="check">
+        <input type="checkbox" name="nda" value="yes" />
+        <span class="check__box" aria-hidden="true"></span>
+        <span>Send me an NDA before we go into detail.</span>
+      </label>
+      <label class="check">
+        <input type="checkbox" name="terms" value="accepted" required />
+        <span class="check__box" aria-hidden="true"></span>
+        <span>I agree that my data is used only to reply to me, as described in the <a href="/privacy-policy/" class="link">privacy policy</a>. <span class="note">Required</span></span>
+      </label>
+    </div>
+
+    <div class="brief__submit" data-reveal="up">
+      <button type="submit" class="btn" data-brief-send>Send the brief <span class="arrow">→</span></button>
+      <p class="note">Reply within 24h · Mon–Fri</p>
+    </div>
+    <p class="brief__error" data-brief-error hidden role="alert">
+      Something went wrong on the way. Nothing is lost: copy your text and write to
+      <a href="mailto:me@piergorelli.com" class="link">me@piergorelli.com</a>.
+    </p>
+  </form>
+
+  <div class="brief__done" data-brief-done hidden tabindex="-1">
+    <p class="note note--accent">200 OK · brief received</p>
+    <p class="h2">Thanks<span data-done-name></span>. I'll be in touch.</p>
+    <p class="lead brief__done-body">
+      Expect a reply at <strong data-done-email>your inbox</strong> within 24 hours, Monday to Friday — usually with a couple of questions and a slot for a call.
+    </p>
+    <a href="/blog/" class="btn btn--ghost">Meanwhile, read the blog</a>
+  </div>
+
+  <aside class="readout" aria-hidden="true">
+    <div class="readout__sheet">
+      <div class="readout__bar">
+        <span class="note note--ink">brief.json</span>
+        <span class="readout__status note" data-out-status>draft</span>
+      </div>
+      <div class="readout__code">
+        <div class="readout__ln">&#123;</div>
+        {readout.map(([k, id], i) => (
+          <div class="readout__ln">
+            &nbsp;&nbsp;<span class="readout__k">"{k}"</span>: <span class="readout__v is-null" data-out={id}>null</span>{i < readout.length - 1 && ","}
+          </div>
+        ))}
+        <div class="readout__ln">&#125;</div>
+      </div>
+      <div class="readout__meter"><span data-out-meter></span></div>
+      <p class="readout__foot note">
+        <span>Required <span data-out-req>0/4</span></span>
+        <span>Compiled locally · sent only on submit</span>
+      </p>
+    </div>
+  </aside>
+</div>
+
+<script>
+  const clip = (s: string, n = 26) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
+
+  function setupBrief() {
+    const form = document.querySelector<HTMLFormElement>("[data-brief]");
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = "1";
+
+    const out = (id: string) => document.querySelector<HTMLElement>(`[data-out="${id}"]`);
+    const status = document.querySelector<HTMLElement>("[data-out-status]");
+    const meter = document.querySelector<HTMLElement>("[data-out-meter]");
+    const req = document.querySelector<HTMLElement>("[data-out-req]");
+    const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+
+    /** Writes a value into the readout and flashes it when it changes. */
+    const write = (id: string, value: string | null) => {
+      const el = out(id);
+      if (!el) return;
+      const text = value ?? "null";
+      if (el.textContent === text) return;
+      el.textContent = text;
+      el.classList.toggle("is-null", value === null);
+      el.classList.remove("is-new");
+      void el.offsetWidth;
+      el.classList.add("is-new");
+    };
+    const str = (v: string) => (v.trim() ? JSON.stringify(clip(v.trim())) : null);
+
+    const setStatus = (s: string, ready = false) => {
+      if (!status) return;
+      status.textContent = s;
+      status.classList.toggle("is-ready", ready);
+    };
+
+    const sync = () => {
+      const data = new FormData(form);
+      const needs = data.getAll("needs[]").map(String);
+      const words = String(data.get("message") ?? "").trim().split(/\s+/).filter(Boolean).length;
+
+      write("name", str(String(data.get("name") ?? "")));
+      write("email", str(String(data.get("email") ?? "")));
+      write("company", str(String(data.get("company") ?? "")));
+      write("needs", needs.length ? `[${needs.map((n) => JSON.stringify(n)).join(", ")}]` : null);
+      write("timeline", data.get("timeline") ? JSON.stringify(data.get("timeline")) : null);
+      write("nda", data.get("nda") ? "true" : "false");
+      write("words", words ? String(words) : null);
+
+      const done = [field("name").validity.valid, field("email").validity.valid, words > 0, field("terms").checked].filter(Boolean).length;
+      if (req) req.textContent = `${done}/4`;
+      if (meter) meter.style.transform = `scaleX(${done / 4})`;
+      setStatus(done === 4 ? "ready to send" : "draft", done === 4);
+    };
+
+    form.addEventListener("input", sync);
+    form.addEventListener("change", sync);
+    sync();
+
+    const send = form.querySelector<HTMLButtonElement>("[data-brief-send]");
+    const error = form.querySelector<HTMLElement>("[data-brief-error]");
+    const doneBox = document.querySelector<HTMLElement>("[data-brief-done]");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (error) error.hidden = true;
+      if (send) send.disabled = true;
+      setStatus("sending…", true);
+      try {
+        const body = new URLSearchParams([...new FormData(form)].map(([k, v]) => [k, String(v)]));
+        const res = await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: body.toString(),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+
+        const name = field("name").value.trim().split(/\s+/)[0];
+        const nameEl = document.querySelector("[data-done-name]");
+        const emailEl = document.querySelector("[data-done-email]");
+        if (nameEl && name) nameEl.textContent = `, ${name}`;
+        if (emailEl) emailEl.textContent = field("email").value.trim();
+        setStatus("200 OK", true);
+        form.hidden = true;
+        if (doneBox) {
+          doneBox.hidden = false;
+          doneBox.focus();
+        }
+      } catch {
+        setStatus("error · retry");
+        if (error) error.hidden = false;
+      } finally {
+        if (send) send.disabled = false;
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupBrief);
+</script>
+
+<style>
+  .brief-wrap { row-gap: 3rem; align-items: start; }
+  .brief, .brief__done { grid-column: 1 / span 7; }
+  .readout { grid-column: 9 / -1; position: sticky; top: 6rem; }
+  @media (max-width: 899px) {
+    .brief, .brief__done { grid-column: 1 / -1; }
+    .readout { display: none; }
+  }
+
+  /* Fields: spec-sheet rows with an underline that inks in the accent on focus */
+  .brief { display: flex; flex-direction: column; }
+  .brief__hp { display: none; }
+  .field {
+    position: relative;
+    margin: 0;
+    padding: 1.25rem 0 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+    min-inline-size: 0;
+  }
+  .field__label {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 0.4rem;
+  }
+  .field__input {
+    width: 100%;
+    padding: 0.4rem 0 1.25rem;
+    background: none;
+    border: 0;
+    outline: 0;
+    border-radius: 0;
+    font-size: var(--step-2);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .field__input::placeholder { color: var(--line-strong); }
+  .field__input--area { font-size: var(--step-1); letter-spacing: -0.015em; line-height: 1.35; resize: vertical; min-height: 9rem; }
+  .field::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-2) var(--ease-in-out);
+  }
+  .field:focus-within::after { transform: scaleX(1); }
+  .field:focus-within .field__label .note--ink { color: var(--accent-text); }
+  .field:has(.field__input:user-invalid) .field__label .note:last-child { color: #d0342c; }
+
+  /* A floated legend stops sitting on the fieldset's border, so it lays out like the labels. */
+  legend.field__label { float: left; }
+
+  /* Chips */
+  .chips { clear: both; display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.6rem 0 1.4rem; }
+  .chip { position: relative; cursor: pointer; }
+  .chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .chip span {
+    display: inline-block;
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out), box-shadow var(--dur-1);
+  }
+  .chip:hover span { box-shadow: inset 0 0 0 1px var(--ink); }
+  .chip input:checked + span { background: var(--ink); color: var(--bg); box-shadow: inset 0 0 0 1px var(--ink); }
+  .chip input:checked + span::before { content: "✓ "; color: var(--accent); }
+  .chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* Checkboxes */
+  .checks { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem 0; border-top: 1px solid var(--line); }
+  .check { position: relative; display: grid; grid-template-columns: 1.25rem 1fr; gap: 0.9rem; align-items: start; color: var(--muted); cursor: pointer; }
+  .check input { position: absolute; opacity: 0; width: 1.25rem; height: 1.25rem; margin: 0; cursor: pointer; }
+  .check__box {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.15rem;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: background var(--dur-1) var(--ease-out), box-shadow var(--dur-1);
+  }
+  .check input:checked + .check__box { background: var(--accent); box-shadow: inset 0 0 0 1px var(--accent), inset 0 0 0 4px var(--bg); }
+  .check input:focus-visible + .check__box { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .check:has(input:checked) { color: var(--ink); }
+
+  .brief__submit { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .brief__submit .btn[disabled] { opacity: 0.6; pointer-events: none; }
+  .brief__error { margin-top: 1.25rem; color: #d0342c; }
+
+  /* Sent */
+  .brief__done { display: flex; flex-direction: column; gap: 1.25rem; align-items: start; padding-top: 1.25rem; border-top: 1px solid var(--accent); outline: 0; }
+  .brief__done-body { max-width: 40ch; color: var(--muted); }
+  .brief__done-body strong { color: var(--ink); font-weight: 500; }
+
+  /* Readout: the "machine" copy of the brief */
+  .readout__sheet {
+    background: var(--bg-raised);
+    box-shadow: inset 0 0 0 1px var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .readout__bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .readout__status { transition: color var(--dur-1); }
+  .readout__status::before { content: "● "; }
+  .readout__status.is-ready { color: var(--accent-text); }
+  .readout__code {
+    padding: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.75;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .readout__ln { overflow: hidden; text-overflow: ellipsis; }
+  .readout__k { color: var(--muted); }
+  .readout__v { color: var(--accent-text); padding: 0 0.1em; border-radius: 3px; }
+  .readout__v.is-null { color: var(--line-strong); }
+  .readout__v.is-new { animation: flash var(--dur-2) var(--ease-out); }
+  @keyframes flash { from { background: color-mix(in oklab, var(--accent) 30%, transparent); } }
+  .readout__meter { height: 2px; margin: 0 1rem; background: var(--line); }
+  .readout__meter span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-2) var(--ease-in-out);
+  }
+  .readout__foot { display: flex; justify-content: space-between; gap: 1rem; padding: 0.8rem 1rem 1rem; }
+</style>

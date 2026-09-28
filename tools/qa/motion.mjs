@@ -41,7 +41,7 @@ await page.screenshot({ path: `${OUT}hero-dark.png` });
 await page.evaluate(() => { localStorage.removeItem("pg-theme"); localStorage.removeItem("pg-accent"); });
 
 // 3. Scroll smoothness
-for (const path of ["/", "/services/", "/services/ai-for-agencies/", "/about/"]) {
+for (const path of ["/", "/services/", "/services/ai-for-agencies/", "/about/", "/contact/"]) {
   await page.goto(`${BASE}${path}?qa=scroll`); await page.waitForTimeout(10000);
   await probe(); await scroll();
   console.log(`scroll ${path}`, JSON.stringify(await stats()));
