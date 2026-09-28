@@ -1,65 +1,110 @@
 /**
- * Page transition: an ink sheet rises while the PG monogram plots itself,
- * then the letters morph into a circle — the "lens" that opens onto the next page.
+ * Page transition, in the preloader's language: an ink sheet rises over the page with the
+ * 12-column grid, construction guides close in on the PG monogram, the monogram plots itself
+ * inside a measured box while the destination is "typed" and a counter runs; then the
+ * sheet lifts off the new page.
  * Loaded on showcase pages right away, on reading pages only on link intent.
  */
 import gsap from "gsap";
-import { MorphSVGPlugin } from "gsap/MorphSVGPlugin";
 
-gsap.registerPlugin(MorphSVGPlugin);
+const $ = <T extends Element>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel);
+const $$ = (sel: string, root: ParentNode) => [...root.querySelectorAll<HTMLElement>(sel)];
 
-const P = "M6 37V3h12a9.5 9.5 0 0 1 0 19H6";
-const G = "M57.3 8.7A16 16 0 1 0 62 20H48";
-// two halves of a circle centred in the viewBox
-const LEFT = "M34 38A18 18 0 0 1 34 2";
-const RIGHT = "M34 2A18 18 0 0 1 34 38";
+const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/·×";
 
-const $ = <T extends Element>(sel: string) => document.querySelector<T>(sel);
+/** Types `text` into `el` with a short scramble, like the hero labels. */
+function scramble(el: HTMLElement, text: string, duration = 0.5) {
+  const state = { p: 0 };
+  return gsap.to(state, {
+    p: 1,
+    duration,
+    ease: "none",
+    onUpdate() {
+      const done = Math.floor(state.p * text.length);
+      let out = text.slice(0, done);
+      for (let i = done; i < Math.min(text.length, done + 3); i++) {
+        out += text[i] === " " ? " " : GLYPHS[(Math.random() * GLYPHS.length) | 0];
+      }
+      el.textContent = out;
+    },
+    onComplete() { el.textContent = text; },
+  });
+}
+
+function parts(sheet: HTMLElement) {
+  return {
+    cols: $$(".pt__cols span", sheet),
+    meta: $$(".pt__meta", sheet),
+    stage: $<HTMLElement>(".pt__stage", sheet)!,
+    guidesH: $$(".pt__guide--h", sheet),
+    guidesV: $$(".pt__guide--v", sheet),
+    box: $<HTMLElement>(".pt__box", sheet)!,
+    label: $<HTMLElement>(".pt__label", sheet)!,
+    paths: [...sheet.querySelectorAll<SVGPathElement>(".pt__mark path")],
+    dot: $<SVGCircleElement>(".pt__mark circle", sheet)!,
+    to: $<HTMLElement>(".pt__to", sheet)!,
+    count: $<HTMLElement>(".pt__count", sheet)!,
+  };
+}
+
+let current: gsap.core.Timeline | undefined;
 
 export function cover(to: URL): Promise<void> {
   const sheet = $<HTMLElement>(".pt");
   if (!sheet) return Promise.resolve();
-  const p = sheet.querySelector<SVGPathElement>(".pt__p")!;
-  const g = sheet.querySelector<SVGPathElement>(".pt__g")!;
-  const dot = sheet.querySelector<SVGCircleElement>(".pt__dot")!;
-  const label = sheet.querySelector<HTMLElement>(".pt__to")!;
-  label.textContent = `→ ${to.pathname}`;
+  const p = parts(sheet);
+  const counter = { n: 0 };
 
-  gsap.killTweensOf([sheet, p, g, dot]);
+  current?.kill();
   gsap.set(sheet, { visibility: "visible", clipPath: "inset(100% 0% 0% 0%)" });
-  gsap.set(p, { attr: { d: P }, strokeDashoffset: 1 });
-  gsap.set(g, { attr: { d: G }, strokeDashoffset: 1 });
-  gsap.set(dot, { scale: 0, transformOrigin: "50% 50%" });
-  gsap.set(".pt__lens", { scale: 1 });
+  gsap.set(p.stage, { yPercent: 0, opacity: 1 });
+  gsap.set(p.cols, { scaleY: 0, transformOrigin: "50% 100%" });
+  gsap.set(p.meta, { opacity: 0 });
+  gsap.set(p.guidesH, { scaleX: 0, transformOrigin: "0% 50%" });
+  gsap.set(p.guidesV, { scaleY: 0, transformOrigin: "50% 0%" });
+  gsap.set(p.box, { opacity: 0 });
+  gsap.set(p.paths, { strokeDashoffset: 1 });
+  gsap.set(p.dot, { scale: 0, transformOrigin: "50% 50%" });
+  p.label.textContent = "";
+  p.to.textContent = "";
+  p.count.textContent = "0%";
 
   return new Promise((resolve) => {
-    gsap.timeline({ onComplete: resolve })
-      .to(sheet, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.65, ease: "power4.inOut" })
-      .to([p, g], { strokeDashoffset: 0, duration: 0.55, ease: "power2.inOut", stagger: 0.08 }, 0.25)
-      .to(dot, { scale: 1, duration: 0.3, ease: "back.out(3)" }, 0.6)
-      .from(label, { opacity: 0, y: 8, duration: 0.4, ease: "power3.out" }, 0.35);
+    current = gsap.timeline({ onComplete: resolve })
+      .to(sheet, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.6, ease: "power4.inOut" })
+      .to(p.cols, { scaleY: 1, duration: 0.7, ease: "expo.inOut", stagger: 0.025 }, 0.1)
+      .to(p.meta, { opacity: 1, duration: 0.3 }, 0.35)
+      .add(scramble(p.to, to.pathname.toUpperCase(), 0.45), 0.4)
+      .to(counter, {
+        n: 100, duration: 0.75, ease: "power2.inOut",
+        onUpdate: () => { p.count.textContent = `${Math.round(counter.n)}%`; },
+      }, 0.35)
+      .to(p.guidesH, { scaleX: 1, duration: 0.6, ease: "expo.inOut", stagger: 0.05 }, 0.3)
+      .to(p.guidesV, { scaleY: 1, duration: 0.6, ease: "expo.inOut", stagger: 0.05 }, 0.36)
+      .to(p.box, { opacity: 1, duration: 0.25 }, 0.55)
+      .add(scramble(p.label, p.label.dataset.text ?? "", 0.35), 0.55)
+      .to(p.paths, { strokeDashoffset: 0, duration: 0.55, ease: "power2.inOut", stagger: 0.08 }, 0.45)
+      .to(p.dot, { scale: 1, duration: 0.3, ease: "back.out(3)" }, 0.9);
   });
 }
 
 export function reveal(): Promise<void> {
   const sheet = $<HTMLElement>(".pt");
   if (!sheet || getComputedStyle(sheet).visibility === "hidden") return Promise.resolve();
-  const p = sheet.querySelector<SVGPathElement>(".pt__p")!;
-  const g = sheet.querySelector<SVGPathElement>(".pt__g")!;
-  const dot = sheet.querySelector<SVGCircleElement>(".pt__dot")!;
+  const p = parts(sheet);
 
   return new Promise((resolve) => {
-    gsap.timeline({
+    current = gsap.timeline({
       onComplete: () => {
         gsap.set(sheet, { visibility: "hidden" });
         resolve();
       },
     })
-      .to(dot, { scale: 0, duration: 0.25, ease: "power2.in" })
-      .to(p, { morphSVG: LEFT, duration: 0.55, ease: "power3.inOut" }, 0)
-      .to(g, { morphSVG: RIGHT, duration: 0.55, ease: "power3.inOut" }, 0)
-      // the circle becomes a lens: it grows past the screen edges while the sheet opens
-      .to(".pt__lens", { scale: 60, duration: 0.9, ease: "power4.in" }, 0.45)
-      .to(sheet, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.7, ease: "power4.inOut" }, 0.75);
+      // guides retract the way they came, the mark leaves upwards with the sheet
+      .to(p.guidesH, { scaleX: 0, transformOrigin: "100% 50%", duration: 0.45, ease: "expo.in" }, 0)
+      .to(p.guidesV, { scaleY: 0, transformOrigin: "50% 100%", duration: 0.45, ease: "expo.in" }, 0)
+      .to([p.box, p.meta], { opacity: 0, duration: 0.2 }, 0.1)
+      .to(p.stage, { yPercent: -60, opacity: 0, duration: 0.6, ease: "power3.in" }, 0.1)
+      .to(sheet, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.8, ease: "power4.inOut" }, 0.2);
   });
 }

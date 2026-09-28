@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import Header from "../components/rd/Header.astro";
 import Footer from "../components/rd/Footer.astro";
 import Preloader from "../components/rd/Preloader.astro";
+import Monogram from "../components/rd/Monogram.astro";
 import "../styles/redesign.css";
 
 interface Props {
@@ -45,7 +46,7 @@ const ogImage = new URL(image, site).href;
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="alternate" hreflang="en" href={canonical} />
     <link rel="alternate" hreflang="x-default" href={canonical} />
-    <link rel="alternate" type="application/rss+xml" title="Pier Gorelli — Blog" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Pier Gorelli | Blog" href="/rss.xml" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" id="favicon" />
     <meta name="theme-color" content="#f4f4f0" />
     <meta name="generator" content={Astro.generator} />
@@ -96,15 +97,23 @@ const ogImage = new URL(image, site).href;
     <Footer />
 
     <div class="pt" transition:persist="pt" aria-hidden="true">
-      <div class="pt__lens">
-        <svg viewBox="0 0 68 40">
-          <path class="pt__p" d="M6 37V3h12a9.5 9.5 0 0 1 0 19H6" pathLength="1" />
-          <path class="pt__g" d="M57.3 8.7A16 16 0 1 0 62 20H48" pathLength="1" />
-          <circle class="pt__dot" cx="64" cy="36" r="2.6" />
-        </svg>
+      <div class="pt__cols grid-12">{Array.from({ length: 12 }, () => <span />)}</div>
+      <div class="pt__meta note">
+        <span>Plotting <span class="pt__to"></span></span>
+        <span>rev. 2026</span>
       </div>
-      <p class="pt__brand note">Pier Gorelli — web &amp; AI dev</p>
-      <p class="pt__to note"></p>
+      <div class="pt__stage">
+        <span class="pt__guide pt__guide--h" style="top: 0" />
+        <span class="pt__guide pt__guide--h" style="bottom: 0" />
+        <span class="pt__guide pt__guide--v" style="left: 0" />
+        <span class="pt__guide pt__guide--v" style="right: 0" />
+        <div class="pt__box"><span class="pt__label note" data-text="PG · 68×40"></span></div>
+        <Monogram class="pt__mark" />
+      </div>
+      <div class="pt__meta note">
+        <span>Pier Gorelli · web &amp; AI dev</span>
+        <span class="pt__count">0%</span>
+      </div>
     </div>
 
     <div class="grid-overlay" aria-hidden="true">
