@@ -215,6 +215,26 @@ html.lenis, html.lenis body { height: auto; }
     color: transparent;
     -webkit-text-stroke: 1px var(--line-strong);
   }
+
+  /* Wireframe rows ([data-wireframe] in motion.ts): outlined line with a solid copy wiped in
+     letter by letter. Negative top/bottom insets keep ascenders and descenders (g, p) in the clip. */
+  .wf-row { position: relative; }
+  .wf-line { position: relative; width: fit-content; white-space: nowrap; }
+  .wf-solid {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(-0.35em 0 -0.45em 0);
+    will-change: clip-path;
+  }
+  .wf-solid__inner { display: block; }
+  .wf-dim { position: absolute; right: 0; top: 0.6em; color: var(--accent-text); }
+  .wf-row:nth-of-type(2) .wf-line { margin-left: 8vw; }
+  .wf-row:nth-of-type(3) .wf-line { margin-left: 16vw; }
+  @media (max-width: 767px) {
+    .wf-line { white-space: normal; font-size: var(--step-3); }
+    .wf-row:nth-of-type(n) .wf-line { margin-left: 0; }
+    .wf-dim { display: none; }
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────
