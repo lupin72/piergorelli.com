@@ -431,7 +431,8 @@ html.js[data-motion="showcase"]:not(.motion-ready) :is([data-hero-generate], [da
   font-size: 0.65rem;
 }
 .bp__guide { position: absolute; background: color-mix(in oklab, var(--accent) 45%, transparent); }
-.bp__guide--h { left: calc(-1 * var(--gutter)); right: calc(-1 * var(--gutter)); height: 1px; transform-origin: left center; }
+/* the hero is full-bleed (gutter is its padding): edge to edge, never past the viewport */
+.bp__guide--h { left: 0; right: 0; height: 1px; transform-origin: left center; }
 .bp__guide--v { top: 0; bottom: 0; width: 1px; transform-origin: center top; }
 
 .hero-gl {
