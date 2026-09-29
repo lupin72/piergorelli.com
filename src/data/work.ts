@@ -9,7 +9,7 @@ export type Work = {
   year: string;
   stack: string[];
   summary: string;
-  visual: "orbit" | "bars" | "audit" | "blueprint";
+  visual: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary";
   placeholder: boolean;
 };
 
@@ -25,23 +25,23 @@ export const work: Work[] = [
     placeholder: false,
   },
   {
-    slug: "fashion-headless",
-    title: "Headless WordPress for a fashion group",
-    client: "For a digital agency · Madrid",
-    year: "2024",
-    stack: ["WordPress", "Astro", "i18n"],
-    summary: "Six markets, one editorial workflow, pages twice as fast as the old stack.",
-    visual: "bars",
-    placeholder: true,
+    slug: "ceramics-wordpress",
+    title: "WordPress site for a ceramics manufacturer",
+    client: "Ceramics manufacturer",
+    year: "2025",
+    stack: ["WordPress", "Blockstudio", "GSAP"],
+    summary: "Custom Blockstudio blocks the marketing team composes freely, GSAP motion that lets every surface and glaze take the stage, and a smart importer that turns the product catalogue into pages without manual entry.",
+    visual: "tiles",
+    placeholder: false,
   },
   {
-    slug: "site-audit-ai",
-    title: "Site Audit AI",
-    client: "Lab · own product",
-    year: "2026",
-    stack: ["n8n", "LLM", "PageSpeed API"],
-    summary: "Paste a URL, get a prioritised report on speed, accessibility, SEO and AI visibility.",
-    visual: "audit",
-    placeholder: true,
+    slug: "migraine-psp",
+    title: "Patient support program for migraine",
+    client: "Healthcare · patient platform",
+    year: "2025",
+    stack: ["Laravel", "Angular", "Filament", "CI/CD"],
+    summary: "An Angular app that stays with patients throughout their therapy, a Filament back office for the care team, one Laravel API behind both, and a CI/CD pipeline that tests and ships every release.",
+    visual: "diary",
+    placeholder: false,
   },
 ];

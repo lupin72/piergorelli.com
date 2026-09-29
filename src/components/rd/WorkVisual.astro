@@ -1,6 +1,6 @@
 ---
 /** Generative blueprint visuals standing in for project imagery in the prototype. */
-interface Props { kind: "orbit" | "bars" | "audit" | "blueprint" }
+interface Props { kind: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" }
 const { kind } = Astro.props;
 const bars = [62, 88, 40, 74, 96, 52, 80, 34, 68, 90, 46, 76];
 const audit = [
@@ -9,6 +9,13 @@ const audit = [
   { label: "SEO", value: 88 },
   { label: "AI visibility", value: 61 },
 ];
+// Ceramics: 5×3 tiles with majolica-like motifs.
+const T = 56, G = 4, TX = 52, TY = 34;
+const motifs = ["arc", "plain", "ring", "diag", "arc", "diag", "accent", "arc", "plain", "ring", "ring", "arc", "diag", "arc", "plain"];
+const tiles = motifs.map((m, i) => ({ m, x: TX + (i % 5) * (T + G), y: TY + Math.floor(i / 5) * (T + G) }));
+// Migraine PSP: one month of the patient diary, 0 = none … 3 = attack.
+const days = [0,0,1,0,0,0,0, 0,3,2,0,0,0,1, 0,0,0,0,1,0,0, 0,2,3,1,0,0,0, 0,0,0,0,1,0,0];
+const queue = [1, 0, 0, 1, 0];
 ---
 
 <div class:list={["visual", `visual--${kind}`]} aria-hidden="true">
@@ -68,6 +75,46 @@ const audit = [
       <p class="note">→ 3 fixes suggested · generated in 41s</p>
     </div>
   )}
+  {kind === "tiles" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+      {tiles.map(({ m, x, y }) => (
+        <g>
+          <rect x={x} y={y} width={T} height={T} class:list={["tile", { "accent-fill": m === "accent" }]} />
+          {m === "arc" && <path d={`M${x} ${y + 28}A28 28 0 0 0 ${x + 28} ${y}M${x + T} ${y + T - 28}A28 28 0 0 0 ${x + T - 28} ${y + T}`} class="motif" />}
+          {m === "ring" && <><circle cx={x + 28} cy={y + 28} r="18" class="motif" /><circle cx={x + 28} cy={y + 28} r="7" class="motif" /></>}
+          {m === "diag" && <path d={`M${x} ${y + T}L${x + T} ${y}V${y + T}Z`} class="motif motif--fill" />}
+          {m === "accent" && <circle cx={x + 28} cy={y + 28} r="16" class="motif motif--on-accent" />}
+        </g>
+      ))}
+      <text x={TX} y="248" class="bp__label">$ import catalogue.xlsx</text>
+      <text x={TX} y="266" class="bp__label">→ 1,284 products · 0 manual edits</text>
+    </svg>
+  )}
+
+  {kind === "diary" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+      <rect x="56" y="28" width="132" height="244" rx="18" class="frame" />
+      <text x="74" y="66" class="bp__label">May · diary</text>
+      {days.map((d, i) => (
+        <rect x={74 + (i % 7) * 14.5} y={78 + Math.floor(i / 7) * 14.5} width="11" height="11" rx="2" class:list={["day", `day--${d}`]} />
+      ))}
+      <rect x="74" y="164" width="96" height="4" rx="2" class="line" />
+      <rect x="74" y="176" width="66" height="4" rx="2" class="line" />
+      <rect x="74" y="222" width="96" height="24" rx="12" class="accent-fill" />
+      <path d="M188 150H236" class="accent-stroke" stroke-dasharray="3 4" />
+      <text x="212" y="142" text-anchor="middle" class="bp__label">API</text>
+      <rect x="236" y="70" width="132" height="160" rx="4" class="frame" />
+      <path d="M236 94H368" class="rule" />
+      <text x="248" y="87" class="bp__label">Care team</text>
+      {queue.map((flag, i) => (
+        <g>
+          <circle cx="252" cy={116 + i * 24} r="4" class:list={[flag ? "accent-fill" : "dot"]} />
+          <rect x="264" y={114 + i * 24} width={i % 2 ? 60 : 84} height="4" rx="2" class="line" />
+        </g>
+      ))}
+      <text x="56" y="292" class="bp__label">patient app ⇄ back office</text>
+    </svg>
+  )}
 </div>
 
 <style>
@@ -84,6 +131,19 @@ const audit = [
   .accent-fill { fill: var(--accent); }
   .accent-stroke { stroke: var(--accent); stroke-opacity: 0.7; }
   .bp__mark path { fill: none; stroke: currentColor; stroke-width: 4.2; stroke-linecap: square; stroke-linejoin: miter; }
+  .tile { fill: currentColor; fill-opacity: 0.05; stroke: currentColor; stroke-opacity: 0.45; }
+  .tile.accent-fill { fill: var(--accent); fill-opacity: 1; stroke: none; }
+  .motif { fill: none; stroke: currentColor; stroke-opacity: 0.55; }
+  .motif--fill { fill: currentColor; fill-opacity: 0.14; stroke: none; }
+  .motif--on-accent { stroke: var(--bg-raised); stroke-opacity: 1; stroke-width: 2; }
+  .frame { fill: var(--bg-raised); stroke: currentColor; stroke-opacity: 0.5; }
+  .rule { stroke: currentColor; stroke-opacity: 0.3; }
+  .line { fill: currentColor; fill-opacity: 0.2; }
+  .dot { fill: currentColor; fill-opacity: 0.35; }
+  .day { fill: none; stroke: currentColor; stroke-opacity: 0.25; }
+  .day--1 { fill: currentColor; fill-opacity: 0.18; stroke: none; }
+  .day--2 { fill: currentColor; fill-opacity: 0.45; stroke: none; }
+  .day--3 { fill: var(--accent); stroke: none; }
   .bp__label { fill: currentColor; fill-opacity: 0.6; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; }
 
   .visual__audit {

@@ -322,7 +322,7 @@ const schema = [
           <p class="case__summary">{w.summary}</p>
         </article>
       ))}
-      <div class="report" data-reveal="up">
+      <div class:list={["report", { "report--solo": cases.length === 0 }]} data-reveal="up">
         <p class="note note--ink">Every pilot ends with this report</p>
         <dl class="report__rows">
           {report.map((r) => (
@@ -613,6 +613,7 @@ const schema = [
   .case__meta { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.5rem; }
   .case__summary { color: var(--muted); max-width: 44ch; }
   .report { grid-column: 9 / -1; align-self: end; display: flex; flex-direction: column; gap: 1rem; }
+  .report--solo { grid-column: 1 / span 7; }
   .report__rows { border-top: 1px solid var(--line); }
   .report__rows div { display: flex; flex-direction: column; gap: 0.3rem; padding-block: 1rem; border-bottom: 1px solid var(--line); }
   .report__rows dd { color: var(--muted); }
