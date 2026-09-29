@@ -5,7 +5,7 @@ import { getPosts, pillarOf, postUrl } from "../lib/blog";
 export async function GET(context: APIContext) {
   const posts = await getPosts();
   return rss({
-    title: "Pier Gorelli — Blog",
+    title: "Pier Gorelli | Blog",
     description: "Web development, AI in practice and AI for creative agencies.",
     site: context.site!,
     items: posts.map((p) => ({

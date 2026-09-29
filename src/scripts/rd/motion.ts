@@ -256,7 +256,7 @@ function hero(delay: number) {
           if (tokensEl) tokensEl.textContent = String(Math.round((i + 1) * 1.33));
         },
       }, t);
-      t += gsap.utils.random(0.03, 0.12) + (/[.,—]$/.test(word.textContent ?? "") ? 0.22 : 0);
+      t += gsap.utils.random(0.03, 0.12) + (/[.,:]$/.test(word.textContent ?? "") ? 0.22 : 0);
     });
     const counter = { ms: 0 };
     gen.to(counter, {

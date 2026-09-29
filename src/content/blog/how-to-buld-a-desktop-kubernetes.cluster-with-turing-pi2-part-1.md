@@ -9,19 +9,19 @@ tags: ["devops", "diy", ""]
 ---
 ## Introduction
 
-Three years ago, I stumbled upon the **Kickstarter** campaign for the **Turing Pi 2** — a compact and surprisingly versatile mini cluster board. The project promised to transform a corner of my desk into a tiny home data center, with support for up to four Raspberry Pi CM4 modules, Nvidia Jetson, or Turing RK1.
+Three years ago, I stumbled upon the **Kickstarter** campaign for the **Turing Pi 2**, a compact and surprisingly versatile mini cluster board. The project promised to transform a corner of my desk into a tiny home data center, with support for up to four Raspberry Pi CM4 modules, Nvidia Jetson, or Turing RK1.
 
-My initial idea — which stood the test of time — was to build a Kubernetes cluster to experiment with, learn from, and maybe even have a little fun.
+My initial idea, which stood the test of time, was to build a Kubernetes cluster to experiment with, learn from, and maybe even have a little fun.
 
-Without a clear plan, I backed the campaign anyway, and it turned out to be a huge success. After several months of waiting — between high demand and some production hiccups — the package finally arrived: a bare board inside a simple antistatic bag, protected by a shockproof box. Nothing more, nothing less — essential, as is often the case with independent hardware projects.
+Without a clear plan, I backed the campaign anyway, and it turned out to be a huge success. After several months of waiting (between high demand and some production hiccups), the package finally arrived: a bare board inside a simple antistatic bag, protected by a shockproof box. Nothing more, nothing less: essential, as is often the case with independent hardware projects.
 
 I immediately got to work gathering all the necessary components, and then came the first cold shower: the global chip shortage had made Raspberry Pis nearly impossible to find.
 
-The CM4 modules, in particular, seemed to have vanished from the market. And when they were available, they were being sold at outrageous prices — often double or triple the MSRP.
+The CM4 modules, in particular, seemed to have vanished from the market. And when they were available, they were being sold at outrageous prices, often double or triple the MSRP.
 
 So I shelved the project, hoping the supply situation would eventually stabilize. And as often happens in these cases, time passed, and what began with enthusiasm turned into a forgotten little item: a dusty antistatic bag left on the bookshelf.
 
-Last month, while organizing, I picked up that bag and thought: now or never. So, after a couple of weeks of planning purchases — and a few more waiting for deliveries — the little beast now sits on my desk as I write this article about my assembly experience, hoping it might help another tech freak out there.
+Last month, while organizing, I picked up that bag and thought: now or never. So, after a couple of weeks of planning purchases (and a few more waiting for deliveries), the little beast now sits on my desk as I write this article about my assembly experience, hoping it might help another tech freak out there.
 
 ---
 
@@ -56,7 +56,7 @@ The Flex ATX fits perfectly, and the orientation aligns well with the pre-instal
 Next, I secured the Turing Pi 2 board inside the case.  
 The orientation is clearly guided by the cutouts for the USB and HDMI ports. Once the screws are tightened, I connected the front panel USB cable to the board.
 
-Then I plugged in the 24-pin ATX power connector. The Flexguru cable is a 20+4 pin — just align and insert it carefully.
+Then I plugged in the 24-pin ATX power connector. The Flexguru cable is a 20+4 pin: just align and insert it carefully.
 
 The final and most delicate step was wiring the **power button and LED** to the board.  
 Locate the **Front I/O pins**: 10 in total, arranged in two rows.
@@ -93,7 +93,7 @@ Before inserting the CM4 modules, I attached **passive heatsinks** to each board
 2. Position the aluminum heatsinks
 3. Secure with screws
 
-⚠️ **Important**: the standoffs must be mounted on top of the CM4s — not underneath as some guides suggest — or the module won’t fit into the adapter.
+⚠️ **Important**: the standoffs must be mounted on top of the CM4s, not underneath as some guides suggest, or the module won’t fit into the adapter.
 
 ![Heatsink](./images/heatsink.jpg)
 *Geekworm mounted on CM4*
@@ -117,7 +117,7 @@ I used a **Noctua fan** with a 4-pin connector:
 - Two pins: Power (V+ and GND)
 - Two pins: PWM (speed control)
 
-The Turing Pi 2 only has a 2-pin fan header, so I connected only the power pins. The fan now runs at default speed — enough for passive cooling.
+The Turing Pi 2 only has a 2-pin fan header, so I connected only the power pins. The fan now runs at default speed, which is enough for passive cooling.
 
 💡 Mount the fan **to extract** air from the case, not blow it in.
 
@@ -140,7 +140,7 @@ In that case, just add the IP to your `/etc/hosts` file like so:
 
 ## Firmware Upgrade
 
-Upon logging into the BMC, I noticed it was running an early firmware version — limited features, and **no root SSH access**.
+Upon logging into the BMC, I noticed it was running an early firmware version, with limited features, and **no root SSH access**.
 
 ![Old firmware](./images/old-firmware.png)
 *Old firmware (1.x)*
@@ -160,7 +160,7 @@ I upgraded from version 1.x to 2.x as follows:
 
 ## Flashing the Nodes
 
-I installed **DietPi** on all 4 CM4s — a lightweight Debian variant ideal for minimal CPU/RAM usage.
+I installed **DietPi** on all 4 CM4s, a lightweight Debian variant ideal for minimal CPU/RAM usage.
 
 - Downloaded the image for Raspberry Pi 2/3/4/Zero 2 from [dietpi.com](https://dietpi.com)
 - Used the BMC web interface to flash each CM4 via **“Flash node”**
@@ -241,4 +241,4 @@ At this stage, you should have a fully assembled cluster:
 
 In the next post, we’ll dive into Kubernetes: installing K3s, configuring the cluster, and deploying your first containers.
 
-**Stay tuned — the fun starts now.** 🚀
+**Stay tuned: the fun starts now.** 🚀

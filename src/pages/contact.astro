@@ -12,14 +12,14 @@ const callHref = CAL_URL ?? `mailto:${EMAIL}?subject=${encodeURIComponent("30-mi
 
 const agenda = [
   "Your brief, the constraints and the date that can't move",
-  "Whether I'm the right fit — and who to call if I'm not",
+  "Whether I'm the right fit, and who to call if I'm not",
   "Next steps: scope, timing, NDA if you need one",
 ];
 
 // TODO(Pier): confirm the proposal turnaround before launch.
 const steps = [
   { n: "01", title: "Reply", when: "< 24h", body: "A human answer, usually with a couple of questions and a slot for a call." },
-  { n: "02", title: "Call", when: "30 min", body: "We go through the brief. NDA first, if you prefer — white-label is the default." },
+  { n: "02", title: "Call", when: "30 min", body: "We go through the brief. NDA first, if you prefer. White-label is the default." },
   { n: "03", title: "Proposal", when: "≈ 1 week", body: "Scope, milestones, stack and an estimate. Written, so your team can pass it on." },
   { n: "04", title: "Kick-off", when: "Day 1", body: "Access to your tools, a repo, staging from the first commit and a weekly demo." },
 ];
@@ -33,10 +33,10 @@ const channels = [
 
 const faqs = [
   { q: "Can you sign an NDA before we talk?", a: "Yes. Tick the box in the form or just ask by email: I'll sign yours or send mine before you share anything confidential. Most agency work I do is white-label." },
-  { q: "Do you work with companies too, or only with agencies?", a: "Agencies are most of my work, but I also work directly with companies — especially on AI features, automations and sites that need to be fast and accessible." },
+  { q: "Do you work with companies too, or only with agencies?", a: "Agencies are most of my work, but I also work directly with companies, especially on AI features, automations and sites that need to be fast and accessible." },
   { q: "Can I get a quote without a call?", a: "If the brief is clear, yes: I can send a written estimate by email. For anything with open questions, a 30-minute call saves both of us a round of guesses." },
   { q: "What makes a good brief?", a: "What you're building and for whom, the deadline and why it exists, what's already decided (design, CMS, hosting) and what worries you. A deck or a Figma link beats a long email." },
-  { q: "Which time zone are you in?", a: "Valencia, Spain — CET/CEST. That means full overlap with the rest of Europe and the UK, and mornings in New York." },
+  { q: "Which time zone are you in?", a: "Valencia, Spain (CET/CEST). That means full overlap with the rest of Europe and the UK, and mornings in New York." },
   { q: "What happens to the data I send?", a: "The form is handled by Netlify Forms and used only to reply to you. No newsletter, no tracking cookies. Details in the privacy policy." },
 ];
 
@@ -79,7 +79,7 @@ const schema = [
 ---
 
 <Base
-  title="Hire a Freelance Web & AI Developer — Pier Gorelli"
+  title="Hire a Freelance Web & AI Developer | Pier Gorelli"
   description="Send a brief or book a 30-minute call with Pier Gorelli, freelance web & AI developer in Valencia, Spain. Replies within 24 hours in English, Spanish or Italian."
   motion="showcase"
   schema={schema}
@@ -92,9 +92,9 @@ const schema = [
     <p class="note">[Contact / 06]</p>
     <h1 class="hero__title">
       <span class="display hero__human" data-hero-human data-bp="h1.human">Let's talk.</span>
-      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Send a brief to a freelance web &amp; AI developer in Valencia — reply within 24 hours.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Send a brief to a freelance web &amp; AI developer in Valencia. Reply within 24 hours.</span>
     </h1>
-    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine — generated · <span data-gen-tokens>17</span> tokens · <span data-gen-ms>1480</span> ms</p>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>17</span> tokens · <span data-gen-ms>1480</span> ms</p>
 
     <dl class="spec" data-hero-fade data-bp="dl.spec">
       <div class="spec__row">

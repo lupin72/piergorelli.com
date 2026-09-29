@@ -61,7 +61,7 @@ const machine = info ? info.tagline : "A web development & AI blog, written from
       <a href="/" class="link">Home</a>{" / "}
       {active ? <><a href="/blog/" class="link">Blog</a>{" / "}<span class="note--ink">{PILLARS[active]}</span></> : <span class="note--ink">Blog</span>}
     </nav>
-    <span class="hide-sm">{info?.tag ? "tag — outside the pillars" : "Dev · AI · Agencies · Reviews"}</span>
+    <span class="hide-sm">{info?.tag ? "tag · outside the pillars" : "Dev · AI · Agencies · Reviews"}</span>
     <span>New entry every Monday</span>
   </div>
 
@@ -75,7 +75,7 @@ const machine = info ? info.tagline : "A web development & AI blog, written from
     <p class="bhead__lead lead">
       {info
         ? info.body
-        : "Notes on web development and applied AI from 25 years of building for creative agencies: Astro, GSAP, WordPress, n8n, LLM integrations — what worked, what broke, and why."}
+        : "Notes on web development and applied AI from 25 years of building for creative agencies: Astro, GSAP, WordPress, n8n, LLM integrations: what worked, what broke, and why."}
     </p>
     <dl class="spec">
       {spec.map(([k, v]) => (
@@ -111,7 +111,7 @@ const machine = info ? info.tagline : "A web development & AI blog, written from
     <a href={postUrl(featured)} class="feat grid-12">
       <figure class="feat__cover">
         <Image src={featured.data.cover} alt={featured.data.alt} widths={[640, 1024, 1400]} sizes="(min-width: 768px) 58vw, 100vw" loading="eager" fetchpriority="high" />
-        <figcaption class="note">fig. 01 — {featured.data.alt}</figcaption>
+        <figcaption class="note">fig. 01 · {featured.data.alt}</figcaption>
       </figure>
       <div class="feat__body">
         <span class="note note--accent">{PILLARS[pillarKeyOf(featured)]}</span>
@@ -193,7 +193,7 @@ const machine = info ? info.tagline : "A web development & AI blog, written from
   <div class="grid-12">
     <h2 class="h2 subscribe__title">One piece a week. No newsletter spam.</h2>
     <div class="subscribe__body">
-      <p>Follow along via RSS or on LinkedIn, where every post goes out the day it's published. Got a topic you'd like me to dig into — or a project behind the question? Write me.</p>
+      <p>Follow along via RSS or on LinkedIn, where every post goes out the day it's published. Got a topic you'd like me to dig into, or a project behind the question? Write me.</p>
       <div class="bhead__actions">
         <a href="/rss.xml" class="btn">RSS feed <span class="arrow">→</span></a>
         <a href="https://www.linkedin.com/in/piergorelli/" class="btn btn--ghost" rel="me noopener">LinkedIn</a>

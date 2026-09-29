@@ -13,7 +13,7 @@ The journey since then has been long, exciting, and at times, challenging. I wit
 
 Today, a quarter of a century later, my **site 2.0** is born. For the first time, what you see is a mirror image of what I envisioned. It’s not just a portfolio but a personal space where I can write, experiment, and share what I love.
 
-This new version of myself is an invitation to embrace consistency—a value often underrated in favor of creativity. I hope this site becomes a place to inspire and be inspired.
+This new version of myself is an invitation to embrace consistency, a value often underrated in favor of creativity. I hope this site becomes a place to inspire and be inspired.
 
 ```php
 <?php
