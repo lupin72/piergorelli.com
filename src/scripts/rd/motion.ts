@@ -48,7 +48,7 @@ export function initMotion(): () => void {
   gsap.ticker.add(tick);
   gsap.ticker.lagSmoothing(0);
 
-  const cleanups: (() => void)[] = [initCursor()];
+  const cleanups: (() => void)[] = [initCursor(), holdHoverWhileWheeling(lenis)];
 
   // First visit: start compiling while the preloader sheet lifts.
   const heroDelay = root.dataset.preloaded ? 0.1 : 1.45;
@@ -96,6 +96,22 @@ export function initMotion(): () => void {
     lenis.destroy();
     root.classList.remove("motion-ready");
   };
+}
+
+/* Wheel scrolling slides rows under a resting pointer, so full-row hover fills would flicker
+   on one after another. html.is-wheeling (gating those :hover rules) holds them back from the
+   wheel input until the pointer really moves; hover itself stays live, so it fills at once. */
+function holdHoverWhileWheeling(lenis: Lenis) {
+  const root = document.documentElement;
+  let on = false;
+  const set = (v: boolean) => { if (v !== on) { on = v; root.classList.toggle("is-wheeling", v); } };
+  // Wheel/touch input, not every scroll frame: moving the pointer during the smooth-scroll
+  // tail must win until the next wheel tick.
+  const onInput = () => set(true);
+  const onMove = (e: PointerEvent) => { if (e.movementX || e.movementY) set(false); };
+  lenis.on("virtual-scroll", onInput);
+  addEventListener("pointermove", onMove, { passive: true });
+  return () => { lenis.off("virtual-scroll", onInput); removeEventListener("pointermove", onMove); set(false); };
 }
 
 /* ── hero: blueprint compile → human line → machine line ────── */

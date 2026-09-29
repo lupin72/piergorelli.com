@@ -432,8 +432,6 @@ const schema = [
     padding-block: 1.5rem;
     transition: color var(--dur-1) var(--ease-out);
   }
-  /* No hover fill flicker while wheel scrolling (see the home services rows). */
-  :global(html.lenis-scrolling) .match__row { pointer-events: none; }
   .match__row::before {
     content: "";
     position: absolute;
@@ -444,9 +442,9 @@ const schema = [
     transition: transform var(--dur-2) var(--ease-in-out);
     z-index: -1;
   }
-  .match__row:hover { color: var(--bg); }
-  .match__row:hover::before { transform: scaleY(1); transform-origin: top; }
-  .match__row:hover .note { color: color-mix(in oklab, var(--bg) 70%, transparent); }
+  :global(html:not(.is-wheeling)) .match__row:hover { color: var(--bg); }
+  :global(html:not(.is-wheeling)) .match__row:hover::before { transform: scaleY(1); transform-origin: top; }
+  :global(html:not(.is-wheeling)) .match__row:hover .note { color: color-mix(in oklab, var(--bg) 70%, transparent); }
   .match__need { grid-column: 1 / span 7; }
   .match__to { grid-column: 9 / span 3; }
   .match__arrow {
@@ -455,7 +453,7 @@ const schema = [
     font-size: var(--step-2);
     transition: transform var(--dur-2) var(--ease-in-out);
   }
-  .match__row:hover .match__arrow { transform: rotate(45deg); }
+  :global(html:not(.is-wheeling)) .match__row:hover .match__arrow { transform: rotate(45deg); }
   .match__foot { max-width: 44ch; margin-top: clamp(2rem, 4vw, 3rem); color: var(--muted); }
   @media (max-width: 767px) {
     .match__need, .match__to { grid-column: 1 / -1; }

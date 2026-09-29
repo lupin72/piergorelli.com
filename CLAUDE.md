@@ -22,7 +22,7 @@ Sito personale di Pier Gorelli (Astro 7 + Tailwind 4, Netlify). Redesign in cors
 - Un elemento animato da GSAP non ha `transition` CSS sulla stessa proprietà (causava gli scatti del parallax).
 - Con Lenis usa `scrub: true`: uno scrub numerico somma un secondo smoothing.
 - Reveal: stato iniziale impostato al setup, mai `gsap.from` dentro un `onEnter` (l'elemento visibile lampeggia prima di rientrare). Controlla con `pnpm qa:reveal`.
-- Hover con riempimento a tutta riga: `pointer-events: none` sotto `html.lenis-scrolling`, altrimenti con la rotella le righe si accendono una dopo l'altra.
+- Hover con riempimento a tutta riga: regole `:hover` sotto `:global(html:not(.is-wheeling))` (vedi `holdHoverWhileWheeling()` in `motion.ts`), altrimenti con la rotella le righe si accendono una dopo l'altra. Mai `pointer-events: none` durante lo scroll: fa perdere il primo hover.
 - Maschere e clip sul testo grande includono i discendenti: `clip-path: inset(-0.35em … -0.45em …)`, `roomForDescenders()` per le maschere SplitText.
 - Manifesto: il riempimento “lettera per lettera” (wipe con `clip-path`) è quello scelto da Pier; l'alternativa a translate opposti è stata scartata.
 - SplitText con `aria: "none"` (e `tag: "span"` dentro elementi inline), altrimenti Lighthouse segnala ARIA proibita.
