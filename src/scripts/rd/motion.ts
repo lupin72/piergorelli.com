@@ -272,11 +272,21 @@ function reveals() {
     });
   });
 
-  ScrollTrigger.batch('[data-reveal="up"]', {
+  // Hide what is still below the trigger line up front: hiding on enter (gsap.from) made each
+  // visible item blink out before fading back in, which read as a stutter.
+  // Items already on screen when this runs (reload mid-page) simply stay visible.
+  const ups = gsap.utils.toArray<HTMLElement>('[data-reveal="up"]')
+    .filter((el) => el.getBoundingClientRect().top > innerHeight * 0.88);
+  if (!ups.length) return;
+  gsap.set(ups, { autoAlpha: 0, y: 48, force3D: true });
+  ScrollTrigger.batch(ups, {
     start: "top 88%",
     once: true,
     onEnter: (batch) =>
-      gsap.from(batch, { opacity: 0, y: 40, duration: 1, ease: EASE_OUT, stagger: 0.08 }),
+      gsap.to(batch, {
+        autoAlpha: 1, y: 0, duration: 1.3, ease: "power3.out", stagger: 0.09, overwrite: true,
+        clearProps: "transform,opacity,visibility",
+      }),
   });
 }
 

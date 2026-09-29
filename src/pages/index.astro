@@ -277,6 +277,9 @@ const schema = [
     padding-block: clamp(1.5rem, 3vw, 2.75rem);
     transition: color var(--dur-1) var(--ease-out);
   }
+  /* Wheel scrolling slides rows under a resting pointer: without this the black fill
+     flickers on and off row after row. Hover resumes as soon as the scroll settles. */
+  :global(html.lenis-scrolling) .service__link { pointer-events: none; }
   .service__link::before {
     content: "";
     position: absolute;

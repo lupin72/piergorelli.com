@@ -8,7 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "qa:motion": "node tools/qa/motion.mjs"
+    "qa:motion": "node tools/qa/motion.mjs",
+    "qa:reveal": "node tools/qa/reveal-jank.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",

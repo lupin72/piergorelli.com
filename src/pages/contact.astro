@@ -377,6 +377,8 @@ const schema = [
     padding-block: clamp(1.25rem, 2.5vw, 2rem);
     transition: color var(--dur-1) var(--ease-out);
   }
+  /* No hover fill flicker while wheel scrolling (see the home services rows). */
+  :global(html.lenis-scrolling) .channel__link { pointer-events: none; }
   .channel__link::before {
     content: "";
     position: absolute;
