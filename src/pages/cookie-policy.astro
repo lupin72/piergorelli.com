@@ -1,31 +1,104 @@
 ---
-import legalHtml from '../legal/cookie-policy.html?raw';
-import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import Title from '../components/Title.astro';
-import SiteData from "../constants/siteData.json";
+import LegalPage from "../components/rd/LegalPage.astro";
 
+const sections = [
+  { id: "short", title: "The short version" },
+  { id: "what", title: "Cookies and local storage" },
+  { id: "stored", title: "What this site stores" },
+  { id: "third-parties", title: "Third parties" },
+  { id: "analytics", title: "Analytics" },
+  { id: "control", title: "How to clear it" },
+  { id: "changes", title: "Changes and contact" },
+];
+
+// Keep in sync with src/layouts/Base.astro and src/scripts/rd/site.ts.
+const stored = [
+  { key: "pg-theme", where: "Local storage", purpose: "Remembers light or dark mode, if you switch it.", lasts: "Until you clear it" },
+  { key: "pg-accent", where: "Local storage", purpose: "Remembers the accent colour you picked.", lasts: "Until you clear it" },
+  { key: "pg-preloaded", where: "Session storage", purpose: "Plays the intro only once per visit.", lasts: "Until you close the tab" },
+];
 ---
 
+<LegalPage
+  seoTitle="Cookie Policy | Pier Gorelli"
+  description="piergorelli.com sets no cookies and runs no trackers. The only things stored in your browser are your theme, accent and intro preferences, listed here."
+  title="Cookie policy"
+  lead="No cookies, no trackers, no banner. This page lists the three small preferences the site keeps in your browser, and nothing else."
+  updated="2026-09-29"
+  meta={[
+    ["Cookies set", "None"],
+    ["Law", "LSSI art. 22.2 · ePrivacy"],
+    ["Applies to", "piergorelli.com"],
+  ]}
+  glance={[
+    { label: "Cookies", value: "0", caption: "No first-party or third-party cookies are set." },
+    { label: "Trackers", value: "0", caption: "No analytics, ad or social scripts, no pixels." },
+    { label: "Stored locally", value: "3 keys", caption: "Theme, accent and intro. They never leave your device." },
+    { label: "Consent banner", value: "None", caption: "Nothing here needs consent, so nothing interrupts you." },
+  ]}
+  sections={sections}
+  other={{ href: "/privacy-policy/", label: "Privacy policy", teaser: "what happens to the data you send me" }}
+>
+  <section id="short">
+    <h2>The short version</h2>
+    <p class="short">piergorelli.com doesn't set cookies and doesn't track you, here or anywhere else.</p>
+    <p>That's why there is no cookie banner. The site remembers a couple of display choices in your own browser so it looks the way you left it. That data stays on your device and is never sent to me or to anyone else.</p>
+  </section>
 
-<Layout 
-	seo={{
-		title: SiteData.pages.about.title,
-		description: SiteData.default.description
-	}}
-	>
-	<Header textColor="black" headerClasses="" menuColor="#000000"/>
-	<main>
-		<Title title="Cookie policy" border="true" />
-		<div class="container mx-auto">
-			<div class="flex justify-center pt-28 lg:pt-48 w-full">
-				<div class="prose lg:prose-xl">
-					<Fragment set:html={legalHtml} />
-					
-				</div>
-			</div>
-		</div>
-	</main>
-  <Footer />
-</Layout>
+  <section id="what">
+    <h2>Cookies and local storage</h2>
+    <p><strong>Cookies</strong> are small files a website asks your browser to keep and send back on every visit. They are often used to recognise you across pages and sites, which is how most tracking works.</p>
+    <p><strong>Local storage</strong> and <strong>session storage</strong> are similar spaces in your browser, but their content is never sent to the server automatically. Only the page's own script can read it, on your device.</p>
+    <p>European and Spanish law (the ePrivacy Directive and article 22.2 of the Spanish LSSI) treat all of these the same way: storage that is strictly needed for a service you asked for, like remembering a setting you chose, doesn't require consent. Anything used for analytics or advertising does.</p>
+  </section>
+
+  <section id="stored">
+    <h2>What this site stores</h2>
+    <p class="short">Three keys, all functional, all on your device.</p>
+    <table class="table">
+      <thead>
+        <tr><th scope="col">Key</th><th scope="col">Where</th><th scope="col">Purpose</th><th scope="col">Lasts</th></tr>
+      </thead>
+      <tbody>
+        {stored.map((s) => (
+          <tr>
+            <td data-label="Key"><code>{s.key}</code></td>
+            <td data-label="Where">{s.where}</td>
+            <td data-label="Purpose">{s.purpose}</td>
+            <td data-label="Lasts">{s.lasts}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p>None of them contains personal data or an identifier. The first two are only written if you actually change the theme or the accent.</p>
+  </section>
+
+  <section id="third-parties">
+    <h2>Third parties</h2>
+    <p class="short">There are none on the page.</p>
+    <p>Fonts, images and scripts are served from piergorelli.com itself. There are no embedded videos, maps, social buttons or chat widgets that could set their own cookies. The hosting provider (Netlify) delivers the pages without setting cookies; the technical data it receives is described in the <a href="/privacy-policy/">privacy policy</a>.</p>
+    <p>Links to LinkedIn, GitHub or other sites take you to services with their own cookie policies, which apply once you are there.</p>
+  </section>
+
+  <section id="analytics">
+    <h2>Analytics</h2>
+    <p>Right now the site runs no analytics at all. If I add statistics in the future, they will be cookieless and privacy-friendly (no personal data, no cross-site tracking), and this page will be updated before they go live.</p>
+  </section>
+
+  <section id="control">
+    <h2>How to clear it</h2>
+    <p>You can delete the stored preferences at any time by clearing this site's data in your browser. The site keeps working exactly the same, it just forgets your theme and accent.</p>
+    <ul>
+      <li><a href="https://support.google.com/chrome/answer/95647" rel="noopener">Chrome</a></li>
+      <li><a href="https://support.mozilla.org/kb/clear-cookies-and-site-data-firefox" rel="noopener">Firefox</a></li>
+      <li><a href="https://support.apple.com/guide/safari/manage-cookies-sfri11471/mac" rel="noopener">Safari</a></li>
+      <li><a href="https://support.microsoft.com/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" rel="noopener">Edge</a></li>
+    </ul>
+    <p>Private or incognito windows discard everything when you close them.</p>
+  </section>
+
+  <section id="changes">
+    <h2>Changes and contact</h2>
+    <p>If what the site stores changes, this page changes first; the date at the top shows the latest revision. Questions: <a href="mailto:me@piergorelli.com">me@piergorelli.com</a>.</p>
+  </section>
+</LegalPage>

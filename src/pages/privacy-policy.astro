@@ -1,36 +1,153 @@
 ---
-import legalHtml from '../legal/privacy-policy.html?raw';
-import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import AboutComponent from '../components/About.astro';
-import Mission from '../components/Mission.astro';
-import Title from '../components/Title.astro';
-import ParallaxImage from '../components/ParallaxImage.astro';
-import catWithLaptop from '../assets/images/cat-with-laptop.jpg';
-import SiteData from "../constants/siteData.json";
-import Experience from '../components/Experience.astro';
+import LegalPage from "../components/rd/LegalPage.astro";
 
+const sections = [
+  { id: "controller", title: "Who is responsible" },
+  { id: "data", title: "What I collect" },
+  { id: "purposes", title: "Why, and on what legal basis" },
+  { id: "sharing", title: "Who else sees it" },
+  { id: "transfers", title: "Transfers outside the EU" },
+  { id: "cookies", title: "Cookies and analytics" },
+  { id: "retention", title: "How long I keep it" },
+  { id: "security", title: "How it is protected" },
+  { id: "rights", title: "Your rights" },
+  { id: "minors", title: "Minors" },
+  { id: "changes", title: "Changes to this policy" },
+  { id: "contact", title: "Contact" },
+];
 ---
 
+<LegalPage
+  seoTitle="Privacy Policy | Pier Gorelli"
+  description="How piergorelli.com handles your personal data: what the contact form collects, why, who processes it, how long it is kept and how to use your GDPR rights."
+  title="Privacy policy"
+  lead="Short version: I only collect what you choose to send me, I use it to reply and to work with you, and I never sell it or use it for ads."
+  updated="2026-09-29"
+  meta={[
+    ["Controller", "Pierpaolo Gorelli"],
+    ["Law", "GDPR · LOPDGDD (Spain)"],
+    ["Applies to", "piergorelli.com"],
+  ]}
+  glance={[
+    { label: "Collected", value: "Your brief", caption: "Only what you send: name, email and your project, by form or email." },
+    { label: "Tracking cookies", value: "0", caption: "No analytics, no ads, no social pixels. See the cookie policy." },
+    { label: "Sold or shared for ads", value: "Never", caption: "Your data is used to reply to you and to run our work together." },
+    { label: "Your rights", value: "Any time", caption: "Access, correct, delete or export your data with one email." },
+  ]}
+  sections={sections}
+  other={{ href: "/cookie-policy/", label: "Cookie policy", teaser: "what this site stores in your browser" }}
+>
+  <section id="controller">
+    <h2>Who is responsible</h2>
+    <p class="short">I am. This is a one-person studio, so the person who reads your brief is the same person responsible for your data.</p>
+    <p>The data controller is <strong>Pierpaolo Gorelli</strong> (Pier Gorelli), freelance web and AI developer:</p>
+    <address>
+      Calle Carteros 76<br />
+      46017 Valencia, Spain<br />
+      <a href="mailto:me@piergorelli.com">me@piergorelli.com</a>
+    </address>
+    <p>This policy covers piergorelli.com and the conversations that start from it (form, email, calls). It follows the EU General Data Protection Regulation (GDPR) and the Spanish data protection law (LOPDGDD).</p>
+  </section>
 
-<Layout 
-	seo={{
-		title: SiteData.pages.about.title,
-		description: SiteData.default.description
-	}}
-	>
-	<Header textColor="black" headerClasses="" menuColor="#000000"/>
-	<main>
-		<Title title="Privacy policy" border="true" />
-		<div class="container mx-auto">
-			<div class="flex justify-center pt-28 lg:pt-48 w-full">
-				<div class="prose lg:prose-xl">
-					<Fragment set:html={legalHtml} />
-				</div>
-			</div>
-		</div>
-	</main>
-  <Footer />
-</Layout>
-      
+  <section id="data">
+    <h2>What I collect</h2>
+    <p class="short">What you type into the contact form or write in an email, plus the technical data any web server needs to deliver a page.</p>
+    <h3>Data you give me</h3>
+    <ul>
+      <li><strong>Contact form (“brief”):</strong> your name and email (required), and optionally your agency or company, what you need, your timeline, your message and whether you want an NDA first.</li>
+      <li><strong>Email and calls:</strong> whatever you choose to share when you write to me or when we talk.</li>
+      <li><strong>If we work together:</strong> the billing details needed for quotes, contracts and invoices.</li>
+    </ul>
+    <p>Please don't send special category data (health, beliefs and so on). I don't need it and I don't process it.</p>
+    <h3>Data collected automatically</h3>
+    <p>When you load a page, the hosting provider (Netlify) receives the technical data every browser sends: IP address, browser and device type, requested page, referring page, date and time. It is used to deliver the site, keep it secure and fix errors. I don't use it to identify or profile you.</p>
+    <p>Your theme and accent choice are saved <strong>in your own browser</strong> and never reach me. Details are in the <a href="/cookie-policy/">cookie policy</a>.</p>
+  </section>
+
+  <section id="purposes">
+    <h2>Why, and on what legal basis</h2>
+    <p class="short">To answer you, to prepare and run a project, and to meet my legal obligations as a business.</p>
+    <table class="table">
+      <thead>
+        <tr><th scope="col">Purpose</th><th scope="col">Legal basis (GDPR art. 6)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td data-label="Purpose">Reply to your brief or email and set up a call</td><td data-label="Basis">Your consent (form checkbox) and steps you asked for before a contract, 6(1)(a) and 6(1)(b)</td></tr>
+        <tr><td data-label="Purpose">Quote, contract and deliver a project</td><td data-label="Basis">Performance of a contract, 6(1)(b)</td></tr>
+        <tr><td data-label="Purpose">Invoices, tax and accounting records</td><td data-label="Basis">Legal obligation, 6(1)(c)</td></tr>
+        <tr><td data-label="Purpose">Keep the site online, secure and free of spam</td><td data-label="Basis">Legitimate interest, 6(1)(f)</td></tr>
+      </tbody>
+    </table>
+    <p>No automated decisions or profiling are made about you. I won't add you to a newsletter or send you marketing emails.</p>
+  </section>
+
+  <section id="sharing">
+    <h2>Who else sees it</h2>
+    <p class="short">Only the few services that make this site and my work possible.</p>
+    <ul>
+      <li><strong>Netlify, Inc.</strong> (hosting and form handling): serves the site and stores form submissions.</li>
+      <li><strong>My email provider:</strong> stores the messages we exchange.</li>
+      <li><strong>My accountant and the tax authorities:</strong> only invoice data, and only if we work together.</li>
+    </ul>
+    <p>I may also disclose data when the law requires it (for example, a request from a court). Nothing is sold, rented or shared for advertising.</p>
+  </section>
+
+  <section id="transfers">
+    <h2>Transfers outside the EU</h2>
+    <p class="short">Netlify is a US company, so some data may be processed in the United States.</p>
+    <p>These transfers rely on the safeguards the GDPR requires: the European Commission's Standard Contractual Clauses and, where the provider is certified, the EU-US Data Privacy Framework. You can ask me for details of the safeguards in place.</p>
+  </section>
+
+  <section id="cookies">
+    <h2>Cookies and analytics</h2>
+    <p class="short">This site sets no cookies and runs no analytics or advertising scripts.</p>
+    <p>Fonts are self-hosted, there are no embedded players or social widgets, and no data is sent to Google or Meta. The only things stored are your display preferences, in your browser. The <a href="/cookie-policy/">cookie policy</a> lists each of them.</p>
+    <p>If I ever add privacy-friendly, cookieless statistics, I will update both policies before switching them on.</p>
+  </section>
+
+  <section id="retention">
+    <h2>How long I keep it</h2>
+    <p class="short">No longer than needed, then it is deleted.</p>
+    <ul>
+      <li><strong>Briefs and emails that don't become a project:</strong> up to 24 months after our last contact, so I have the context if you come back. Ask and I delete them sooner.</li>
+      <li><strong>Client data:</strong> for the duration of the project, then as long as Spanish tax and commercial law requires (currently up to six years for invoices and accounting records).</li>
+      <li><strong>Server logs:</strong> kept by Netlify for a short period for security and troubleshooting.</li>
+    </ul>
+  </section>
+
+  <section id="security">
+    <h2>How it is protected</h2>
+    <p class="short">HTTPS everywhere, few tools, and access limited to me.</p>
+    <p>The site is served only over HTTPS and no one else has access to form submissions, my mailbox or project files. No online system is 100% secure, but I keep the number of places your data lives as small as possible.</p>
+  </section>
+
+  <section id="rights">
+    <h2>Your rights</h2>
+    <p class="short">Your data stays yours. One email is enough to use any of these rights, free of charge.</p>
+    <ul>
+      <li><strong>Access:</strong> know whether I hold data about you and get a copy.</li>
+      <li><strong>Rectification:</strong> correct anything inaccurate or incomplete.</li>
+      <li><strong>Erasure:</strong> have your data deleted when it is no longer needed.</li>
+      <li><strong>Restriction:</strong> ask me to pause the processing.</li>
+      <li><strong>Portability:</strong> receive your data in a common, machine-readable format.</li>
+      <li><strong>Objection:</strong> object to processing based on legitimate interest.</li>
+      <li><strong>Withdraw consent:</strong> at any time, without affecting what happened before.</li>
+    </ul>
+    <p>Write to <a href="mailto:me@piergorelli.com">me@piergorelli.com</a>. I reply within one month at the latest, usually within a couple of days. If you think your data has been handled unlawfully, you can also complain to the Spanish Data Protection Agency (<a href="https://www.aepd.es/" rel="noopener">AEPD</a>) or to the authority in your country.</p>
+  </section>
+
+  <section id="minors">
+    <h2>Minors</h2>
+    <p>This site is for businesses and professionals. I don't knowingly collect data from anyone under 18. If you think a minor has sent me personal data, tell me and I will delete it.</p>
+  </section>
+
+  <section id="changes">
+    <h2>Changes to this policy</h2>
+    <p>When the site or the tools behind it change, this page changes too. The date at the top always shows the latest revision. If a change affects how I use data you already sent me, I will let you know by email.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>For anything about your data: <a href="mailto:me@piergorelli.com">me@piergorelli.com</a>, or by post to Pierpaolo Gorelli, Calle Carteros 76, 46017 Valencia, Spain.</p>
+  </section>
+</LegalPage>

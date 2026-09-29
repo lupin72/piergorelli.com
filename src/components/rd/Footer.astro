@@ -48,7 +48,10 @@ const cols = [
   <div class="footer-bottom note">
     <span>© {year} Pier Gorelli · Made with ♥ in Valencia</span>
     <span class="hint">Press <kbd>G</kbd> for the grid · <kbd>⌘K</kbd> for everything else</span>
-    <a href="/privacy-policy/" class="link">Privacy</a>
+    <nav class="legal-links" aria-label="Legal">
+      <a href="/privacy-policy/" class="link">Privacy</a>
+      <a href="/cookie-policy/" class="link">Cookies</a>
+    </nav>
   </div>
 </footer>
 
@@ -87,6 +90,7 @@ const cols = [
     margin-top: 1.25rem;
     border-top: 1px solid var(--line);
   }
+  .legal-links { display: flex; gap: 1.25rem; }
   kbd {
     font-family: inherit;
     padding: 0.05em 0.4em;
