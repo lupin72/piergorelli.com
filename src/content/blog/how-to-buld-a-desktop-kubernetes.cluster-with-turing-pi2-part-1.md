@@ -48,7 +48,7 @@ To make the process easier, I recommend using a magnetic screwdriver, especially
 
 The Flex ATX fits perfectly, and the orientation aligns well with the pre-installed cabling, simplifying the connection process.
 
-![Flexguru Flex ATX](./images/power-supply.jpg)
+![FSP Flexguru 300W power supply mounted at the top of the case, above the empty board tray](./images/power-supply.jpg)
 *Flexguru Flex ATX*
 
 ### Turing Pi 2 Board
@@ -61,7 +61,7 @@ Then I plugged in the 24-pin ATX power connector. The Flexguru cable is a 20+4 p
 The final and most delicate step was wiring the **power button and LED** to the board.  
 Locate the **Front I/O pins**: 10 in total, arranged in two rows.
 
-![Front I/O pins](./images/front-io.png)
+![Diagram of the Turing Pi 2 front I/O header: two rows of five pins, P-LED, RESET and their GND on the left, S-LED, POWER and their GND on the right](./images/front-io.png)
 *Front I/O pins*
 
 - Outer row (closest to the board edge):

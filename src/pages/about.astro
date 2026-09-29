@@ -188,7 +188,7 @@ const schema = [
           </p>
           <p data-reveal="up">
             <span class="note story__note">2025 → AI</span>
-            Today I also bring AI into agencies — n8n automations and LLM workflows that take the busywork off their teams — and into their clients' products. I test every tool on real work first, and I write about what holds up on the <a href="/blog/" class="link">blog</a>.
+            Today I also bring AI into agencies (n8n automations and LLM workflows that take the busywork off their teams) and into their clients' products. I test every tool on real work first, and I write about what holds up on the <a href="/blog/" class="link link--inline">blog</a>.
           </p>
           <p class="story__quote" data-reveal="up"><em>Creativity lies in making geometry feel like art.</em></p>
         </div>
@@ -339,7 +339,7 @@ const schema = [
     border-radius: 99px;
     background: var(--accent);
     box-shadow: 0 0 0 0 var(--accent);
-    animation: live 2.4s var(--ease-out) infinite;
+    animation: live 2.4s var(--ease-out) 2; /* stops within 5 s (WCAG 2.2.2) */
   }
   @keyframes live { 70%, 100% { box-shadow: 0 0 0 7px transparent; } }
   @media (max-width: 899px) {

@@ -351,12 +351,13 @@ const machine = info ? info.tagline : "A web development & AI blog, written from
       aspect-ratio: 7 / 5;
       translate: 0 -50%;
       rotate: 2deg;
-      pointer-events: none;
+      /* hoverable (WCAG 1.4.13): the pointer can move onto the preview without it closing; Esc closes it (site.ts) */
       clip-path: inset(50% 50% 50% 50%);
       transition: clip-path var(--dur-2) var(--ease-in-out), rotate var(--dur-2) var(--ease-in-out);
     }
     .entry__thumb :global(img) { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
     .entry:hover .entry__thumb { clip-path: inset(0 0 0 0); rotate: 0deg; }
+    :global(html[data-hover-off]) .entry:hover .entry__thumb { clip-path: inset(50% 50% 50% 50%); }
   }
 
   @media (max-width: 767px) {

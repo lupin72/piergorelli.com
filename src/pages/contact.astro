@@ -102,6 +102,7 @@ const schema = [
         <dd>
           <a href={`mailto:${EMAIL}`} class="link">{EMAIL}</a>
           <button type="button" class="copy note" data-copy={EMAIL} aria-label="Copy email address">Copy</button>
+          <span class="sr-only" role="status" data-copy-status></span>
         </dd>
       </div>
       <div class="spec__row">
@@ -252,13 +253,19 @@ const schema = [
 
     document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
       btn.addEventListener("click", async () => {
+        const status = btn.parentElement?.querySelector<HTMLElement>("[data-copy-status]");
         try {
           await navigator.clipboard.writeText(btn.dataset.copy ?? "");
           btn.textContent = "Copied ✓";
+          if (status) status.textContent = "Email address copied";
         } catch {
           btn.textContent = "Select & copy";
+          if (status) status.textContent = "Copy failed: select the address to copy it";
         }
-        window.setTimeout(() => (btn.textContent = "Copy"), 1800);
+        window.setTimeout(() => {
+          btn.textContent = "Copy";
+          if (status) status.textContent = "";
+        }, 1800);
       });
     });
   }
@@ -301,7 +308,7 @@ const schema = [
     border-radius: 99px;
     background: var(--accent);
     box-shadow: 0 0 0 0 var(--accent);
-    animation: live 2.4s var(--ease-out) infinite;
+    animation: live 2.4s var(--ease-out) 2; /* stops within 5 s (WCAG 2.2.2) */
   }
   .spec__live.is-off { background: var(--muted); animation: none; }
   @keyframes live { 70%, 100% { box-shadow: 0 0 0 7px transparent; } }

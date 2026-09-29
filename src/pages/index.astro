@@ -138,7 +138,7 @@ const schema = [
       {services.map((s) => (
         <li class="service" data-reveal="up">
           <a href={s.href} class="service__link grid-12" data-fill>
-            <span class="service__n note">{s.n}</span>
+            <span class="service__n note" aria-hidden="true">{s.n}</span>
             <h2 class="service__title h2">{s.title}</h2>
             <p class="service__body">{s.body}</p>
             <ul class="service__tags">

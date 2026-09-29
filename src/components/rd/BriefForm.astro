@@ -38,28 +38,30 @@ const readout = [
 
     <div class="field" data-reveal="up">
       <label for="f-name" class="field__label">
-        <span class="note note--accent">01</span><span class="note note--ink">Your name</span><span class="note">Required</span>
+        <span class="note note--accent" aria-hidden="true">01</span> <span class="note note--ink">Your name</span> <span class="note">Required</span>
       </label>
-      <input id="f-name" name="name" class="field__input" autocomplete="name" required placeholder="Ada Lovelace" />
+      <input id="f-name" name="name" class="field__input" autocomplete="name" required placeholder="e.g. Ada Lovelace" />
+      <p class="field__error note" id="f-name-error" data-error-for="f-name" hidden>Please enter your name.</p>
     </div>
 
     <div class="field" data-reveal="up">
       <label for="f-email" class="field__label">
-        <span class="note note--accent">02</span><span class="note note--ink">Email</span><span class="note">Required</span>
+        <span class="note note--accent" aria-hidden="true">02</span> <span class="note note--ink">Email</span> <span class="note">Required</span>
       </label>
-      <input id="f-email" name="email" type="email" class="field__input" autocomplete="email" required placeholder="ada@agency.studio" />
+      <input id="f-email" name="email" type="email" class="field__input" autocomplete="email" required placeholder="e.g. ada@agency.studio" />
+      <p class="field__error note" id="f-email-error" data-error-for="f-email" hidden>Please enter a valid email address, like ada@agency.studio.</p>
     </div>
 
     <div class="field" data-reveal="up">
       <label for="f-company" class="field__label">
-        <span class="note note--accent">03</span><span class="note note--ink">Agency or company</span><span class="note">Optional</span>
+        <span class="note note--accent" aria-hidden="true">03</span> <span class="note note--ink">Agency or company</span> <span class="note">Optional</span>
       </label>
-      <input id="f-company" name="company" class="field__input" autocomplete="organization" placeholder="Analytical Engines Ltd." />
+      <input id="f-company" name="company" class="field__input" autocomplete="organization" placeholder="e.g. Analytical Engines Ltd." />
     </div>
 
     <fieldset class="field" data-reveal="up">
       <legend class="field__label">
-        <span class="note note--accent">04</span><span class="note note--ink">What do you need?</span><span class="note">Pick any</span>
+        <span class="note note--accent" aria-hidden="true">04</span> <span class="note note--ink">What do you need?</span> <span class="note">Pick any</span>
       </legend>
       <div class="chips">
         {needs.map((n) => (
@@ -70,7 +72,7 @@ const readout = [
 
     <fieldset class="field" data-reveal="up">
       <legend class="field__label">
-        <span class="note note--accent">05</span><span class="note note--ink">Timeline</span><span class="note">Pick one</span>
+        <span class="note note--accent" aria-hidden="true">05</span> <span class="note note--ink">Timeline</span> <span class="note">Pick one</span>
       </legend>
       <div class="chips">
         {timelines.map((t) => (
@@ -81,7 +83,7 @@ const readout = [
 
     <div class="field" data-reveal="up">
       <label for="f-message" class="field__label">
-        <span class="note note--accent">06</span><span class="note note--ink">The brief</span><span class="note">Required</span>
+        <span class="note note--accent" aria-hidden="true">06</span> <span class="note note--ink">The brief</span> <span class="note">Required</span>
       </label>
       <textarea
         id="f-message"
@@ -91,6 +93,7 @@ const readout = [
         required
         placeholder="What are you building, for whom, and what makes it hard? Links to a deck or Figma are welcome."
       ></textarea>
+      <p class="field__error note" id="f-message-error" data-error-for="f-message" hidden>Please write a few words about the project.</p>
     </div>
 
     <div class="checks" data-reveal="up">
@@ -100,10 +103,11 @@ const readout = [
         <span>Send me an NDA before we go into detail.</span>
       </label>
       <label class="check">
-        <input type="checkbox" name="terms" value="accepted" required />
+        <input type="checkbox" id="f-terms" name="terms" value="accepted" required />
         <span class="check__box" aria-hidden="true"></span>
-        <span>I agree that my data is used only to reply to me, as described in the <a href="/privacy-policy/" class="link">privacy policy</a>. <span class="note">Required</span></span>
+        <span>I agree that my data is used only to reply to me, as described in the <a href="/privacy-policy/" class="link link--inline">privacy policy</a>. <span class="note">Required</span></span>
       </label>
+      <p class="field__error note" id="f-terms-error" data-error-for="f-terms" hidden>Please accept the privacy terms to send the brief.</p>
     </div>
 
     <div class="brief__submit" data-reveal="up">
@@ -112,7 +116,7 @@ const readout = [
     </div>
     <p class="brief__error" data-brief-error hidden role="alert">
       Something went wrong on the way. Nothing is lost: copy your text and write to
-      <a href="mailto:me@piergorelli.com" class="link">me@piergorelli.com</a>.
+      <a href="mailto:me@piergorelli.com" class="link link--inline">me@piergorelli.com</a>.
     </p>
   </form>
 
@@ -210,8 +214,36 @@ const readout = [
     const error = form.querySelector<HTMLElement>("[data-brief-error]");
     const doneBox = document.querySelector<HTMLElement>("[data-brief-done]");
 
+    // Inline errors in text, tied to their field (WCAG 3.3.1, 3.3.3). Without JS the browser validates natively.
+    form.noValidate = true;
+    const required = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("[required]")];
+    const showError = (el: HTMLInputElement | HTMLTextAreaElement, on: boolean) => {
+      const msg = form.querySelector<HTMLElement>(`[data-error-for="${el.id}"]`);
+      if (!msg) return;
+      msg.hidden = !on;
+      if (on) {
+        el.setAttribute("aria-invalid", "true");
+        el.setAttribute("aria-describedby", msg.id);
+      } else {
+        el.removeAttribute("aria-invalid");
+        el.removeAttribute("aria-describedby");
+      }
+    };
+    const invalid = (el: HTMLInputElement | HTMLTextAreaElement) => !el.checkValidity() || (el.type !== "checkbox" && !el.value.trim());
+    required.forEach((el) =>
+      el.addEventListener(el.type === "checkbox" ? "change" : "input", () => {
+        if (el.getAttribute("aria-invalid")) showError(el, invalid(el));
+      }),
+    );
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      const bad = required.filter(invalid);
+      required.forEach((el) => showError(el, bad.includes(el)));
+      if (bad.length) {
+        bad[0].focus();
+        return;
+      }
       if (error) error.hidden = true;
       if (send) send.disabled = true;
       setStatus("sending…", true);
@@ -287,7 +319,7 @@ const readout = [
     line-height: 1.15;
     color: var(--ink);
   }
-  .field__input::placeholder { color: var(--line-strong); }
+  .field__input::placeholder { color: var(--muted); }
   .field__input--area { font-size: var(--step-1); letter-spacing: -0.015em; line-height: 1.35; resize: vertical; min-height: 9rem; }
   .field::after {
     content: "";
@@ -296,14 +328,19 @@ const readout = [
     right: 0;
     top: -1px;
     height: 1px;
-    background: var(--accent);
+    height: 2px;
+    background: var(--accent-text);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform var(--dur-2) var(--ease-in-out);
   }
   .field:focus-within::after { transform: scaleX(1); }
   .field:focus-within .field__label .note--ink { color: var(--accent-text); }
-  .field:has(.field__input:user-invalid) .field__label .note:last-child { color: #d0342c; }
+  .field:has(.field__input:user-invalid) .field__label .note:last-child,
+  .field:has([aria-invalid="true"]) .field__label .note:last-child { color: var(--danger); }
+  .field__error { margin: -0.6rem 0 1.1rem; color: var(--danger); text-transform: none; font-size: 0.8rem; }
+  .field__error::before { content: "✗ "; content: "✗ " / ""; }
+  .checks .field__error { margin: 0 0 0 2.15rem; }
 
   /* A floated legend stops sitting on the fieldset's border, so it lays out like the labels. */
   legend.field__label { float: left; }
@@ -316,13 +353,14 @@ const readout = [
     display: inline-block;
     padding: 0.55rem 1.1rem;
     border-radius: 999px;
-    box-shadow: inset 0 0 0 1px var(--line-strong);
+    /* borders ≥ 3:1 against the paper: they are what makes a chip read as a control (WCAG 1.4.11) */
+    box-shadow: inset 0 0 0 1px var(--control-line);
     transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out), box-shadow var(--dur-1);
   }
   .chip:hover span { box-shadow: inset 0 0 0 1px var(--ink); }
   .chip input:checked + span { background: var(--ink); color: var(--bg); box-shadow: inset 0 0 0 1px var(--ink); }
-  .chip input:checked + span::before { content: "✓ "; color: var(--accent); }
-  .chip input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .chip input:checked + span::before { content: "✓ "; content: "✓ " / ""; color: var(--accent); }
+  .chip input:focus-visible + span { outline: 2px solid var(--accent-text); outline-offset: 3px; }
 
   /* Checkboxes */
   .checks { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem 0; border-top: 1px solid var(--line); }
@@ -332,16 +370,16 @@ const readout = [
     width: 1.25rem;
     height: 1.25rem;
     margin-top: 0.15rem;
-    box-shadow: inset 0 0 0 1px var(--line-strong);
+    box-shadow: inset 0 0 0 1px var(--control-line);
     transition: background var(--dur-1) var(--ease-out), box-shadow var(--dur-1);
   }
-  .check input:checked + .check__box { background: var(--accent); box-shadow: inset 0 0 0 1px var(--accent), inset 0 0 0 4px var(--bg); }
-  .check input:focus-visible + .check__box { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .check input:checked + .check__box { background: var(--accent-text); box-shadow: inset 0 0 0 1px var(--accent-text), inset 0 0 0 4px var(--bg); }
+  .check input:focus-visible + .check__box { outline: 2px solid var(--accent-text); outline-offset: 3px; }
   .check:has(input:checked) { color: var(--ink); }
 
   .brief__submit { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
   .brief__submit .btn[disabled] { opacity: 0.6; pointer-events: none; }
-  .brief__error { margin-top: 1.25rem; color: #d0342c; }
+  .brief__error { margin-top: 1.25rem; color: var(--danger); }
 
   /* Sent */
   .brief__done { display: flex; flex-direction: column; gap: 1.25rem; align-items: start; padding-top: 1.25rem; border-top: 1px solid var(--accent); outline: 0; }
@@ -376,7 +414,7 @@ const readout = [
   .readout__ln { overflow: hidden; text-overflow: ellipsis; }
   .readout__k { color: var(--muted); }
   .readout__v { color: var(--accent-text); padding: 0 0.1em; border-radius: 3px; }
-  .readout__v.is-null { color: var(--line-strong); }
+  .readout__v.is-null { color: var(--muted); }
   .readout__v.is-new { animation: flash var(--dur-2) var(--ease-out); }
   @keyframes flash { from { background: color-mix(in oklab, var(--accent) 30%, transparent); } }
   .readout__meter { height: 2px; margin: 0 1rem; background: var(--line); }

@@ -91,7 +91,7 @@ const ogImage = new URL(image, site).href;
     <a href="#main" class="skip note">Skip to content</a>
     {preloader && <Preloader />}
     <Header />
-    <main id="main">
+    <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer />
@@ -139,4 +139,5 @@ const ogImage = new URL(image, site).href;
     transition: top var(--dur-1) var(--ease-out);
   }
   .skip:focus { top: 1rem; }
+  @media (prefers-reduced-motion: reduce) { .skip { transition: none; } }
 </style>

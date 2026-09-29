@@ -2,6 +2,8 @@
  * Hero background: topographic contour lines (a blueprint of a landscape)
  * that swell around the pointer. Raw WebGL2, no dependencies.
  * Desktop only, paused when off-screen or when the tab is hidden.
+ * The contours drift on their own for 4 s, then glide to a stop within 5 s (WCAG 2.2.2 Pause, Stop, Hide);
+ * after that they only move in answer to the pointer, and settle again 1.5 s after it stops.
  */
 
 const VERT = `#version 300 es
@@ -120,7 +122,7 @@ async function build(host: HTMLElement): Promise<() => void> {
     gl.uniform3fv(uAccent, hexToRgb(styles.getPropertyValue("--accent").trim()));
   };
   syncColors();
-  const themeObserver = new MutationObserver(syncColors);
+  const themeObserver = new MutationObserver(() => { syncColors(); loop(); }); // redraw even when at rest
   themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "data-accent"] });
 
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -132,7 +134,7 @@ async function build(host: HTMLElement): Promise<() => void> {
     gl.uniform2f(uRes, canvas.width, canvas.height);
   };
   resize();
-  const ro = new ResizeObserver(resize);
+  const ro = new ResizeObserver(() => { resize(); loop(); });
   ro.observe(host);
 
   // pointer, eased
@@ -143,8 +145,10 @@ async function build(host: HTMLElement): Promise<() => void> {
     mouse.ty = (r.bottom - e.clientY) * dpr;
     if (mouse.x < -1e3) { mouse.x = mouse.tx; mouse.y = mouse.ty; }
     mouse.target = 1;
+    calmAt = Math.max(calmAt, performance.now() + 1500);
+    loop();
   };
-  const onLeave = () => { mouse.target = 0; };
+  const onLeave = () => { mouse.target = 0; loop(); };
   host.addEventListener("pointermove", onMove, { passive: true });
   host.addEventListener("pointerleave", onLeave);
 
@@ -153,20 +157,32 @@ async function build(host: HTMLElement): Promise<() => void> {
   io.observe(host);
 
   let raf = 0;
-  const start = performance.now();
+  let last = performance.now();
+  let calmAt = last + 4000; // autonomous drift ends here, then a 1 s glide to rest
+  let t = 0; // drift clock: advances only while there is energy
   const frame = (now: number) => {
     raf = 0;
     if (!visible || document.hidden) return;
+    const dt = Math.min(now - last, 50) / 1000;
+    last = now;
+    const energy = Math.min(1, Math.max(0, (calmAt + 1000 - now) / 1000)) ** 2;
+    t += dt * energy;
     mouse.x += (mouse.tx - mouse.x) * 0.08;
     mouse.y += (mouse.ty - mouse.y) * 0.08;
     mouse.pull += (mouse.target - mouse.pull) * 0.04;
-    gl.uniform1f(uTime, (now - start) / 1000);
+    gl.uniform1f(uTime, t);
     gl.uniform2f(uMouse, mouse.x, mouse.y);
     gl.uniform1f(uPull, mouse.pull);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
-    loop();
+    const settled = energy === 0 && Math.abs(mouse.target - mouse.pull) < 0.002 &&
+      Math.abs(mouse.tx - mouse.x) < 0.5 && Math.abs(mouse.ty - mouse.y) < 0.5;
+    if (!settled) loop(); // at rest: stop drawing until the pointer moves again
   };
-  const loop = () => { if (!raf) raf = requestAnimationFrame(frame); };
+  const loop = () => {
+    if (raf) return;
+    last = performance.now();
+    raf = requestAnimationFrame(frame);
+  };
   const onVisibility = () => loop();
   document.addEventListener("visibilitychange", onVisibility);
   loop();

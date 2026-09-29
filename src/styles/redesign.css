@@ -12,14 +12,16 @@
   --bg: #f4f4f0;
   --bg-raised: #ecece6;
   --ink: #0e0e0d;
-  --muted: #6d6d67;
+  --muted: #65655f; /* ≥ 4.5:1 on --bg and --bg-raised (WCAG 1.4.3) */
   --line: rgb(14 14 13 / 0.14);
   --line-strong: rgb(14 14 13 / 0.32);
+  --control-line: rgb(14 14 13 / 0.5); /* outline of form controls: ≥ 3:1 (WCAG 1.4.11) */
 
   /* accent (set by [data-accent]) */
   --accent: #2f5bff;
   --accent-ink: #ffffff;
-  --accent-text: var(--accent); /* accent used as text: darkened where contrast needs it */
+  --accent-text: #2a52f0; /* accent used as text, focus rings: ≥ 4.5:1 on --bg and --bg-raised */
+  --danger: #c02b24; /* form errors */
 
   /* type */
   --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
@@ -55,12 +57,15 @@
   --muted: #8b8b85;
   --line: rgb(237 237 231 / 0.12);
   --line-strong: rgb(237 237 231 / 0.3);
+  --control-line: rgb(237 237 231 / 0.45);
+  --danger: #ff6b5e;
   color-scheme: dark;
 }
 
-:root[data-accent="blue"] { --accent: #2f5bff; --accent-ink: #ffffff; }
-:root[data-theme="dark"][data-accent="blue"] { --accent: #5b7cff; }
-:root[data-accent="orange"] { --accent: #ff5a1f; --accent-ink: #0e0e0d; --accent-text: #c83a06; }
+:root[data-accent="blue"] { --accent: #2f5bff; --accent-ink: #ffffff; --accent-text: #2a52f0; }
+/* white on #5b7cff is 3.6:1: ink on the lighter dark-theme blue */
+:root[data-theme="dark"][data-accent="blue"] { --accent: #5b7cff; --accent-ink: #0e0e0d; }
+:root[data-accent="orange"] { --accent: #ff5a1f; --accent-ink: #0e0e0d; --accent-text: #bb3505; }
 :root[data-accent="lime"] { --accent: #c6f432; --accent-ink: #0e0e0d; --accent-text: #4f6b00; }
 :root[data-theme="dark"] { --accent-text: var(--accent); }
 
@@ -96,7 +101,11 @@
   }
   ::selection { background: var(--accent); color: var(--accent-ink); }
   a { color: inherit; text-decoration: none; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  /* --accent-text, not --accent: lime and orange rings would be < 3:1 on the light paper (WCAG 1.4.11) */
+  :focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+  /* keep focused elements and anchor targets clear of the fixed header */
+  html { scroll-padding-top: 5.5rem; }
+  main:focus { outline: 0; }
   h1, h2, h3, h4 { font-weight: 500; letter-spacing: -0.035em; line-height: 0.95; text-wrap: balance; }
   p { text-wrap: pretty; }
 }
@@ -236,6 +245,25 @@ html.lenis, html.lenis body { height: auto; }
     transition: background-size var(--dur-1) var(--ease-out);
   }
   .link:hover { background-size: 100% 1px; }
+  /* A link inside a sentence needs more than colour to stand out (WCAG 1.4.1): resting underline */
+  .link--inline {
+    background-size: 100% 1px;
+    background-image: linear-gradient(color-mix(in oklab, currentColor 45%, transparent), color-mix(in oklab, currentColor 45%, transparent));
+  }
+  .link--inline:hover { background-image: linear-gradient(currentColor, currentColor); }
+
+  /* Read by assistive tech, not shown */
+  .sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
 
   /* Text that is "wireframe": outlined */
   .outline-text {
@@ -246,7 +274,8 @@ html.lenis, html.lenis body { height: auto; }
   /* Wireframe rows ([data-wireframe] in motion.ts): outlined line with a solid copy wiped in
      letter by letter. Negative top/bottom insets keep ascenders and descenders (g, p) in the clip. */
   .wf-row { position: relative; }
-  .wf-line { position: relative; width: fit-content; white-space: nowrap; }
+  /* may wrap instead of overflowing when a reader overrides text spacing (WCAG 1.4.12) */
+  .wf-line { position: relative; width: fit-content; max-width: 100%; }
   .wf-solid {
     position: absolute;
     inset: 0;
@@ -329,7 +358,7 @@ html.js[data-motion="showcase"]:not(.motion-ready) :is([data-hero-generate], [da
   vertical-align: -0.04em;
   background: var(--accent);
 }
-.gen-caret.is-idle { animation: blink 1.1s steps(1) infinite; }
+.gen-caret.is-idle { animation: blink 1.1s steps(1) 4; } /* stops within 5 s (WCAG 2.2.2) */
 @keyframes blink { 50% { opacity: 0; } }
 
 /* ─────────────────────────────────────────────────────────────
@@ -367,6 +396,7 @@ html.js[data-motion="showcase"]:not(.motion-ready) :is([data-hero-generate], [da
   padding: 1rem 1.1rem;
   border-bottom: 1px solid var(--line);
 }
+.palette__search:focus-within { box-shadow: inset 0 -2px 0 var(--accent-text); }
 .palette__search input {
   flex: 1;
   min-width: 0;
@@ -472,6 +502,7 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 .cursor.is-down .cursor__ring { transform: scale(0.6); }
 .cursor__label { position: absolute; left: 14px; top: 12px; white-space: nowrap; color: var(--ink); font-size: 0.62rem; }
 .cursor.is-hover .cursor__label { left: 30px; top: -6px; color: var(--accent-text); }
+html[data-hover-off] .cursor__label { visibility: hidden; }
 
 /* ─────────────────────────────────────────────────────────────
    Page-transition sheet (persisted across navigations)

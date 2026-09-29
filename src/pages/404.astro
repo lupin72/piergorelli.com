@@ -16,6 +16,7 @@ const pages = [
   { title: "Contact", url: "/contact/", group: "Page" },
   { title: "Privacy policy", url: "/privacy-policy/", group: "Legal" },
   { title: "Cookie policy", url: "/cookie-policy/", group: "Legal" },
+  { title: "Accessibility statement", url: "/accessibility/", group: "Legal" },
 ];
 const posts = (await getPosts()).map((p) => ({ title: p.data.title, url: postUrl(p), group: pillarOf(p) }));
 const routes = [...pages, ...posts];
@@ -95,10 +96,10 @@ const options = [
           <form class="term__prompt a-fade" style="--d: 3.4s" role="search" data-prompt>
             <label for="nf-q" class="term__caret">›</label>
             <span class="term__field">
-              <input id="nf-q" type="search" placeholder="search pages and posts" autocomplete="off" spellcheck="false" aria-controls="nf-results" />
+              <input id="nf-q" type="search" aria-label="Search pages and posts" placeholder="search pages and posts" autocomplete="off" spellcheck="false" aria-controls="nf-results" />
               <span class="term__cursor" aria-hidden="true" data-cursor></span>
             </span>
-            <span class="note term__kbd">↵</span>
+            <span class="note term__kbd" aria-hidden="true">↵</span>
           </form>
           <ul class="term__results" id="nf-results" data-results aria-live="polite"></ul>
         </div>
@@ -229,10 +230,13 @@ const options = [
       input.addEventListener("focus", () => { if (!input.value) finish(); else window.clearInterval(typing); }, { once: true });
     }
 
-    // Harness-style choices: 1–4 from anywhere outside the input
+    // Harness-style choices: 1–4 while focus is on the terminal's links (not the input).
+    // Scoped to the terminal, not the whole page: single-key shortcuts must not fire from anywhere (WCAG 2.1.4).
     const opts = [...root.querySelectorAll<HTMLAnchorElement>("[data-opt]")];
+    const term = root.querySelector<HTMLElement>(".term")!;
     opts[0].addEventListener("click", (e) => { e.preventDefault(); input.focus(); input.select(); });
     const onKey = (e: KeyboardEvent) => {
+      if (!(e.target instanceof Element) || !term.contains(e.target)) return;
       if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey || e.altKey) return;
       const opt = opts.find((o) => o.dataset.opt === e.key);
       if (opt) { e.preventDefault(); opt.click(); }
@@ -385,7 +389,7 @@ const options = [
   }
   .term__prompt input::-webkit-search-cancel-button { display: none; }
   .term__kbd { border: 1px solid var(--line-strong); padding: 0 0.4rem; }
-  .term__prompt:focus-within { border-top-color: var(--accent); }
+  .term__prompt:focus-within { border-top: 1px solid var(--accent-text); box-shadow: 0 -1px 0 var(--accent-text); }
 
   .term__results:empty { display: none; }
   .term__results { margin-top: -0.5rem; }
@@ -406,7 +410,7 @@ const options = [
     height: 1.15em;
     translate: 2px -50%;
     background: var(--accent);
-    animation: nf-blink 1s steps(1) infinite;
+    animation: nf-blink 1s steps(1) 5; /* stops within 5 s (WCAG 2.2.2) */
     pointer-events: none;
   }
   .term__field:focus-within .term__cursor { display: none; }
@@ -453,7 +457,7 @@ const options = [
       & .nf__ink { animation: nf-ink 1.45s linear 0.95s both; }
       & .nf__box { animation: nf-op 0.4s var(--ease-out) 0.45s both, nf-fail-box 0.9s var(--ease-out) var(--fail) both; }
       & .nf__cross { animation: nf-wipe 0.6s var(--ease-in-out) calc(var(--fail) + 0.1s) both; }
-      & .nf__blink { animation: nf-blink 0.5s steps(1) infinite; }
+      & .nf__blink { animation: nf-blink 0.5s steps(1) 8; }
       & .term__results :global(li) { animation: nf-fade 0.35s var(--ease-out) both; }
       & .term__results :global(li:nth-child(2)) { animation-delay: 0.05s; }
       & .term__results :global(li:nth-child(3)) { animation-delay: 0.1s; }

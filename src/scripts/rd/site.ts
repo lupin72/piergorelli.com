@@ -67,15 +67,32 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("keydown", (e) => {
-  const t = e.target as HTMLElement;
-  const typing = t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName);
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
     e.preventDefault();
     openPalette();
-  } else if (!typing && !e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase() === "g") {
+  } else if (e.altKey && !e.metaKey && !e.ctrlKey && e.code === "KeyG") {
+    // ⌥G / Alt+G, never a bare letter: single-key shortcuts clash with speech input (WCAG 2.1.4).
+    // e.code, because on macOS ⌥G types "©".
+    e.preventDefault();
     toggleGrid();
   }
 });
+
+// Content that appears on hover (blog cover previews, cursor labels) closes with Esc and stays closed
+// until the pointer leaves what it was over (WCAG 1.4.13).
+let dismissedOn: Element | null = null;
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  const hovered = document.querySelectorAll(":hover");
+  dismissedOn = hovered[hovered.length - 1]?.closest("a, button, [data-fill]") ?? null;
+  if (dismissedOn) root.dataset.hoverOff = "";
+});
+document.addEventListener("pointerover", (e) => {
+  if (dismissedOn && !dismissedOn.contains(e.target as Node)) {
+    dismissedOn = null;
+    delete root.dataset.hoverOff;
+  }
+}, { passive: true });
 
 console.log(
   `%c

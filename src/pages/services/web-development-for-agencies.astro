@@ -289,7 +289,7 @@ const schema = [
       ))}
     </div>
     <p class="self lead" data-reveal="up">
-      The first one is the page you're reading, so you can inspect it right now.<span class="self__grid"> Press <kbd>G</kbd> to see the grid.</span>
+      The first one is the page you're reading, so you can inspect it right now.<span class="self__grid"> Press <kbd>⌥G</kbd> to see the grid.</span>
     </p>
   </section>
 
@@ -431,7 +431,7 @@ const schema = [
   .lab__ease:hover { background: var(--bg-raised); }
   .lab__ease:has(:checked) { background: var(--ink); color: var(--bg); }
   .lab__ease:has(:checked) .note { color: color-mix(in oklab, var(--bg) 70%, transparent); }
-  .lab__ease:has(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .lab__ease:has(:focus-visible) { outline: 2px solid var(--accent-text); outline-offset: 2px; }
 
   .lab__stage {
     display: grid;
@@ -464,7 +464,7 @@ const schema = [
   .lab__ticks span:nth-child(5n + 1) { height: 1rem; background: var(--ink); }
   .lab__play { align-self: start; margin-top: 1rem; cursor: pointer; }
   .lab__play input { position: absolute; opacity: 0; pointer-events: none; }
-  .lab__play:has(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .lab__play:has(:focus-visible) { outline: 2px solid var(--accent-text); outline-offset: 3px; }
   .lab__play-off, .lab__play:has(:checked) .lab__play-on { display: none; }
   .lab__play:has(:checked) .lab__play-off { display: inline; }
 

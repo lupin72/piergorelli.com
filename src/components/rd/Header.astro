@@ -21,7 +21,7 @@ const path = Astro.url.pathname;
       {nav.map((item) => (
         <li>
           <a href={item.href} class="nav__link" aria-current={path.startsWith(item.href) && item.href !== "/#work" ? "page" : undefined}>
-            <span class="note">{item.index}</span>
+            <span class="note" aria-hidden="true">{item.index}</span>
             <span class="nav__label" data-label={item.label}>{item.label}</span>
           </a>
         </li>
@@ -32,8 +32,8 @@ const path = Astro.url.pathname;
   <div class="tools">
     <div class="lang note" role="group" aria-label="Language">
       <span aria-current="true">EN</span>
-      <span title="Coming soon">ES</span>
-      <span title="Coming soon">IT</span>
+      <span title="Coming soon">ES<span class="sr-only"> (coming soon)</span></span>
+      <span title="Coming soon">IT<span class="sr-only"> (coming soon)</span></span>
     </div>
     <button class="tool" type="button" data-action="theme" aria-label="Toggle light / dark theme">
       <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" /><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" /></svg>
@@ -41,7 +41,7 @@ const path = Astro.url.pathname;
     <button class="tool" type="button" data-action="accent" aria-label="Change accent colour">
       <span class="swatch" aria-hidden="true"></span>
     </button>
-    <button class="tool tool--kbd note" type="button" data-action="palette" aria-label="Open command palette">⌘K</button>
+    <button class="tool tool--kbd note" type="button" data-action="palette" aria-label="Open command palette (⌘K)">⌘K</button>
     <button class="tool tool--menu note" type="button" data-action="palette" aria-label="Open menu">Menu</button>
     <a href="/contact/" class="btn header-cta">Let's talk</a>
   </div>
@@ -161,6 +161,7 @@ const path = Astro.url.pathname;
   }
   .nav__label::after {
     content: attr(data-label);
+    content: attr(data-label) / ""; /* hover copy of the label: not read twice */
     position: absolute;
     left: 0;
     top: 100%;
@@ -173,7 +174,8 @@ const path = Astro.url.pathname;
 
   .tools { justify-self: end; display: flex; align-items: center; gap: 0.5rem; padding-right: 0.75rem; }
   .lang { display: flex; gap: 0.5rem; margin-right: 0.5rem; }
-  .lang span:not([aria-current]) { opacity: 0.45; cursor: not-allowed; }
+  /* dimmed with --muted (4.5:1), not opacity: still legible (WCAG 1.4.3) */
+  .lang > span:not([aria-current]) { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; cursor: not-allowed; }
   .lang span[aria-current] { color: var(--ink); }
 
   .tool {

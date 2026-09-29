@@ -24,7 +24,7 @@ const base: Item[] = [
   { group: "Go to", label: "Contact", hint: "/contact/", run: go("/contact/") },
   { group: "Do", label: "Toggle light / dark", hint: "theme", run: () => toggleTheme() },
   { group: "Do", label: "Next accent colour", hint: "accent", run: () => cycleAccent() },
-  { group: "Do", label: "Show the grid", hint: "G", run: () => { toggleGrid(); dialog?.close(); } },
+  { group: "Do", label: "Show the grid", hint: "⌥G", run: () => { toggleGrid(); dialog?.close(); } },
   { group: "Do", label: "Copy email address", hint: "me@piergorelli.com", run: () => { navigator.clipboard?.writeText("me@piergorelli.com"); dialog?.close(); } },
 ];
 
@@ -34,12 +34,14 @@ function build() {
   dialog.setAttribute("aria-label", "Command palette");
   dialog.innerHTML = `
     <div class="palette__box">
-      <label class="palette__search">
-        <span class="note">⌘K</span>
-        <input type="text" placeholder="Search pages, posts, actions…" autocomplete="off" spellcheck="false" aria-controls="palette-list" />
-        <button type="button" class="note palette__close" aria-label="Close">Esc</button>
-      </label>
-      <ul class="palette__list" id="palette-list" role="listbox"></ul>
+      <div class="palette__search">
+        <span class="note" aria-hidden="true">⌘K</span>
+        <input type="text" role="combobox" aria-label="Search pages, posts, actions" aria-expanded="true" aria-autocomplete="list"
+          aria-controls="palette-list" placeholder="Search pages, posts, actions…" autocomplete="off" spellcheck="false" />
+        <button type="button" class="note palette__close" aria-label="Close (Esc)">Esc</button>
+      </div>
+      <ul class="palette__list" id="palette-list" role="listbox" aria-label="Results"></ul>
+      <p class="sr-only" role="status" data-palette-count></p>
     </div>`;
   document.body.append(dialog);
 
@@ -76,17 +78,24 @@ function render(query: string) {
   list.innerHTML = filtered
     .map((item, i) => {
       const head = item.group !== group ? `<li class="note palette__group" role="presentation">${(group = item.group)}</li>` : "";
-      return `${head}<li role="option" data-i="${i}"><span>${escape(item.label)}</span><span class="note">${escape(item.hint)}</span></li>`;
+      return `${head}<li role="option" id="palette-opt-${i}" data-i="${i}"><span>${escape(item.label)}</span><span class="note">${escape(item.hint)}</span></li>`;
     })
-    .join("") || `<li class="palette__empty note">Nothing found — try “ai” or “astro”.</li>`;
+    .join("") || `<li class="palette__empty note" role="presentation">Nothing found. Try “ai” or “astro”.</li>`;
+  const count = dialog!.querySelector("[data-palette-count]")!;
+  count.textContent = q ? `${filtered.length} result${filtered.length === 1 ? "" : "s"}` : "";
   paint();
 }
 
 function paint() {
+  const input = dialog!.querySelector("input")!;
+  input.removeAttribute("aria-activedescendant");
   dialog!.querySelectorAll<HTMLElement>("[data-i]").forEach((li) => {
     const on = Number(li.dataset.i) === active;
     li.setAttribute("aria-selected", String(on));
-    if (on) li.scrollIntoView({ block: "nearest" });
+    if (on) {
+      input.setAttribute("aria-activedescendant", li.id);
+      li.scrollIntoView({ block: "nearest" });
+    }
   });
 }
 

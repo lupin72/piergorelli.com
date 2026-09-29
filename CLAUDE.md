@@ -28,6 +28,15 @@ Sito personale di Pier Gorelli (Astro 7 + Tailwind 4, Netlify). Redesign in cors
 - SplitText con `aria: "none"` (e `tag: "span"` dentro elementi inline), altrimenti Lighthouse segnala ARIA proibita.
 - Ogni effetto rispetta `prefers-reduced-motion` (contenuto subito visibile, niente cursore/WebGL/intro) e ha un fallback senza JS.
 
+## Accessibilità (WCAG 2.1 AA, EN 301 549)
+- Obiettivo: WCAG 2.1 AA su ogni pagina, in tema chiaro/scuro e con tutti e 3 gli accenti. `pnpm qa:a11y` (axe-core + giro da tastiera, reflow 320 px, text spacing) deve dare 0 problemi. Dichiarazione pubblica in `src/pages/accessibility.astro`: aggiornala se cambia qualcosa.
+- Colori: testo secondario `--muted`, testo/anelli di focus in accento `--accent-text`, errori `--danger`, bordi dei controlli `--control-line`. `--accent` e `--line*` solo per decorazioni.
+- Niente animazioni infinite: tutto ciò che si muove da solo si ferma entro 5 s (WebGL compreso: poi reagisce solo al puntatore).
+- Niente scorciatoie a tasto singolo globali (griglia = `⌥G`, codice `KeyG`).
+- Link dentro una frase: classe `link link--inline` (sottolineati). Testo generato via CSS `content` con alternativa vuota (`content: "✓ " / ""`).
+- Contenuti che compaiono all'hover: passabili col mouse e chiudibili con Esc (`html[data-hover-off]`, in `site.ts`).
+- Form: errori testuali inline con `aria-invalid` + `aria-describedby` (vedi `BriefForm.astro`); feedback di azioni in una regione `role="status"`.
+
 ## Verifica
 Una modifica visiva è verificata quando: `pnpm build` passa, `astro check` ha 0 errori, la pagina è stata vista nel browser, e per il motion `pnpm qa:motion` (Chrome headless, vedi `tools/qa/`) mostra scroll a 60 fps e gli screenshot sono stati guardati. Lighthouse mobile resta ≥ 95 su home, servizi e un articolo (`npx lighthouse <url> --chrome-flags="--headless=new"` su `astro preview`).
 - La finestra Chrome dell'estensione, quando è in background, sospende `requestAnimationFrame`: WebGL e animazioni sembrano ferme e le misure di frame sono falsate. Per motion e WebGL usa gli script headless.
