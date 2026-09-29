@@ -11,7 +11,7 @@ const path = Astro.url.pathname;
 ---
 
 <header class="site-header wrap">
-  <a href="/" class="brand" aria-label="Pier Gorelli — home">
+  <a href="/" class="brand" aria-label="Pier Gorelli, home">
     <Monogram class="brand__mark" />
     <span class="brand__name note note--ink">Pier Gorelli<span class="brand__role"> / web &amp; AI dev</span></span>
   </a>
@@ -45,6 +45,10 @@ const path = Astro.url.pathname;
     <button class="tool tool--menu note" type="button" data-action="palette" aria-label="Open menu">Menu</button>
     <a href="/contact/" class="btn header-cta">Let's talk</a>
   </div>
+
+  <div class="hd-rule" aria-hidden="true">
+    <span class="hd-rule__fill"><span class="hd-rule__tag note"></span></span>
+  </div>
 </header>
 
 <style>
@@ -59,9 +63,83 @@ const path = Astro.url.pathname;
     height: 4.5rem;
     color: var(--ink);
     view-transition-name: site-header;
-    /* soft paper fade so content can scroll beneath */
-    background: linear-gradient(var(--bg) 55%, transparent);
   }
+  /* Scrolled state: solid paper band with a crisp edge (no fade: big headings ghosted through it). Driven by scroll-timeline, zero JS
+     (also on the blog). Without scroll-timeline support the band is always on and static. */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--bg);
+  }
+  /* Bottom edge = blueprint ruler: hairline, minor ticks every 8px, major every 80px.
+     It draws itself in from the left, then an accent fill tracks reading progress. */
+  .hd-rule {
+    position: absolute;
+    grid-area: 1 / 1 / -1 / -1; /* abspos grid child: span the whole header */
+    inset: auto 0 0 0;
+    height: 7px;
+    pointer-events: none;
+    background:
+      linear-gradient(var(--line-strong), var(--line-strong)) bottom / 100% 1px no-repeat,
+      repeating-linear-gradient(90deg, var(--line-strong) 0 1px, transparent 1px 80px) bottom / 100% 7px no-repeat,
+      repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 8px) bottom / 100% 3px no-repeat;
+    clip-path: inset(0 0 -1.5rem 0);
+  }
+  .hd-rule__fill {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 1px;
+    background: var(--accent);
+    transform: translateX(-100%);
+  }
+  /* progress readout riding the head of the fill */
+  .hd-rule__tag {
+    position: absolute;
+    right: 0;
+    top: 0.45rem;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.625rem;
+    line-height: 1;
+    color: var(--accent-ink);
+    background: var(--accent);
+    counter-reset: pct var(--pct);
+    opacity: 0;
+  }
+  .hd-rule__tag::before { content: counter(pct, decimal-leading-zero) "%"; }
+  .hd-rule__tag::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    width: 1px;
+    height: 0.45rem;
+    background: var(--accent);
+  }
+
+  @property --pct { syntax: "<integer>"; inherits: true; initial-value: 0; }
+
+  @supports (animation-timeline: scroll()) {
+    .site-header, .site-header::before, .hd-rule, .hd-rule__fill, .hd-rule__tag {
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+    }
+    .site-header { animation-name: hd-compact; animation-range: 0 160px; }
+    .site-header::before { animation-name: hd-band; animation-range: 0 80px; }
+    .hd-rule { animation-name: hd-draw; animation-range: 40px 280px; }
+    .hd-rule__fill { animation-name: hd-progress; }
+    .hd-rule__tag { animation-name: hd-tag; animation-range: 200px 100%; }
+  }
+  @supports not (animation-timeline: scroll()) {
+    .hd-rule__fill { display: none; }
+  }
+  @keyframes hd-compact { to { height: 3.75rem; } }
+  @keyframes hd-band { from { opacity: 0; } }
+  @keyframes hd-draw { from { clip-path: inset(0 100% -1.5rem 0); } }
+  @keyframes hd-progress { to { transform: translateX(0); --pct: 100; } }
+  @keyframes hd-tag { 0% { opacity: 0; } 4%, 100% { opacity: 1; } }
   .brand {
     display: inline-flex;
     align-items: center;
