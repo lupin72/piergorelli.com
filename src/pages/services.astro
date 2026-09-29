@@ -235,7 +235,7 @@ const schema = [
     <ul class="match">
       {matcher.map((m) => (
         <li data-reveal="up">
-          <a href={`#${services[m.to].id}`} class="match__row grid-12">
+          <a href={`#${services[m.to].id}`} class="match__row grid-12" data-fill>
             <span class="match__need h3">{m.need}</span>
             <span class="match__to note"><span class="note--accent">{services[m.to].n}</span> {services[m.to].title}</span>
             <span class="match__arrow" aria-hidden="true">→</span>
@@ -442,9 +442,9 @@ const schema = [
     transition: transform var(--dur-2) var(--ease-in-out);
     z-index: -1;
   }
-  :global(html:not(.is-wheeling)) .match__row:hover { color: var(--bg); }
-  :global(html:not(.is-wheeling)) .match__row:hover::before { transform: scaleY(1); transform-origin: top; }
-  :global(html:not(.is-wheeling)) .match__row:hover .note { color: color-mix(in oklab, var(--bg) 70%, transparent); }
+  :global(html:not(.fill-js)) .match__row:hover, .match__row[data-hot] { color: var(--bg); }
+  :global(html:not(.fill-js)) .match__row:hover::before, .match__row[data-hot]::before { transform: scaleY(1); transform-origin: top; }
+  :global(html:not(.fill-js)) .match__row:hover .note, .match__row[data-hot] .note { color: color-mix(in oklab, var(--bg) 70%, transparent); }
   .match__need { grid-column: 1 / span 7; }
   .match__to { grid-column: 9 / span 3; }
   .match__arrow {
@@ -453,7 +453,7 @@ const schema = [
     font-size: var(--step-2);
     transition: transform var(--dur-2) var(--ease-in-out);
   }
-  :global(html:not(.is-wheeling)) .match__row:hover .match__arrow { transform: rotate(45deg); }
+  :global(html:not(.fill-js)) .match__row:hover .match__arrow, .match__row[data-hot] .match__arrow { transform: rotate(45deg); }
   .match__foot { max-width: 44ch; margin-top: clamp(2rem, 4vw, 3rem); color: var(--muted); }
   @media (max-width: 767px) {
     .match__need, .match__to { grid-column: 1 / -1; }

@@ -199,7 +199,7 @@ const schema = [
     <ul class="channels">
       {channels.map((c) => (
         <li class="channel" data-reveal="up">
-          <a href={c.href} class="channel__link grid-12" {...(c.ext ? { target: "_blank", rel: "noopener me" } : {})}>
+          <a href={c.href} class="channel__link grid-12" data-fill {...(c.ext ? { target: "_blank", rel: "noopener me" } : {})}>
             <span class="channel__label note">{c.label}</span>
             <span class="channel__handle h3">{c.handle}</span>
             <span class="channel__body">{c.body}</span>
@@ -387,9 +387,9 @@ const schema = [
     transition: transform var(--dur-2) var(--ease-in-out);
     z-index: -1;
   }
-  :global(html:not(.is-wheeling)) .channel__link:hover { color: var(--bg); }
-  :global(html:not(.is-wheeling)) .channel__link:hover::before { transform: scaleY(1); transform-origin: top; }
-  :global(html:not(.is-wheeling)) .channel__link:hover .note { color: color-mix(in oklab, var(--bg) 65%, transparent); }
+  :global(html:not(.fill-js)) .channel__link:hover, .channel__link[data-hot] { color: var(--bg); }
+  :global(html:not(.fill-js)) .channel__link:hover::before, .channel__link[data-hot]::before { transform: scaleY(1); transform-origin: top; }
+  :global(html:not(.fill-js)) .channel__link:hover .note, .channel__link[data-hot] .note { color: color-mix(in oklab, var(--bg) 65%, transparent); }
   .channel__label { grid-column: 1 / span 2; }
   .channel__handle { grid-column: 3 / span 5; overflow-wrap: anywhere; }
   .channel__body { grid-column: 8 / span 4; opacity: 0.8; }
@@ -400,8 +400,8 @@ const schema = [
     font-size: var(--step-2);
     transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1);
   }
-  :global(html:not(.is-wheeling)) .channel__link:hover .channel__arrow { transform: rotate(-45deg); color: var(--accent); }
-  :global(html:not(.is-wheeling)) .channel__link:hover .channel__arrow--ext { transform: translate(0.15em, -0.15em); }
+  :global(html:not(.fill-js)) .channel__link:hover .channel__arrow, .channel__link[data-hot] .channel__arrow { transform: rotate(-45deg); color: var(--accent); }
+  :global(html:not(.fill-js)) .channel__link:hover .channel__arrow--ext, .channel__link[data-hot] .channel__arrow--ext { transform: translate(0.15em, -0.15em); }
   @media (max-width: 767px) {
     .channel__label, .channel__handle, .channel__body { grid-column: 1 / -1; }
     .channel__arrow { display: none; }

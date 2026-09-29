@@ -13,6 +13,7 @@
  *  [data-wireframe]             outlined → solid text, scrubbed by scroll
  *  [data-draw]                  hairline that draws itself (scaleX), scrubbed
  *  [data-parallax="<percent>"]  scrubbed vertical drift
+ *  [data-fill]                  full-row hover fill: [data-hot] set only by real pointer movement
  *  [data-plot]                  SVG figure: [pathLength="1"] strokes plot themselves, [data-plot-dot] pop in, scrubbed
  */
 import gsap from "gsap";
@@ -48,7 +49,7 @@ export function initMotion(): () => void {
   gsap.ticker.add(tick);
   gsap.ticker.lagSmoothing(0);
 
-  const cleanups: (() => void)[] = [initCursor(), holdHoverWhileWheeling(lenis)];
+  const cleanups: (() => void)[] = [initCursor(), rowFills(lenis)];
 
   // First visit: start compiling while the preloader sheet lifts.
   const heroDelay = root.dataset.preloaded ? 0.1 : 1.45;
@@ -98,20 +99,36 @@ export function initMotion(): () => void {
   };
 }
 
-/* Wheel scrolling slides rows under a resting pointer, so full-row hover fills would flicker
-   on one after another. html.is-wheeling (gating those :hover rules) holds them back from the
-   wheel input until the pointer really moves; hover itself stays live, so it fills at once. */
-function holdHoverWhileWheeling(lenis: Lenis) {
+/* Full-row hover fills ([data-fill]): a row lights up ([data-hot]) only when the pointer really
+   moves inside it, and goes dark as soon as the pointer is no longer over it. Rows sliding under
+   a resting pointer (wheel, trackpad inertia, keyboard) never flicker. html.fill-js switches the
+   pages' plain :hover rules off; without this layer (reduced motion) they work as usual. */
+function rowFills(lenis: Lenis) {
   const root = document.documentElement;
-  let on = false;
-  const set = (v: boolean) => { if (v !== on) { on = v; root.classList.toggle("is-wheeling", v); } };
-  // Wheel/touch input, not every scroll frame: moving the pointer during the smooth-scroll
-  // tail must win until the next wheel tick.
-  const onInput = () => set(true);
-  const onMove = (e: PointerEvent) => { if (e.movementX || e.movementY) set(false); };
-  lenis.on("virtual-scroll", onInput);
+  let hot: HTMLElement | null = null;
+  const heat = (el: HTMLElement | null) => {
+    if (el === hot) return;
+    hot?.removeAttribute("data-hot");
+    hot = el;
+    hot?.setAttribute("data-hot", "");
+  };
+  const onMove = (e: PointerEvent) => {
+    if (e.pointerType === "touch" || (!e.movementX && !e.movementY)) return;
+    heat((e.target as Element).closest<HTMLElement>("[data-fill]"));
+  };
+  const onOut = (e: PointerEvent) => { if (hot && !hot.contains(e.relatedTarget as Node | null)) heat(null); };
+  const onScroll = () => { if (hot && !hot.matches(":hover")) heat(null); };
+  root.classList.add("fill-js");
   addEventListener("pointermove", onMove, { passive: true });
-  return () => { lenis.off("virtual-scroll", onInput); removeEventListener("pointermove", onMove); set(false); };
+  addEventListener("pointerout", onOut, { passive: true });
+  lenis.on("scroll", onScroll);
+  return () => {
+    removeEventListener("pointermove", onMove);
+    removeEventListener("pointerout", onOut);
+    lenis.off("scroll", onScroll);
+    heat(null);
+    root.classList.remove("fill-js");
+  };
 }
 
 /* ── hero: blueprint compile → human line → machine line ────── */

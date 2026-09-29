@@ -137,7 +137,7 @@ const schema = [
     <ol class="services">
       {services.map((s) => (
         <li class="service" data-reveal="up">
-          <a href={s.href} class="service__link grid-12">
+          <a href={s.href} class="service__link grid-12" data-fill>
             <span class="service__n note">{s.n}</span>
             <h2 class="service__title h2">{s.title}</h2>
             <p class="service__body">{s.body}</p>
@@ -287,9 +287,9 @@ const schema = [
     transition: transform var(--dur-2) var(--ease-in-out);
     z-index: -1;
   }
-  :global(html:not(.is-wheeling)) .service__link:hover { color: var(--bg); }
-  :global(html:not(.is-wheeling)) .service__link:hover::before { transform: scaleY(1); transform-origin: top; }
-  :global(html:not(.is-wheeling)) .service__link:hover .note { color: color-mix(in oklab, var(--bg) 65%, transparent); }
+  :global(html:not(.fill-js)) .service__link:hover, .service__link[data-hot] { color: var(--bg); }
+  :global(html:not(.fill-js)) .service__link:hover::before, .service__link[data-hot]::before { transform: scaleY(1); transform-origin: top; }
+  :global(html:not(.fill-js)) .service__link:hover .note, .service__link[data-hot] .note { color: color-mix(in oklab, var(--bg) 65%, transparent); }
   .service__n { grid-column: 1 / span 1; }
   .service__title { grid-column: 2 / span 6; }
   .service__body { grid-column: 8 / span 4; opacity: 0.8; }
@@ -301,7 +301,7 @@ const schema = [
     font-size: var(--step-2);
     transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1);
   }
-  :global(html:not(.is-wheeling)) .service__link:hover .service__arrow { transform: rotate(-45deg); color: var(--accent-text); }
+  :global(html:not(.fill-js)) .service__link:hover .service__arrow, .service__link[data-hot] .service__arrow { transform: rotate(-45deg); color: var(--accent-text); }
   @media (max-width: 767px) {
     .service__n, .service__title, .service__body, .service__tags { grid-column: 1 / -1; }
     .service__arrow { display: none; }
