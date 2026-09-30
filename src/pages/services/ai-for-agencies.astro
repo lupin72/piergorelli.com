@@ -1,28 +1,34 @@
 ---
 import Base from "../../layouts/Base.astro";
+import WorkVisual from "../../components/rd/WorkVisual.astro";
 
-const useCases = [
-  { n: "01", title: "Brief intake & research", body: "Client briefs, calls and decks turned into a structured brief, competitor scan and open questions, before the kick-off." },
-  { n: "02", title: "Multilingual content pipelines", body: "One source text, on-brand versions in IT / ES / EN for web and social, with a human approval step." },
-  { n: "03", title: "Client reporting", body: "Analytics, ads and SEO data pulled together every month and written up in your agency's voice." },
-  { n: "04", title: "Asset production", body: "Resizes, variants, alt text and naming handled by a workflow, not by your juniors at 7 pm." },
-  { n: "05", title: "Internal knowledge assistant", body: "Ask your past proposals, guidelines and case studies a question and get answers with sources." },
-  { n: "06", title: "Proposal drafts", body: "First drafts of estimates and proposals from your own templates and historical data." },
+const services = [
+  { n: "01", title: "Training", body: "Hands-on sessions on the tools your team already has, starting with Claude Code. Your projects, your files, not a slide deck about the future." },
+  { n: "02", title: "Custom workflows", body: "Skills, agents and MCP connections built around how your team works: your templates, your tone, your data." },
+  { n: "03", title: "Consulting", body: "Where AI is worth it in your agency, where it isn't, and which tools to trust with client work." },
+];
+
+// Real, anonymous field report (docs/content-facts.md): no client name, no numbers beyond what Pier confirmed.
+const report = [
+  { k: "Before", v: "Every image on a manufacturer's WordPress site needed research, a new file name, alt text and a caption. By hand, one at a time." },
+  { k: "Workflow", v: "A framework I built on Claude Code, with skills, agents and subagents. It reads Search Console through MCP, checks the keyword niche, looks at the image and at the page it sits on, then writes the name, the alt text and the caption. A person reviews and confirms before anything goes live." },
+  { k: "After", v: "Hundreds of images a day. Nobody renames them by hand any more." },
 ];
 
 const offer = [
-  { n: "A", title: "AI audit", body: "Two workshops with your team to map processes and pick the three automations with the best return." },
-  { n: "B", title: "Working prototype", body: "One workflow running on your real tools in about two weeks, so the team can judge it on actual work." },
-  { n: "C", title: "Rollout & training", body: "Hardening, documentation and hands-on training. Your team owns the workflows at the end." },
+  { n: "A", title: "Start with a session", body: "A hands-on workshop on your team's own projects. We find the jobs worth handing to AI, and the ones that aren't." },
+  { n: "B", title: "Build what's missing", body: "Skills, prompts and tool connections for the jobs that came up in the session." },
+  { n: "C", title: "Leave it owned", body: "Written guides and a named person inside the agency who looks after it." },
 ];
 
-const stack = ["n8n", "Claude", "OpenAI", "Supabase · pgvector", "WordPress", "Google Workspace", "Notion", "Slack"];
+const stack = ["Claude Code", "Codex", "Skills & subagents", "MCP", "Search Console", "WordPress"];
 
 const faqs = [
-  { q: "Do we need a technical team?", a: "No. I build and host the workflows, and train whoever will look after them. Most agencies need one curious person, not a developer." },
-  { q: "What about client data and privacy?", a: "Workflows can run on your own infrastructure or EU-hosted services, with models that don't train on your data. We decide together what never leaves the building." },
-  { q: "Which AI models do you use?", a: "Whichever fits the task and the budget: usually Claude or OpenAI models, sometimes open models self-hosted. Workflows are built so the model can be swapped." },
-  { q: "Can you work white-label for our clients?", a: "Yes. I often build AI features that agencies sell to their own clients, under the agency's name and contract." },
+  { q: "Do we need a technical team?", a: "No. One curious person is enough to start, and training begins with the tools you already pay for." },
+  { q: "What happens in the first week?", a: "Once people see how the harness, skills and MCP fit together, they want to do everything with AI, and forget permissions, tokens and where the model stops being smart. A good part of the first week is learning where to stop." },
+  { q: "Do you still build n8n automations?", a: "When monitoring matters, yes: n8n still gives you a place to watch every run, which a CLI agent doesn't. Most agency teams are better served by skills inside the tools they already use." },
+  { q: "What about client data?", a: "Where the models run is decided with you, based on the data involved. Every workflow keeps a person in the loop for reviews and confirmations." },
+  { q: "Can you work white-label for our clients?", a: "Yes. I also build AI features that agencies sell to their own clients, under the agency's name: chatbots and semantic search grounded in the client's content." },
 ];
 
 const schema = [
@@ -30,7 +36,7 @@ const schema = [
     "@context": "https://schema.org",
     "@type": "Service",
     name: "AI for creative agencies",
-    serviceType: "AI automation and adoption consulting",
+    serviceType: "AI training and consulting",
     provider: { "@type": "Person", "@id": "https://piergorelli.com/#person", name: "Pier Gorelli" },
     areaServed: ["ES", "IT", "EU"],
     url: "https://piergorelli.com/services/ai-for-agencies/",
@@ -53,8 +59,8 @@ const schema = [
 ---
 
 <Base
-  title="AI for Creative Agencies: n8n Automation & AI Adoption | Pier Gorelli"
-  description="AI automation for creative and marketing agencies: n8n workflows for briefs, multilingual content, reporting and assets, plus hands-on AI adoption for your team."
+  title="AI Training & Consulting for Creative Agencies | Pier Gorelli"
+  description="Hands-on AI training for creative agencies: Claude Code, custom skills and MCP workflows built on your own projects, plus honest advice on what not to automate."
   motion="showcase"
   schema={schema}
 >
@@ -64,23 +70,23 @@ const schema = [
     </nav>
     <p class="note hero__index">[Services / 02]</p>
     <h1 class="h1 hero__title" data-hero-human data-bp="h1">AI for creative agencies</h1>
-    <p class="h2 hero__machine" data-hero-generate data-bp="p.machine">Automate the busywork. Keep the craft.</p>
-    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>9</span> tokens · <span data-gen-ms>820</span> ms</p>
+    <p class="h2 hero__machine" data-hero-generate data-bp="p.machine">Your team already pays for AI. Let's make it work.</p>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>12</span> tokens · <span data-gen-ms>820</span> ms</p>
     <div class="hero__foot" data-hero-fade>
       <p class="lead">
-        Your team should spend its hours on ideas, not on copy-pasting reports and resizing banners. I build the AI workflows that take the repetitive work off the table, and teach your people to run them.
+        I train agency teams on tools like Claude Code, then build the custom skills and workflows that make those tools fit how the agency actually works. The first example is always your own material.
       </p>
-      <a href="/contact/" class="btn">Book an AI audit call <span class="arrow">→</span></a>
+      <a href="/contact/" class="btn">Plan a session <span class="arrow">→</span></a>
     </div>
   </section>
 
   <section class="section wrap">
     <header class="section-head">
-      <span class="note note--ink">[01] Where AI actually helps an agency</span>
-      <span class="note">6 use cases · real, not hype</span>
+      <span class="note note--ink">[01] What I do</span>
+      <span class="note">Training · workflows · consulting</span>
     </header>
     <ol class="cases grid-12">
-      {useCases.map((c) => (
+      {services.map((c) => (
         <li class="case" data-reveal="up">
           <span class="note note--accent">{c.n}</span>
           <h2 class="case__title">{c.title}</h2>
@@ -92,7 +98,28 @@ const schema = [
 
   <section class="section wrap">
     <header class="section-head">
-      <span class="note note--ink">[02] What you get</span>
+      <span class="note note--ink">[02] Field report</span>
+      <span class="note">In use every day · client name under NDA</span>
+    </header>
+    <div class="report grid-12">
+      <div class="report__visual" data-reveal="up"><WorkVisual kind="captions" /></div>
+      <div class="report__text">
+        <h2 class="h2 report__title" data-reveal="lines">Image SEO that runs every day</h2>
+        <dl class="report__steps">
+          {report.map((r) => (
+            <div class="report__step" data-reveal="up">
+              <dt class="note note--ink">{r.k}</dt>
+              <dd>{r.v}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[03] What you get</span>
       <span class="note">No fixed prices · scoped on your processes</span>
     </header>
     <h2 class="h2 offer__claim" data-reveal="lines">Start small, prove it on real work, then scale what pays back.</h2>
@@ -110,8 +137,8 @@ const schema = [
 
   <section class="section wrap">
     <header class="section-head">
-      <span class="note note--ink">[03] Stack</span>
-      <span class="note">Model-agnostic by design</span>
+      <span class="note note--ink">[04] Stack</span>
+      <span class="note">Chosen per task, swapped when something better proves itself</span>
     </header>
     <ul class="stack" data-reveal="up">
       {stack.map((s) => <li>{s}</li>)}
@@ -120,7 +147,7 @@ const schema = [
 
   <section class="section wrap">
     <header class="section-head">
-      <span class="note note--ink">[04] FAQ</span>
+      <span class="note note--ink">[05] FAQ</span>
       <span class="note">{faqs.length} questions</span>
     </header>
     <div class="faqs">
@@ -135,13 +162,13 @@ const schema = [
 
   <section class="section wrap cta">
     <header class="section-head">
-      <span class="note note--ink">[05] Next</span>
+      <span class="note note--ink">[06] Next</span>
       <span class="note">30 minutes · no slides</span>
     </header>
     <h2 class="display cta__title" data-reveal="lines">Which task would you automate first?</h2>
     <div class="cta__actions" data-reveal="up">
-      <a href="/contact/" class="btn">Book an AI audit call <span class="arrow">→</span></a>
-      <a href="/lab/site-audit/" class="btn btn--ghost">Try the Site Audit AI demo</a>
+      <a href="/contact/" class="btn">Plan a session <span class="arrow">→</span></a>
+      <a href="/services/ai-product-integration/" class="btn btn--ghost">See AI in products</a>
     </div>
   </section>
 </Base>
@@ -183,6 +210,16 @@ const schema = [
   .case__title { font-size: var(--step-2); }
   .case__body { color: var(--muted); max-width: 36ch; }
   @media (max-width: 767px) { .case { grid-column: 1 / -1; } }
+
+  .report { row-gap: 2.5rem; align-items: start; }
+  .report__visual { grid-column: 1 / span 6; }
+  .report__text { grid-column: 8 / -1; }
+  .report__title { max-width: 16ch; margin-bottom: 2rem; }
+  .report__steps { border-top: 1px solid var(--line); }
+  .report__step { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--line); }
+  .report__step dd { color: var(--muted); max-width: 46ch; }
+  @media (max-width: 899px) { .report__visual, .report__text { grid-column: 1 / -1; } }
+  @media (max-width: 480px) { .report__step { grid-template-columns: 1fr; gap: 0.4rem; } }
 
   .offer__claim { max-width: 20ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
   .offer__line { height: 1px; background: var(--ink); transform-origin: left; }
