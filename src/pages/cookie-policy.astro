@@ -21,10 +21,10 @@ const stored = [
 
 <LegalPage
   seoTitle="Cookie Policy | Pier Gorelli"
-  description="piergorelli.com sets no cookies and runs no trackers. The only things stored in your browser are your theme, accent and intro preferences, listed here."
+  description="piergorelli.com sets no cookies and runs no trackers. It counts visits with cookieless statistics and stores only your theme, accent and intro preferences."
   title="Cookie policy"
-  lead="No cookies, no trackers, no banner. This page lists the three small preferences the site keeps in your browser, and nothing else."
-  updated="2026-09-29"
+  lead="No cookies, no trackers, no banner. This page lists the three small preferences the site keeps in your browser and the anonymous visit counter, and nothing else."
+  updated="2026-09-30"
   meta={[
     ["Cookies set", "None"],
     ["Law", "LSSI art. 22.2 · ePrivacy"],
@@ -32,7 +32,7 @@ const stored = [
   ]}
   glance={[
     { label: "Cookies", value: "0", caption: "No first-party or third-party cookies are set." },
-    { label: "Trackers", value: "0", caption: "No analytics, ad or social scripts, no pixels." },
+    { label: "Trackers", value: "0", caption: "No ad or social scripts, no pixels. Visits are counted without cookies." },
     { label: "Stored locally", value: "3 keys", caption: "Theme, accent and intro. They never leave your device." },
     { label: "Consent banner", value: "None", caption: "Nothing here needs consent, so nothing interrupts you." },
   ]}
@@ -42,7 +42,7 @@ const stored = [
   <section id="short">
     <h2>The short version</h2>
     <p class="short">piergorelli.com doesn't set cookies and doesn't track you, here or anywhere else.</p>
-    <p>That's why there is no cookie banner. The site remembers a couple of display choices in your own browser so it looks the way you left it. That data stays on your device and is never sent to me or to anyone else.</p>
+    <p>That's why there is no cookie banner. Visits are counted anonymously, without cookies. The site also remembers a couple of display choices in your own browser so it looks the way you left it. That data stays on your device and is never sent to me or to anyone else.</p>
   </section>
 
   <section id="what">
@@ -75,14 +75,16 @@ const stored = [
 
   <section id="third-parties">
     <h2>Third parties</h2>
-    <p class="short">There are none on the page.</p>
-    <p>Fonts, images and scripts are served from piergorelli.com itself. There are no embedded videos, maps, social buttons or chat widgets that could set their own cookies. The hosting provider (Netlify) delivers the pages without setting cookies; the technical data it receives is described in the <a href="/privacy-policy/">privacy policy</a>.</p>
+    <p class="short">One, and it sets no cookies: the visit counter described below.</p>
+    <p>Fonts, images and all other scripts are served from piergorelli.com itself. There are no embedded videos, maps, social buttons or chat widgets that could set their own cookies. The hosting provider (Netlify) delivers the pages without setting cookies; the technical data it receives is described in the <a href="/privacy-policy/">privacy policy</a>.</p>
     <p>Links to LinkedIn, GitHub or other sites take you to services with their own cookie policies, which apply once you are there.</p>
   </section>
 
   <section id="analytics">
     <h2>Analytics</h2>
-    <p>Right now the site runs no analytics at all. If I add statistics in the future, they will be cookieless and privacy-friendly (no personal data, no cross-site tracking), and this page will be updated before they go live.</p>
+    <p class="short">A cookieless counter tells me how many people visit and which pages they read. It can't tell me who you are.</p>
+    <p>The site uses <a href="https://umami.is/" rel="noopener">Umami</a> (Umami Cloud, by Umami Software, Inc.). Its script sets no cookies and writes nothing to your browser's storage. For each page view it records the page, the referring site, browser, operating system, device type and country. Your IP address is used only to work out the country and is not stored. Visits are grouped with a hash that changes regularly, so they can't be linked to you or followed across other sites.</p>
+    <p>If your browser sends a Do Not Track signal, the counter doesn't run at all. Blocking <code>cloud.umami.is</code> with a content blocker has the same effect and doesn't change anything else on the site.</p>
   </section>
 
   <section id="control">

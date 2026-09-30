@@ -22,7 +22,7 @@ const sections = [
   description="How piergorelli.com handles your personal data: what the contact form collects, why, who processes it, how long it is kept and how to use your GDPR rights."
   title="Privacy policy"
   lead="Short version: I only collect what you choose to send me, I use it to reply and to work with you, and I never sell it or use it for ads."
-  updated="2026-09-29"
+  updated="2026-09-30"
   meta={[
     ["Controller", "Pierpaolo Gorelli"],
     ["Law", "GDPR · LOPDGDD (Spain)"],
@@ -30,7 +30,7 @@ const sections = [
   ]}
   glance={[
     { label: "Collected", value: "Your brief", caption: "Only what you send: name, email and your project, by form or email." },
-    { label: "Tracking cookies", value: "0", caption: "No analytics, no ads, no social pixels. See the cookie policy." },
+    { label: "Tracking cookies", value: "0", caption: "Cookieless visit stats only. No ads, no social pixels. See the cookie policy." },
     { label: "Sold or shared for ads", value: "Never", caption: "Your data is used to reply to you and to run our work together." },
     { label: "Your rights", value: "Any time", caption: "Access, correct, delete or export your data with one email." },
   ]}
@@ -61,6 +61,7 @@ const sections = [
     <p>Please don't send special category data (health, beliefs and so on). I don't need it and I don't process it.</p>
     <h3>Data collected automatically</h3>
     <p>When you load a page, the hosting provider (Netlify) receives the technical data every browser sends: IP address, browser and device type, requested page, referring page, date and time. It is used to deliver the site, keep it secure and fix errors. I don't use it to identify or profile you.</p>
+    <p>A cookieless counter (Umami) records anonymous page views: page, referring site, browser, device type and country. Your IP address is used only to work out the country and is not stored.</p>
     <p>Your theme and accent choice are saved <strong>in your own browser</strong> and never reach me. Details are in the <a href="/cookie-policy/">cookie policy</a>.</p>
   </section>
 
@@ -76,6 +77,7 @@ const sections = [
         <tr><td data-label="Purpose">Quote, contract and deliver a project</td><td data-label="Basis">Performance of a contract, 6(1)(b)</td></tr>
         <tr><td data-label="Purpose">Invoices, tax and accounting records</td><td data-label="Basis">Legal obligation, 6(1)(c)</td></tr>
         <tr><td data-label="Purpose">Keep the site online, secure and free of spam</td><td data-label="Basis">Legitimate interest, 6(1)(f)</td></tr>
+        <tr><td data-label="Purpose">Count visits anonymously to see which pages are useful</td><td data-label="Basis">Legitimate interest, 6(1)(f)</td></tr>
       </tbody>
     </table>
     <p>No automated decisions or profiling are made about you. I won't add you to a newsletter or send you marketing emails.</p>
@@ -86,6 +88,7 @@ const sections = [
     <p class="short">Only the few services that make this site and my work possible.</p>
     <ul>
       <li><strong>Netlify, Inc.</strong> (hosting and form handling): serves the site and stores form submissions.</li>
+      <li><strong>Umami Software, Inc.</strong> (Umami Cloud, visit statistics): receives anonymous page views, never form data.</li>
       <li><strong>My email provider:</strong> stores the messages we exchange.</li>
       <li><strong>My accountant and the tax authorities:</strong> only invoice data, and only if we work together.</li>
     </ul>
@@ -94,15 +97,14 @@ const sections = [
 
   <section id="transfers">
     <h2>Transfers outside the EU</h2>
-    <p class="short">Netlify is a US company, so some data may be processed in the United States.</p>
+    <p class="short">Netlify and Umami are US companies, so some data may be processed in the United States.</p>
     <p>These transfers rely on the safeguards the GDPR requires: the European Commission's Standard Contractual Clauses and, where the provider is certified, the EU-US Data Privacy Framework. You can ask me for details of the safeguards in place.</p>
   </section>
 
   <section id="cookies">
     <h2>Cookies and analytics</h2>
-    <p class="short">This site sets no cookies and runs no analytics or advertising scripts.</p>
-    <p>Fonts are self-hosted, there are no embedded players or social widgets, and no data is sent to Google or Meta. The only things stored are your display preferences, in your browser. The <a href="/cookie-policy/">cookie policy</a> lists each of them.</p>
-    <p>If I ever add privacy-friendly, cookieless statistics, I will update both policies before switching them on.</p>
+    <p class="short">This site sets no cookies and runs no advertising scripts. Visits are counted without cookies.</p>
+    <p>Fonts are self-hosted, there are no embedded players or social widgets, and no data is sent to Google or Meta. The visit counter (Umami) stores nothing in your browser and doesn't run if your browser sends Do Not Track. The only things stored are your display preferences, in your browser. The <a href="/cookie-policy/">cookie policy</a> lists each of them.</p>
   </section>
 
   <section id="retention">

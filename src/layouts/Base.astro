@@ -84,6 +84,19 @@ const ogImage = new URL(image, site).href;
       })();
     </script>
 
+    <!-- Cookieless stats (Umami Cloud). Production builds only, counted only on the real domain;
+         client-side navigations are tracked through history.pushState. Listed in the cookie policy. -->
+    {import.meta.env.PROD && (
+      <script
+        is:inline
+        defer
+        src="https://cloud.umami.is/script.js"
+        data-website-id="4abb51c3-b9d2-4b64-a181-35434d036431"
+        data-domains="piergorelli.com"
+        data-do-not-track="true"
+      ></script>
+    )}
+
     <ClientRouter fallback="swap" />
   </head>
 
