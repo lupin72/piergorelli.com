@@ -105,7 +105,7 @@
   :focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
   /* keep focused elements and anchor targets clear of the fixed header */
   html { scroll-padding-top: 5.5rem; }
-  main:focus { outline: 0; }
+  main:focus, :where([tabindex="-1"]):focus { outline: 0; }
   h1, h2, h3, h4 { font-weight: 500; letter-spacing: -0.035em; line-height: 0.95; text-wrap: balance; }
   p { text-wrap: pretty; }
 }
@@ -217,9 +217,9 @@ html.lenis, html.lenis body { height: auto; }
     transition: transform var(--dur-1) var(--ease-in-out);
   }
   .faq__icon::after { width: 1px; height: 100%; }
-  .faq[open] .faq__icon::after { transform: scaleY(0); }
+  .faq[open]:not([data-closing]) .faq__icon::after { transform: scaleY(0); }
   @media (max-width: 767px) { .faq__icon { --icon: 13px; } }
-  .faq[open] summary { color: var(--accent-text); }
+  .faq[open]:not([data-closing]) summary { color: var(--accent-text); }
   .faq p { max-width: 60ch; padding-bottom: 1.75rem; color: var(--muted); }
 
   /* Buttons */

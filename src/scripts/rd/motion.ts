@@ -16,6 +16,8 @@
  *  [data-fill]                  full-row hover fill: [data-hot] set only by real pointer movement
  *  [data-plot]                  SVG figure: [pathLength="1"] strokes plot themselves, [data-plot-dot] pop in,
  *                               [data-plot-fill] bars grow from the left, [data-plot-solid] outlines fill in, scrubbed
+ *  details.faq                  accordion: opens/closes with a height tween ([data-closing] while it folds)
+ *  a[href="#id"]                same-page anchors glide there with Lenis (not the skip link)
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -50,7 +52,7 @@ export function initMotion(): () => void {
   gsap.ticker.add(tick);
   gsap.ticker.lagSmoothing(0);
 
-  const cleanups: (() => void)[] = [initCursor(), rowFills(lenis)];
+  const cleanups: (() => void)[] = [initCursor(), rowFills(lenis), anchors(lenis), accordions()];
 
   // First visit: start compiling while the preloader sheet lifts.
   const heroDelay = root.dataset.preloaded ? 0.1 : 1.45;
@@ -130,6 +132,71 @@ function rowFills(lenis: Lenis) {
     heat(null);
     root.classList.remove("fill-js");
   };
+}
+
+/* Same-page anchors (Work in the nav, the services jump list, "Write a brief") glide with Lenis
+   instead of jumping. Capture phase + preventDefault, so Astro's router leaves the click alone.
+   Focus moves to the target, so keyboard users carry on from there as with a native jump. */
+function anchors(lenis: Lenis) {
+  const onClick = (e: MouseEvent) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = (e.target as Element).closest<HTMLAnchorElement>("a[href*='#']");
+    if (!a || a.target || a.classList.contains("skip")) return;
+    const url = new URL(a.href);
+    if (!url.hash || url.origin !== location.origin || url.pathname !== location.pathname || url.search !== location.search) return;
+    const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+    if (!target) return;
+    e.preventDefault();
+    // Lenis already honours scroll-padding-top, so the target lands clear of the fixed header.
+    lenis.scrollTo(target);
+    history.replaceState(history.state, "", url.hash);
+    if (!target.matches("a[href], button, input, select, textarea, [tabindex]")) target.setAttribute("tabindex", "-1");
+    target.focus({ preventScroll: true });
+  };
+  document.addEventListener("click", onClick, true);
+  return () => document.removeEventListener("click", onClick, true);
+}
+
+/* FAQ accordions unfold with a height tween instead of snapping open. The <details> stays native
+   (keyboard, find-in-page, no-JS): only the summary click is taken over. While it folds shut the
+   element is still [open], so [data-closing] lets the CSS turn the icon and colour back at once. */
+function accordions() {
+  const offs: (() => void)[] = [];
+  document.querySelectorAll<HTMLDetailsElement>("details.faq").forEach((d) => {
+    const summary = d.querySelector("summary");
+    const body = summary?.nextElementSibling as HTMLElement | null;
+    if (!summary || !body) return;
+    let tl: gsap.core.Timeline | undefined;
+    const done = () => {
+      gsap.set(d, { clearProps: "height,overflow" });
+      gsap.set(body, { clearProps: "opacity,transform" });
+      ScrollTrigger.refresh();
+    };
+    const onClick = (e: MouseEvent) => {
+      e.preventDefault();
+      tl?.kill();
+      const from = d.offsetHeight;
+      const opening = !d.open || d.hasAttribute("data-closing");
+      if (opening) {
+        d.removeAttribute("data-closing");
+        d.open = true;
+        gsap.set(d, { height: "auto" });
+        const to = d.offsetHeight;
+        tl = gsap.timeline({ onComplete: done })
+          .fromTo(d, { height: from, overflow: "hidden" }, { height: to, duration: 0.7, ease: EASE_OUT }, 0)
+          .fromTo(body, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.6, ease: EASE_OUT }, 0.08);
+      } else {
+        d.setAttribute("data-closing", "");
+        const to = summary.offsetHeight + d.offsetHeight - d.clientHeight;
+        tl = gsap.timeline({ onComplete: () => { d.open = false; d.removeAttribute("data-closing"); done(); } })
+          .fromTo(d, { height: from, overflow: "hidden" }, { height: to, duration: 0.5, ease: "power3.inOut" }, 0)
+          .to(body, { opacity: 0, y: -6, duration: 0.3, ease: "power2.in" }, 0);
+      }
+    };
+    summary.addEventListener("click", onClick);
+    offs.push(() => { summary.removeEventListener("click", onClick); tl?.kill(); d.removeAttribute("data-closing"); });
+  });
+  return () => offs.forEach((fn) => fn());
 }
 
 /* ── hero: blueprint compile → human line → machine line ────── */
