@@ -138,20 +138,23 @@ const schema = [
     </header>
     <p class="work__intro lead" data-reveal="up">Client work stays confidential. So here you'll see how each project was built, not whose it is.</p>
     <div class="work grid-12">
-      {homeWork.map((w, i) => (
-        <article class:list={["work__item", `work__item--${i}`]} data-reveal="up">
-          <a href="#work" class="work__link">
-            <WorkVisual kind={w.visual} />
-            <div class="work__meta">
-              <span class="note">{String(i + 1).padStart(2, "0")}{w.year && ` / ${w.year}`}</span>
-              <span class="note">{w.stack.join(" · ")}</span>
-            </div>
-            <h2 class="h3 work__title">{w.title}</h2>
-            <p class="work__client note">{w.client}</p>
-            <p class="work__summary">{w.summary}</p>
-          </a>
-        </article>
-      ))}
+      {homeWork.map((w, i) => {
+        const Card = w.href ? "a" : "div";
+        return (
+          <article class:list={["work__item", `work__item--${i}`]} data-reveal="up">
+            <Card href={w.href} class="work__link">
+              <WorkVisual kind={w.visual} />
+              <div class="work__meta">
+                <span class="note">{String(i + 1).padStart(2, "0")}{w.year && ` / ${w.year}`}</span>
+                <span class="note">{w.stack.join(" · ")}</span>
+              </div>
+              <h2 class="h3 work__title">{w.title}</h2>
+              <p class="work__client note">{w.client}</p>
+              <p class="work__summary">{w.summary}</p>
+            </Card>
+          </article>
+        );
+      })}
     </div>
   </section>
 
@@ -321,7 +324,7 @@ const schema = [
   }
   .work__link { display: block; }
   .work__link :global(.visual) { transition: border-radius var(--dur-2) var(--ease-in-out); }
-  .work__link:hover :global(.visual) { border-radius: 28px; }
+  a.work__link:hover :global(.visual) { border-radius: 28px; }
   .work__meta { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1rem; }
   .work__title { margin-top: 0.9rem; }
   .work__client { margin-top: 0.5rem; }

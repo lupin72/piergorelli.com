@@ -10,6 +10,8 @@ export type Work = {
   year: string;
   stack: string[];
   summary: string;
+  /** Only a full case study has a page; field reports stay cards. */
+  href?: string;
   visual: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" | "diagonals" | "captions" | "catalogue";
 };
 
@@ -35,6 +37,7 @@ export const work: Work[] = [
   {
     slug: "piergorelli-com",
     title: "piergorelli.com, redesigned",
+    href: "/work/piergorelli-com/",
     client: "Own studio · Valencia",
     year: "2026",
     stack: ["Astro", "GSAP", "WebGL"],
