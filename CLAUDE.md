@@ -33,6 +33,7 @@ Sito personale di Pier Gorelli (Astro 7 + Tailwind 4, Netlify). Redesign in cors
 - Colori: testo secondario `--muted`, testo/anelli di focus in accento `--accent-text`, errori `--danger`, bordi dei controlli `--control-line`. `--accent` e `--line*` solo per decorazioni.
 - Niente animazioni infinite: tutto ciò che si muove da solo si ferma entro 5 s (WebGL compreso: poi reagisce solo al puntatore).
 - Niente scorciatoie a tasto singolo globali (griglia = `⌥G`, codice `KeyG`).
+- Link esterni: sempre `target="_blank" rel="noopener"` e freccia `↗` nei bottoni e nei link di navigazione. Nel Markdown lo fa il plugin `externalLinks` in `astro.config.mjs` (hast plugin di Sätteri: Astro 7 non accetta più `rehypePlugins`).
 - Link dentro una frase: classe `link link--inline` (sottolineati). Testo generato via CSS `content` con alternativa vuota (`content: "✓ " / ""`).
 - Contenuti che compaiono all'hover: passabili col mouse e chiudibili con Esc (`html[data-hover-off]`, in `site.ts`).
 - Form: errori testuali inline con `aria-invalid` + `aria-describedby` (vedi `BriefForm.astro`); feedback di azioni in una regione `role="status"`.

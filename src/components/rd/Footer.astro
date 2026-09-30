@@ -39,7 +39,11 @@ const cols = [
         <p class="note">{col.title}</p>
         <ul>
           {col.links.map((l) => (
-            <li><a href={l.href} class="link">{l.label}</a></li>
+            <li>
+              {l.href.startsWith("http")
+                ? <a href={l.href} class="link" target="_blank" rel="noopener">{l.label} <span class="arrow" aria-hidden="true">↗</span></a>
+                : <a href={l.href} class="link">{l.label}</a>}
+            </li>
           ))}
         </ul>
       </div>
