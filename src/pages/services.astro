@@ -1,11 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
 import ServiceFigure from "../components/rd/ServiceFigure.astro";
-import { getCollection } from "astro:content";
-import { postUrl, pillarOf } from "../lib/blog";
 
 const SITE = "https://piergorelli.com";
-const updated = new Date("2026-09-28");
+const updated = new Date("2026-09-30");
 
 const services = [
   {
@@ -93,24 +91,14 @@ const models = [
   { n: "D", title: "Training", body: "A hands-on session on your team's own projects, then written guides they keep." },
 ];
 
-// Link to posts by id so the URLs follow the slug migration (redesign-plan §3.5).
-const all = await getCollection("blog");
-const reading = [
-  "is-it-still-worth-developing-on-wordpress-in-2025",
-  "creating-a-custom-n8n-node-for-wordpress-managing-custom-post-types",
-  "how-to-buld-a-desktop-kubernetescluster-with-turing-pi2-part-1",
-]
-  .map((id) => all.find((p) => p.id === id))
-  .filter((p) => p !== undefined);
-
 const faqs = [
   { q: "Do you work white-label for agencies?", a: "When the project needs it, yes. I work under NDA, inside your tools and processes, and your client can deal only with your agency. Code, documentation and handover can carry your brand." },
-  { q: "Do you also work directly with companies?", a: "Yes, especially for AI in products and automation projects. Most of my work comes through agencies, but companies with an internal marketing or product team work with me the same way." },
-  { q: "How do you price a project?", a: "There's no price list: every project is scoped. After a 30-minute call and your brief I send a fixed quote with scope, milestones and dates. Ongoing work runs on a monthly retainer." },
+  { q: "Do you also work directly with companies?", a: "Yes, especially for maintenance and AI in products. Most of my ongoing work comes through agencies, but companies with an in-house marketing or product team work with me the same way." },
+  { q: "How do you price a project?", a: "There's no price list: every project is scoped. About two weeks after a call and your brief, I send a written quote with scope, milestones and dates. Ongoing care runs on a monthly block of days, or is billed as it comes up." },
   { q: "Do you design, or only develop?", a: "I'm a developer who works alongside designers. I bring your Figma files to life, prototype motion early and flag what will be hard to build. When a project needs UI/UX from scratch, I bring in designers I trust." },
   { q: "Can you take over an existing website?", a: "Yes. I start with a short technical audit (code, hosting, performance, security, SEO) so we both know what we're inheriting before anything changes." },
   { q: "Which CMS do you recommend?", a: "The one your client's team will actually use. Astro with a headless CMS for fast, motion-heavy sites; WordPress when editors want familiarity and plugins; Drupal for complex, multi-site or enterprise setups." },
-  { q: "Where are you based?", a: "I'm in Valencia, Spain (CET). I work with agencies across Spain, Italy and the rest of Europe." },
+  { q: "Where are you based?", a: "I'm in Valencia, Spain (CET), and I work remotely with agencies in Spain, Italy and the rest of Europe." },
 ];
 
 const schema = [
@@ -282,30 +270,11 @@ const schema = [
     </ol>
   </section>
 
-  <!-- ── 05 Reading ───────────────────────────────────────── -->
+  <!-- ── 05 FAQ ───────────────────────────────────────────── -->
   <section class="section wrap">
     <header class="section-head">
-      <span class="note note--ink">[05] Read before you call</span>
-      <a href="/blog/" class="note link">All posts →</a>
-    </header>
-    <ul class="posts">
-      {reading.map((p) => (
-        <li data-reveal="up">
-          <a href={postUrl(p)} class="post grid-12">
-            <span class="post__pillar note">{pillarOf(p)}</span>
-            <span class="post__title h3">{p.data.title}</span>
-            <span class="post__arrow" aria-hidden="true">→</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
-
-  <!-- ── 06 FAQ ───────────────────────────────────────────── -->
-  <section class="section wrap">
-    <header class="section-head">
-      <span class="note note--ink">[06] FAQ</span>
-      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>28 Sep 2026</time></span>
+      <span class="note note--ink">[05] FAQ</span>
+      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
     </header>
     <div class="faqs">
       {faqs.map((f) => (
@@ -317,10 +286,10 @@ const schema = [
     </div>
   </section>
 
-  <!-- ── 07 CTA ───────────────────────────────────────────── -->
+  <!-- ── 06 CTA ───────────────────────────────────────────── -->
   <section class="section wrap cta">
     <header class="section-head">
-      <span class="note note--ink">[07] Next</span>
+      <span class="note note--ink">[06] Next</span>
       <span class="note">30 minutes</span>
     </header>
     <h2 class="display cta__title" data-reveal="lines">Tell me what you're building.</h2>
@@ -485,19 +454,6 @@ const schema = [
   }
   @media (max-width: 1099px) { .model { grid-column: span 6; } }
   @media (max-width: 767px) { .model { grid-column: 1 / -1; } }
-
-  /* Reading */
-  .posts { border-bottom: 1px solid var(--line); }
-  .posts li { border-top: 1px solid var(--line); }
-  .post { align-items: baseline; padding-block: 1.6rem; row-gap: 0.4rem; }
-  .post__pillar { grid-column: 1 / span 2; }
-  .post__title { grid-column: 3 / span 8; transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1); }
-  .post__arrow { grid-column: 12; justify-self: end; font-size: var(--step-1); }
-  .post:hover .post__title { transform: translateX(1rem); color: var(--accent-text); }
-  @media (max-width: 767px) {
-    .post__pillar, .post__title { grid-column: 1 / -1; }
-    .post__arrow { display: none; }
-  }
 
   /* CTA */
   .cta__title { max-width: 12ch; }
