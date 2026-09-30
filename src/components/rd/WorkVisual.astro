@@ -55,13 +55,13 @@ const rows = [0, 1, 2, 3, 4, 5, 6, 7];
   )}
 
   {kind === "blueprint" && (
-    <svg class="visual__art visual__bp" viewBox="0 0 400 300" data-parallax="8">
+    <svg class="visual__art visual__bp" viewBox="0 0 400 300" data-parallax="8" data-plot>
       <path d="M95 0V300M305 0V300M0 80H400M0 220H400" class="accent-stroke" stroke-dasharray="2 4" />
       <rect x="95" y="80" width="210" height="140" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-dasharray="4 4" />
       <g transform="translate(115 100) scale(2.5)" class="bp__mark">
-        <path d="M6 37V3h12a9.5 9.5 0 0 1 0 19H6" />
-        <path d="M57.3 8.7A16 16 0 1 0 62 20H48" />
-        <circle cx="64" cy="36" r="2.6" class="accent-fill" />
+        <path d="M6 37V3h12a9.5 9.5 0 0 1 0 19H6" pathLength="1" />
+        <path d="M57.3 8.7A16 16 0 1 0 62 20H48" pathLength="1" />
+        <circle cx="64" cy="36" r="2.6" class="accent-fill" data-plot-dot />
       </g>
       <text x="95" y="70" class="bp__label">PG · 68×40</text>
       <text x="305" y="240" text-anchor="end" class="bp__label">rev. 2026</text>
@@ -82,14 +82,14 @@ const rows = [0, 1, 2, 3, 4, 5, 6, 7];
     </div>
   )}
   {kind === "tiles" && (
-    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
       {tiles.map(({ m, x, y }) => (
         <g>
-          <rect x={x} y={y} width={T} height={T} class:list={["tile", { "accent-fill": m === "accent" }]} />
-          {m === "arc" && <path d={`M${x} ${y + 28}A28 28 0 0 0 ${x + 28} ${y}M${x + T} ${y + T - 28}A28 28 0 0 0 ${x + T - 28} ${y + T}`} class="motif" />}
-          {m === "ring" && <><circle cx={x + 28} cy={y + 28} r="18" class="motif" /><circle cx={x + 28} cy={y + 28} r="7" class="motif" /></>}
-          {m === "diag" && <path d={`M${x} ${y + T}L${x + T} ${y}V${y + T}Z`} class="motif motif--fill" />}
-          {m === "accent" && <circle cx={x + 28} cy={y + 28} r="16" class="motif motif--on-accent" />}
+          <rect x={x} y={y} width={T} height={T} class:list={["tile", { "accent-fill": m === "accent" }]} {...(m === "accent" ? { "data-plot-dot": "" } : { pathLength: 1 })} />
+          {m === "arc" && <path d={`M${x} ${y + 28}A28 28 0 0 0 ${x + 28} ${y}M${x + T} ${y + T - 28}A28 28 0 0 0 ${x + T - 28} ${y + T}`} class="motif" pathLength="1" />}
+          {m === "ring" && <><circle cx={x + 28} cy={y + 28} r="18" class="motif" pathLength="1" /><circle cx={x + 28} cy={y + 28} r="7" class="motif" pathLength="1" /></>}
+          {m === "diag" && <path d={`M${x} ${y + T}L${x + T} ${y}V${y + T}Z`} class="motif motif--fill" data-plot-dot />}
+          {m === "accent" && <circle cx={x + 28} cy={y + 28} r="16" class="motif motif--on-accent" pathLength="1" />}
         </g>
       ))}
       <text x={TX} y="248" class="bp__label">$ import catalogue.xlsx --map config.json</text>
@@ -98,24 +98,24 @@ const rows = [0, 1, 2, 3, 4, 5, 6, 7];
   )}
 
   {kind === "diary" && (
-    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
-      <rect x="56" y="28" width="132" height="244" rx="18" class="frame" />
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
+      <rect x="56" y="28" width="132" height="244" rx="18" class="frame" pathLength="1" data-plot-solid />
       <text x="74" y="66" class="bp__label">May · diary</text>
       {days.map((d, i) => (
-        <rect x={74 + (i % 7) * 14.5} y={78 + Math.floor(i / 7) * 14.5} width="11" height="11" rx="2" class:list={["day", `day--${d}`]} />
+        <rect x={74 + (i % 7) * 14.5} y={78 + Math.floor(i / 7) * 14.5} width="11" height="11" rx="2" class:list={["day", `day--${d}`]} data-plot-dot />
       ))}
-      <rect x="74" y="164" width="96" height="4" rx="2" class="line" />
-      <rect x="74" y="176" width="66" height="4" rx="2" class="line" />
-      <rect x="74" y="222" width="96" height="24" rx="12" class="accent-fill" />
+      <rect x="74" y="164" width="96" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="74" y="176" width="66" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="74" y="222" width="96" height="24" rx="12" class="accent-fill" data-plot-dot />
       <path d="M188 150H236" class="accent-stroke" stroke-dasharray="3 4" />
       <text x="212" y="142" text-anchor="middle" class="bp__label">API</text>
-      <rect x="236" y="70" width="132" height="160" rx="4" class="frame" />
-      <path d="M236 94H368" class="rule" />
+      <rect x="236" y="70" width="132" height="160" rx="4" class="frame" pathLength="1" data-plot-solid />
+      <path d="M236 94H368" class="rule" pathLength="1" />
       <text x="248" y="87" class="bp__label">Care team</text>
       {queue.map((flag, i) => (
         <g>
-          <circle cx="252" cy={116 + i * 24} r="4" class:list={[flag ? "accent-fill" : "dot"]} />
-          <rect x="264" y={114 + i * 24} width={i % 2 ? 60 : 84} height="4" rx="2" class="line" />
+          <circle cx="252" cy={116 + i * 24} r="4" class:list={[flag ? "accent-fill" : "dot"]} data-plot-dot />
+          <rect x="264" y={114 + i * 24} width={i % 2 ? 60 : 84} height="4" rx="2" class="line" data-plot-fill />
         </g>
       ))}
       <text x="56" y="292" class="bp__label">patient app ⇄ back office</text>
@@ -123,15 +123,15 @@ const rows = [0, 1, 2, 3, 4, 5, 6, 7];
   )}
 
   {kind === "diagonals" && (
-    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
       <path d="M10 260L270 0M102 0L339 300" class="accent-stroke" stroke-dasharray="3 5" />
-      <path d="M150 30V170M158 112L224 46M176 94L236 170" class="k" />
+      <path d="M150 30V170M158 112L224 46M176 94L236 170" class="k" pathLength="1" />
       <text x="240" y="58" class="bp__label">45°</text>
       <text x="170" y="24" class="bp__label">K · construction</text>
       {slides.map(({ x, w }, i) => (
         <g>
-          <rect x={x} y="192" width={w} height="40" class="frame" />
-          <rect x={x + w - w / 12} y="192" width={w / 12} height="40" class:list={[i === 1 ? "accent-fill" : "slide-hint"]} />
+          <rect x={x} y="192" width={w} height="40" class="frame" pathLength="1" data-plot-solid />
+          <rect x={x + w - w / 12} y="192" width={w / 12} height="40" class:list={[i === 1 ? "accent-fill" : "slide-hint"]} data-plot-fill />
         </g>
       ))}
       <text x="20" y="256" class="bp__label">last 1/12 = colour of the next slide</text>
@@ -139,40 +139,40 @@ const rows = [0, 1, 2, 3, 4, 5, 6, 7];
   )}
 
   {kind === "captions" && (
-    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
       {shots.map((i) => (
         <g>
-          <rect x={30 + i * 120} y="36" width="100" height="74" class="frame" />
-          <path d={`M${40 + i * 120} 98L${64 + i * 120} 70L${82 + i * 120} 88L${94 + i * 120} 78L${120 + i * 120} 98`} class="motif" />
-          <circle cx={108 + i * 120} cy="54" r="6" class:list={[i === 1 ? "accent-fill" : "dot"]} />
+          <rect x={30 + i * 120} y="36" width="100" height="74" class="frame" pathLength="1" data-plot-solid />
+          <path d={`M${40 + i * 120} 98L${64 + i * 120} 70L${82 + i * 120} 88L${94 + i * 120} 78L${120 + i * 120} 98`} class="motif" pathLength="1" />
+          <circle cx={108 + i * 120} cy="54" r="6" class:list={[i === 1 ? "accent-fill" : "dot"]} data-plot-dot />
           <text x={30 + i * 120} y="128" class="bp__label strike">IMG_04{12 + i}.jpg</text>
-          <rect x={30 + i * 120} y="140" width={i === 1 ? 92 : 78} height="4" rx="2" class:list={[i === 1 ? "accent-fill" : "line"]} />
-          <rect x={30 + i * 120} y="152" width={i === 2 ? 56 : 70} height="4" rx="2" class="line" />
+          <rect x={30 + i * 120} y="140" width={i === 1 ? 92 : 78} height="4" rx="2" class:list={[i === 1 ? "accent-fill" : "line"]} data-plot-fill />
+          <rect x={30 + i * 120} y="152" width={i === 2 ? 56 : 70} height="4" rx="2" class="line" data-plot-fill />
         </g>
       ))}
-      <path d="M30 186H370" class="rule" />
+      <path d="M30 186H370" class="rule" pathLength="1" />
       <text x="30" y="212" class="bp__label">search console · keyword niche · page context</text>
       <text x="30" y="232" class="bp__label">→ file name · alt · caption</text>
       <text x="30" y="266" class="bp__label">$ claude › seo-images</text>
     </svg>
   )}
   {kind === "catalogue" && (
-    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
-      <rect x="56" y="48" width="130" height="176" class="frame" />
-      <rect x="48" y="40" width="130" height="176" class="frame" />
-      <rect x="40" y="32" width="130" height="176" class="frame" />
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
+      <rect x="56" y="48" width="130" height="176" class="frame" pathLength="1" data-plot-solid />
+      <rect x="48" y="40" width="130" height="176" class="frame" pathLength="1" data-plot-solid />
+      <rect x="40" y="32" width="130" height="176" class="frame" pathLength="1" data-plot-solid />
       <text x="52" y="50" class="bp__label">catalogue.pdf</text>
       {rows.map((i) => (
-        <rect x="52" y={64 + i * 16} width={i % 3 === 2 ? 72 : 106} height="4" rx="2" class:list={[i === 4 || i === 5 ? "accent-fill" : "line"]} />
+        <rect x="52" y={64 + i * 16} width={i % 3 === 2 ? 72 : 106} height="4" rx="2" class:list={[i === 4 || i === 5 ? "accent-fill" : "line"]} data-plot-fill />
       ))}
       <rect x="46" y="124" width="118" height="32" class="accent-stroke" fill="none" stroke-dasharray="3 3" />
       <text x="170" y="200" text-anchor="end" class="bp__label">p. 42</text>
       <path d="M164 140H226" class="accent-stroke" stroke-dasharray="3 4" />
-      <rect x="226" y="92" width="144" height="104" rx="4" class="frame" />
-      <rect x="240" y="110" width="116" height="4" rx="2" class="line" />
-      <rect x="240" y="122" width="100" height="4" rx="2" class="line" />
-      <rect x="240" y="134" width="84" height="4" rx="2" class="line" />
-      <rect x="240" y="160" width="58" height="20" rx="10" class="accent-fill" />
+      <rect x="226" y="92" width="144" height="104" rx="4" class="frame" pathLength="1" data-plot-solid />
+      <rect x="240" y="110" width="116" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="240" y="122" width="100" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="240" y="134" width="84" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="240" y="160" width="58" height="20" rx="10" class="accent-fill" data-plot-dot />
       <text x="269" y="174" text-anchor="middle" class="bp__label on-accent">p. 42</text>
       <text x="40" y="252" class="bp__label">hundreds of PDF pages → embeddings</text>
       <text x="40" y="272" class="bp__label">$ ask › answer + source page</text>
@@ -191,6 +191,8 @@ const rows = [0, 1, 2, 3, 4, 5, 6, 7];
   }
   .visual__grid, .visual__art { position: absolute; inset: 0; width: 100%; height: 100%; }
   .visual__art, .visual__audit { will-change: transform; }
+  /* Plotted on scroll by motion.ts ([data-plot]); the 1 2 pattern keeps square caps from leaving dots. */
+  .visual__art [pathLength="1"] { stroke-dasharray: 1 2; }
   .accent-fill { fill: var(--accent); }
   .accent-stroke { stroke: var(--accent); stroke-opacity: 0.7; }
   .bp__mark path { fill: none; stroke: currentColor; stroke-width: 4.2; stroke-linecap: square; stroke-linejoin: miter; }

@@ -102,7 +102,7 @@ const { kind, caption } = Astro.props;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  .sfig__svg [pathLength="1"] { stroke-dasharray: 1; }
+  .sfig__svg [pathLength="1"] { stroke-dasharray: 1 2; } /* 1 2: no zero-length dash (cap dot) at the path end while hidden */
   .sfig__svg .thin { stroke: var(--line-strong); }
   .sfig__svg .guide { stroke: var(--line-strong); stroke-dasharray: 3 5; }
   .sfig__svg .accent { stroke: var(--accent); stroke-width: 2; }

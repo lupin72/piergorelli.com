@@ -1,12 +1,13 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { EMAIL } from "../../data/site";
+import { CAL_URL, EMAIL } from "../../data/site";
 
 const SITE = "https://piergorelli.com";
 const PAGE = `${SITE}/work/piergorelli-com/`;
 
 // Measured with tools/qa/js-weight.mjs (gzip, as the browser loads it) and Lighthouse mobile on the local build.
 // Provisional until launch: re-measure on production and fill in `measured`.
+const updated = new Date("2026-09-30");
 const measured = { date: "30 Sep 2026", where: "local build, provisional" };
 const pageTypes = [
   { name: "Showcase", pages: "Home · Services · About · Contact", js: 63, lighthouse: ["98", "100", "96", "100"], loads: "Common code + GSAP, Lenis, motion, WebGL hero" },
@@ -37,6 +38,7 @@ const schema = [
     name: "piergorelli.com, redesigned",
     url: PAGE,
     dateCreated: "2026",
+    dateModified: updated.toISOString().slice(0, 10),
     creator: { "@type": "Person", "@id": `${SITE}/#person`, name: "Pier Gorelli" },
     about: "Redesign of piergorelli.com: motion on showcase pages, almost no JavaScript on reading pages.",
   },
@@ -63,7 +65,7 @@ const schema = [
     <nav class="note crumbs" aria-label="Breadcrumb">
       <a href="/" class="link">Home</a> / <a href="/#work" class="link">Work</a> / <span class="note--ink">piergorelli.com</span>
     </nav>
-    <p class="note">[Case study · Own studio · 2026]</p>
+    <p class="note">[Work / 01.1 · Case study · 2026]</p>
     <h1 class="hero__title">
       <span class="display hero__human" data-hero-human data-bp="h1.human">My own site, redesigned.</span>
       <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Motion where it shows the work. About 8&nbsp;KB of JavaScript where you read.</span>
@@ -87,7 +89,7 @@ const schema = [
   <section class="section wrap">
     <header class="section-head">
       <span class="note note--ink">[01] Context</span>
-      <span class="note">2024 → 2026</span>
+      <span class="note">2024 → 2026 · Updated <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
     </header>
     <div class="story grid-12">
       <h2 class="h2 story__title" data-reveal="lines">It worked. It didn't feel like mine.</h2>
@@ -145,6 +147,7 @@ const schema = [
       <span class="note note--ink">[04] Build</span>
       <span class="note">{build.length} parts</span>
     </header>
+    <div class="build-line" data-draw></div>
     <ol class="build-list">
       {build.map((b) => (
         <li class="build grid-12" data-reveal="up">
@@ -191,11 +194,11 @@ const schema = [
   <section class="section wrap cta">
     <header class="section-head">
       <span class="note note--ink">[06] Next</span>
-      <span class="note">Reply within 24 h · Mon to Fri</span>
+      <span class="note">30 minutes</span>
     </header>
     <h2 class="display cta__title" data-reveal="lines">Want this for a client's site?</h2>
     <div class="cta__actions" data-reveal="up">
-      <a href="/contact/" class="btn">Start a build <span class="arrow">→</span></a>
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
       <a href={`mailto:${EMAIL}`} class="btn btn--ghost">{EMAIL}</a>
     </div>
   </section>
@@ -247,7 +250,7 @@ const schema = [
   @media (max-width: 767px) { .type { grid-column: 1 / -1; } }
 
   /* Build */
-  .build-list { border-top: 1px solid var(--line); }
+  .build-line { height: 1px; background: var(--ink); transform-origin: left; }
   .build { align-items: baseline; row-gap: 0.75rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
   .build__n { grid-column: 1; }
   .build__title { grid-column: 2 / span 5; }

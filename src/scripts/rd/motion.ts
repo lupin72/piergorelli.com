@@ -14,7 +14,8 @@
  *  [data-draw]                  hairline that draws itself (scaleX), scrubbed
  *  [data-parallax="<percent>"]  scrubbed vertical drift
  *  [data-fill]                  full-row hover fill: [data-hot] set only by real pointer movement
- *  [data-plot]                  SVG figure: [pathLength="1"] strokes plot themselves, [data-plot-dot] pop in, scrubbed
+ *  [data-plot]                  SVG figure: [pathLength="1"] strokes plot themselves, [data-plot-dot] pop in,
+ *                               [data-plot-fill] bars grow from the left, [data-plot-solid] outlines fill in, scrubbed
  */
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -369,13 +370,23 @@ function plots() {
   gsap.utils.toArray<SVGSVGElement>("[data-plot]").forEach((svg) => {
     const strokes = svg.querySelectorAll('[pathLength="1"]');
     const dots = svg.querySelectorAll("[data-plot-dot]");
+    const fills = svg.querySelectorAll("[data-plot-fill]");
     const labels = svg.querySelectorAll("text");
+    // Dense figures (the work visuals) keep the same overall pace: the stagger shrinks with the count.
+    const each = (n: number, max: number, total: number) => Math.min(max, total / Math.max(n, 1));
     const tl = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: { trigger: svg, start: "top 85%", end: "bottom 60%", scrub: true },
     });
-    tl.fromTo(strokes, { strokeDashoffset: 1 }, { strokeDashoffset: 0, stagger: 0.12 }, 0)
-      .fromTo(dots, { scale: 0 }, { scale: 1, transformOrigin: "50% 50%", stagger: 0.06, ease: "back.out(3)" }, 0.3)
-      .fromTo(labels, { opacity: 0 }, { opacity: 1, stagger: 0.05 }, 0.4);
+    const stagger = each(strokes.length, 0.12, 0.9);
+    tl.fromTo(strokes, { strokeDashoffset: 1 }, { strokeDashoffset: 0, stagger }, 0);
+    // Filled outlines ([data-plot-solid]) fill in with their own stroke instead of before it.
+    strokes.forEach((el, i) => {
+      if (el.hasAttribute("data-plot-solid")) tl.fromTo(el, { fillOpacity: 0 }, { fillOpacity: 1 }, i * stagger);
+    });
+    tl
+      .fromTo(dots, { scale: 0 }, { scale: 1, transformOrigin: "50% 50%", stagger: each(dots.length, 0.06, 0.6), ease: "back.out(3)" }, 0.3)
+      .fromTo(fills, { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", stagger: each(fills.length, 0.06, 0.5) }, 0.35)
+      .fromTo(labels, { opacity: 0 }, { opacity: 1, stagger: each(labels.length, 0.05, 0.4) }, 0.4);
   });
 }

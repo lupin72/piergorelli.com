@@ -157,7 +157,7 @@ const schema = [
   <section class="section wrap" id="story">
     <header class="section-head">
       <span class="note note--ink">[01] Long story short</span>
-      <span class="note">Last updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
+      <span class="note">Valencia, ES</span>
     </header>
     <div class="story grid-12">
       <figure class="portrait" data-reveal="up">
@@ -202,6 +202,7 @@ const schema = [
       <span class="note note--ink">[02] Changelog</span>
       <span class="note">git log --reverse --oneline</span>
     </header>
+    <div class="log__line" data-draw></div>
     <ol class="log">
       {log.map((e) => (
         <li class:list={["log__entry grid-12", { "log__entry--head": e.head }]} data-reveal="up">
@@ -281,7 +282,7 @@ const schema = [
   <section class="section wrap" id="faq">
     <header class="section-head">
       <span class="note note--ink">[06] FAQ</span>
-      <span class="note">{faqs.length} questions</span>
+      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
     </header>
     <div class="faqs">
       {faqs.map((f) => (
@@ -297,7 +298,7 @@ const schema = [
   <section class="section wrap cta">
     <header class="section-head">
       <span class="note note--ink">[07] Next</span>
-      <span class="note">Reply within 24h, Mon to Fri</span>
+      <span class="note">30 minutes</span>
     </header>
     <h2 class="display cta__title" data-reveal="lines">Now you know me. Your turn.</h2>
     <div class="cta__actions" data-reveal="up">
@@ -384,6 +385,8 @@ const schema = [
 
   /* Changelog */
   .log { border-bottom: 1px solid var(--line); }
+  .log__line { height: 1px; background: var(--ink); transform-origin: left; }
+  .log__entry:first-child { border-top: 0; }
   .log__entry {
     position: relative;
     align-items: baseline;

@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import WorkVisual from "../components/rd/WorkVisual.astro";
 import { work } from "../data/work";
+import { CAL_URL } from "../data/site";
 
 const homeWork = ["retail-k", "piergorelli-com", "seo-images"].map((slug) => work.find((w) => w.slug === slug)!);
 import { getPosts, pillarOf, postUrl, formatDate } from "../lib/blog";
@@ -224,11 +225,11 @@ const schema = [
   <section class="section wrap cta">
     <header class="section-head">
       <span class="note note--ink">[06] Next</span>
-      <span class="note">Reply within 24h, Mon to Fri</span>
+      <span class="note">30 minutes</span>
     </header>
     <h2 class="display cta__title" data-reveal="lines">Send me the part of the brief that worries you.</h2>
     <div class="cta__actions" data-reveal="up">
-      <a href="mailto:me@piergorelli.com" class="btn">Start with an email <span class="arrow">→</span></a>
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
       <a href="/contact/" class="btn btn--ghost">Or send a brief</a>
     </div>
   </section>
