@@ -48,6 +48,8 @@ function parts(sheet: HTMLElement) {
 }
 
 let current: gsap.core.Timeline | undefined;
+/** Same choreography, played faster: a jury clicks through 4–5 pages, each wait counts (~0.7 s cover + ~0.55 s reveal). */
+const SPEED = 1.75;
 
 export function cover(to: URL): Promise<void> {
   const sheet = $<HTMLElement>(".pt");
@@ -84,7 +86,8 @@ export function cover(to: URL): Promise<void> {
       .to(p.box, { opacity: 1, duration: 0.25 }, 0.55)
       .add(scramble(p.label, p.label.dataset.text ?? "", 0.35), 0.55)
       .to(p.paths, { strokeDashoffset: 0, duration: 0.55, ease: "power2.inOut", stagger: 0.08 }, 0.45)
-      .to(p.dot, { scale: 1, duration: 0.3, ease: "back.out(3)" }, 0.9);
+      .to(p.dot, { scale: 1, duration: 0.3, ease: "back.out(3)" }, 0.9)
+      .timeScale(SPEED);
   });
 }
 
@@ -105,6 +108,7 @@ export function reveal(): Promise<void> {
       .to(p.guidesV, { scaleY: 0, transformOrigin: "50% 100%", duration: 0.45, ease: "expo.in" }, 0)
       .to([p.box, p.meta], { opacity: 0, duration: 0.2 }, 0.1)
       .to(p.stage, { yPercent: -60, opacity: 0, duration: 0.6, ease: "power3.in" }, 0.1)
-      .to(sheet, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.8, ease: "power4.inOut" }, 0.2);
+      .to(sheet, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.8, ease: "power4.inOut" }, 0.2)
+      .timeScale(SPEED);
   });
 }
