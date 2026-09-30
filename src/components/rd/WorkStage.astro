@@ -202,15 +202,16 @@ const lighthouse = [98, 100, 100, 100];
                 <text x="30" y="22" class="lbl lbl--a" data-b-in>viewport · 1440×900</text>
                 <path d="M30 80H770" class="wire" pathLength="1" data-b-draw />
                 {[0, 1, 2, 3].map((i) => <rect x={300 + i * 80} y="48" width="56" height="14" class="guide" data-b-in />)}
-                <rect x="60" y="120" width="420" height="120" class="guide" data-b-in />
-                <text x="60" y="112" class="lbl lbl--a" data-b-in>h1.human · 720×196</text>
-                <text x="60" y="222" class="hed hed--outline" data-b-in>I do dev.</text>
-                <clipPath id="ws-h1clip"><rect x="40" y="110" width="460" height="140" data-b-clip /></clipPath>
+                {/* Same position and size as the live title, so the live wipe does not move it. */}
+                <rect x="40" y="113" width="460" height="128" class="guide" data-b-in />
+                <text x="40" y="105" class="lbl lbl--a" data-b-in>h1.human · 720×196</text>
+                <text x="40" y="215" class="hed hed--lg hed--outline" data-b-in>I do dev.</text>
+                <clipPath id="ws-h1clip"><rect x="20" y="100" width="500" height="145" data-b-clip /></clipPath>
                 {/* Clip on a group: WebKit ignores clip-path set directly on <text>. */}
-                <g clip-path="url(#ws-h1clip)"><text x="60" y="222" class="hed">I do dev.</text></g>
+                <g clip-path="url(#ws-h1clip)"><text x="40" y="215" class="hed hed--lg">I do dev.</text></g>
                 {hills.map((d, i) => <path d={d} class={i === 4 ? "hill hill--a" : "hill"} data-b-in />)}
-                <rect x="60" y="270" width="300" height="10" rx="5" class="bar" data-b-wipe />
-                <rect x="60" y="290" width="220" height="10" rx="5" class="bar" data-b-wipe />
+                <rect x="42" y="255" width="300" height="10" rx="5" class="bar" data-b-wipe />
+                <rect x="42" y="287" width="220" height="10" rx="5" class="bar" data-b-wipe />
               </g>
               <g class="live" data-live>
                 <clipPath id="ws-live-pg"><rect width="800" height="500" data-live-clip /></clipPath>
