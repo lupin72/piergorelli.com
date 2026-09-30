@@ -187,10 +187,11 @@ html.lenis, html.lenis body { height: auto; }
     .seq__line { display: none; }
     .seq { grid-template-columns: 1fr; row-gap: 0; }
     .seq > li { grid-column: 1 / -1; position: relative; padding: 0.45rem 0 2.25rem 3.75rem; }
-    .seq > li::before { content: ""; position: absolute; left: calc(1.25rem - 0.5px); top: 1.25rem; bottom: -1.25rem; width: 1px; background: var(--ink); }
+    /* Markers sit on the centre of the step title: each page sets --mark-y (title centre from the item top). */
+    .seq > li::before { content: ""; position: absolute; left: calc(1.25rem - 0.5px); top: var(--mark-y, 1.25rem); bottom: calc(-1 * var(--mark-y, 1.25rem)); width: 1px; background: var(--ink); }
     .seq > li:last-child { padding-bottom: 0; }
     .seq > li:last-child::before { display: none; }
-    .seq__n { position: absolute; left: 0; top: 0; }
+    .seq__n { position: absolute; left: 0; top: var(--mark-y, 1.25rem); transform: translateY(-50%); }
   }
 
   /* FAQ accordion — service pages, about, hub */
