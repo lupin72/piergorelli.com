@@ -4,6 +4,7 @@
  * Desktop only, paused when off-screen or when the tab is hidden.
  * The contours drift on their own for 4 s, then glide to a stop within 5 s (WCAG 2.2.2 Pause, Stop, Hide);
  * after that they only move in answer to the pointer, and settle again 1.5 s after it stops.
+ * The hill under the pointer is "the hard part" of the headline.
  */
 
 const VERT = `#version 300 es
@@ -41,17 +42,22 @@ void main() {
   vec2 uv = gl_FragCoord.xy / uRes.y;
   vec2 m = uMouse / uRes.y;
   float d = distance(uv, m);
-  float bump = exp(-d * d * 14.0) * uPull;
+  // a wide hill rises under the pointer and pushes the lines apart
+  float bump = exp(-d * d * 5.0) * uPull;
 
-  float h = fbm(uv * 1.35 + vec2(uTime * 0.018, uTime * 0.011)) + bump * 0.22;
-  float k = h * 16.0;
-  float minor = contour(k, 1.1);
-  float major = contour(k / 5.0, 1.4);
+  float h = fbm(uv * 1.35 + vec2(uTime * 0.018, uTime * 0.011)) + bump * 0.55;
+  float k = h * 18.0;
+  float minor = contour(k, 1.2);
+  float major = contour(k / 5.0, 2.0);
+  // hypsometric bands in the accent, only on the hill
+  float band = step(0.5, fract(k / 2.0));
 
-  // fade towards the top-left where the headline sits, keep the right side lively
-  float vignette = smoothstep(0.0, 1.0, gl_FragCoord.x / uRes.x) * 0.6 + 0.4;
-  float a = (minor * 0.16 + major * 0.28 + bump * minor * 0.55) * vignette;
-  vec3 col = mix(uInk, uAccent, clamp(bump * 1.6, 0.0, 1.0));
+  // fade towards the headline on the left, keep the right side lively; fade out at the bottom so
+  // the hero has no hard edge and the lead, buttons and spec labels sit on a quiet ground
+  float vignette = (smoothstep(0.25, 0.85, gl_FragCoord.x / uRes.x) * 0.85 + 0.15)
+                 * smoothstep(0.0, 0.3, gl_FragCoord.y / uRes.y);
+  float a = (minor * 0.34 + major * 0.62 + bump * minor * 0.5 + band * bump * 0.10) * vignette;
+  vec3 col = mix(uInk, uAccent, clamp(bump * 1.8, 0.0, 1.0));
   outColor = vec4(col * a, a);
 }`;
 
@@ -187,7 +193,10 @@ async function build(host: HTMLElement): Promise<() => void> {
   document.addEventListener("visibilitychange", onVisibility);
   loop();
 
-  requestAnimationFrame(() => canvas.classList.add("is-on"));
+  requestAnimationFrame(() => {
+    canvas.classList.add("is-on");
+    host.classList.add("has-terrain"); // shows the "point anywhere" hint, where there is one
+  });
 
   return () => {
     cancelAnimationFrame(raf);
@@ -199,5 +208,6 @@ async function build(host: HTMLElement): Promise<() => void> {
     host.removeEventListener("pointerleave", onLeave);
     gl.getExtension("WEBGL_lose_context")?.loseContext();
     canvas.remove();
+    host.classList.remove("has-terrain");
   };
 }
