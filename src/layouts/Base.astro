@@ -11,7 +11,9 @@ interface Props {
   description: string;
   /** "showcase" loads Lenis + GSAP; "read" keeps the page free of animation JS. */
   motion?: "showcase" | "read";
+  /** Social image, always 1200×630. Default rendered by `node tools/og/render.mjs`. */
   image?: string;
+  imageAlt?: string;
   type?: "website" | "article" | "profile";
   schema?: Record<string, unknown>[];
   preloader?: boolean;
@@ -23,7 +25,8 @@ const {
   title,
   description,
   motion = "read",
-  image = "/i-do-things.png",
+  image = "/og-default.png",
+  imageAlt = "Pier Gorelli: I do dev. Web & AI development for creative agencies, when the idea is hard to build.",
   type = "website",
   schema = [],
   preloader = false,
@@ -56,6 +59,9 @@ const ogImage = new URL(image, site).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Pier Gorelli" />
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
