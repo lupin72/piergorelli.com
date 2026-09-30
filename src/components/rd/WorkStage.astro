@@ -41,7 +41,7 @@ const lighthouse = [98, 100, 100, 100];
 
 <div class="ws" data-work-stage>
   <div class="ws__count" aria-hidden="true">
-    <span class="ws__n" data-ws-n style="display:inline-block">01</span><span class="ws__of">/{String(items.length).padStart(2, "0")}</span>
+    <span class="ws__n" data-ws-n style="display:inline-block">01</span><span class="ws__of outline-text">/{String(items.length).padStart(2, "0")}</span>
   </div>
   <div class="ws__stages note" aria-hidden="true">
     <ol>
@@ -284,7 +284,6 @@ const lighthouse = [98, 100, 100, 100];
 
   /* Tabular digits: "01" is 32 px narrower than "02" in Geist, so "/03" jumped sideways on every change. */
   .ws__count { font-variant-numeric: tabular-nums; font-size: var(--step-4); font-weight: 500; letter-spacing: -0.06em; line-height: 0.85; }
-  .ws__of { color: transparent; -webkit-text-stroke: 1px var(--ink); }
   .ws__stages ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .ws__stages li { position: relative; padding-top: 10px; border-top: 2px solid var(--line); }
   .ws__stages li i { position: absolute; left: 0; top: -2px; height: 2px; width: 100%; background: var(--ink); transform: scaleX(var(--p, 0)); transform-origin: left; }
