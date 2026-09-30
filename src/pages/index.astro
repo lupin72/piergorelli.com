@@ -351,11 +351,13 @@ const schema = [
   @media (max-width: 767px) {
     .process__line { display: none; }
     .process { row-gap: 0; }
-    .step { grid-column: 1 / -1; padding: 0 0 2.25rem 1.75rem; }
-    .step::before { content: ""; position: absolute; left: 4px; top: 0.45rem; bottom: -0.45rem; width: 1px; background: var(--ink); }
+    /* Dots sit on the title's centre line (same rule as .seq in redesign.css): block number (0.72rem × 1.4) + title margin + half the title line (0.95). */
+    .step { --mark-y: calc(0.72rem * 1.4 + 0.6rem + var(--step-1) * 0.475); grid-column: 1 / -1; padding: 0 0 2.25rem 1.75rem; }
+    .step > .note { display: block; }
+    .step::before { content: ""; position: absolute; left: 4px; top: var(--mark-y); bottom: calc(-1 * var(--mark-y)); width: 1px; background: var(--ink); }
     .step:last-child { padding-bottom: 0; }
     .step:last-child::before { bottom: auto; height: 0; }
-    .step__dot { top: 0.45rem; transform: translateY(-50%); }
+    .step__dot { top: var(--mark-y); transform: translateY(-50%); }
   }
 
   /* Blog */
