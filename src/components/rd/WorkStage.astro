@@ -282,7 +282,8 @@ const lighthouse = [98, 100, 100, 100];
   :global(.ws.is-pinned) :is(.ws__text, .ws__art) { will-change: opacity, transform; }
   :global(.ws.is-pinned) .ws__item:not([data-current]) :is(.ws__text, .ws__art) { pointer-events: none; }
 
-  .ws__count { font-size: var(--step-4); font-weight: 500; letter-spacing: -0.06em; line-height: 0.85; }
+  /* Tabular digits: "01" is 32 px narrower than "02" in Geist, so "/03" jumped sideways on every change. */
+  .ws__count { font-variant-numeric: tabular-nums; font-size: var(--step-4); font-weight: 500; letter-spacing: -0.06em; line-height: 0.85; }
   .ws__of { color: transparent; -webkit-text-stroke: 1px var(--ink); }
   .ws__stages ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
   .ws__stages li { position: relative; padding-top: 10px; border-top: 2px solid var(--line); }
