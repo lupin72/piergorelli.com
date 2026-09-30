@@ -62,8 +62,8 @@ const machine = info ? info.tagline : "A web development & AI blog, written from
       {active ? <><a href="/blog/" class="link">Blog</a>{" / "}<span class="note--ink">{PILLARS[active]}</span></> : <span class="note--ink">Blog</span>}
     </nav>
     <span>[Blog / 04]</span>
-    <span class="hide-sm">{info?.tag ? "tag · outside the pillars" : "Dev · AI · Agencies · Reviews"}</span>
-    <span>New entry every Monday</span>
+    <span class="hide-sm">{info?.tag ? "tag · outside the themes" : "Dev · AI · Agencies · Reviews"}</span>
+    <span>Notes from current work</span>
   </div>
 
   <h1 class="bhead__title">
@@ -170,7 +170,7 @@ const machine = info ? info.tagline : "A web development & AI blog, written from
 <section class="section wrap">
   <header class="section-head">
     <span class="note note--ink">[02] What I write about</span>
-    <span class="note">4 pillars · 1 long read a month + short notes</span>
+    <span class="note">Four themes · written between projects</span>
   </header>
   <ul class="pillars grid-12">
     {pillars.map((k, i) => (
@@ -189,10 +189,10 @@ const machine = info ? info.tagline : "A web development & AI blog, written from
 <section class="section wrap subscribe">
   <header class="section-head">
     <span class="note note--ink">[03] Subscribe</span>
-    <span class="note">Mondays · EN (+ ES for strategic posts)</span>
+    <span class="note">RSS · LinkedIn · in English</span>
   </header>
   <div class="grid-12">
-    <h2 class="h2 subscribe__title">One piece a week. No newsletter spam.</h2>
+    <h2 class="h2 subscribe__title">No schedule. No newsletter spam.</h2>
     <div class="subscribe__body">
       <p>Follow along via RSS or on LinkedIn, where every post goes out the day it's published. Got a topic you'd like me to dig into, or a project behind the question? Write me.</p>
       <div class="bhead__actions">
