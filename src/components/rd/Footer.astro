@@ -1,5 +1,5 @@
 ---
-import { CAL_URL, EMAIL } from "../../data/site";
+import { CAL_URL } from "../../data/site";
 
 const year = new Date().getFullYear();
 const cols = [
@@ -23,7 +23,7 @@ const cols = [
   {
     title: "Contact",
     links: [
-      { href: `mailto:${EMAIL}`, label: EMAIL },
+      { href: "/contact/", label: "Send a brief" },
       { href: CAL_URL, label: "Book a call" },
     ],
   },
