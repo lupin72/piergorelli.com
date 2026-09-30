@@ -15,10 +15,10 @@ const services = [
     short: "Web development",
     href: "/services/web-development-for-agencies/",
     figure: { kind: "web" as const, caption: "fig. 01 · motion curve on a 12-column grid" },
-    problem: "You sold a concept that moves. Now someone has to build it without flattening the design.",
-    body: "I'm the senior developer agencies call when the design is ambitious and the deadline isn't. Animated marketing and campaign sites, headless and classic CMS builds, web apps, built with your designers and your team.",
+    problem: "The pitch has motion, odd transitions and a deadline.",
+    body: "I prototype the part most likely to fail, agree the behaviour with the designer, then build the production site. Campaign sites, headless and classic CMS builds, web apps.",
     deliverables: [
-      "Animated, award-level front-ends with GSAP, WebGL and View Transitions",
+      "Animated front-ends with GSAP, WebGL and View Transitions, profiled for smoothness",
       "Headless or classic CMS builds: Astro, WordPress, Drupal",
       "Web apps, platforms and hybrid mobile apps (Laravel, Angular, Ionic)",
       "Figma to code, pixel-faithful, with your designers in the loop",
@@ -34,17 +34,17 @@ const services = [
     title: "AI for agencies",
     short: "AI for agencies",
     href: "/services/ai-for-agencies/",
-    figure: { kind: "automation" as const, caption: "fig. 02 · an n8n workflow with a human in the loop" },
-    problem: "Your team spends Mondays on reports, resizes and first drafts. Nobody joined an agency for that.",
-    body: "I map where your hours go, then build n8n and LLM workflows that take the repetitive work off the table, with a human approval step wherever the brand is at stake. Then I train your people to run them.",
+    figure: { kind: "automation" as const, caption: "fig. 02 · an image SEO skill with a human in the loop" },
+    problem: "Most agencies pay for AI licences that two people use.",
+    body: "I train the team on its own projects, then build the skills and tool connections that are missing. One of them now writes file names, alt text and captions for hundreds of images a day, with a person reviewing every result.",
     deliverables: [
-      "AI audit: processes mapped, three automations ranked by return",
-      "n8n workflows for briefs, client reporting, content and assets",
-      "An internal assistant that answers from your proposals and guidelines",
-      "Hands-on training and documentation for the team",
-      "Hosting on your infrastructure or EU-based services",
+      "Hands-on sessions on Claude Code and the tools you already pay for",
+      "Custom skills, instructions and MCP connections to your data",
+      "Advice on where AI pays off, where it doesn't, and which tools to pick",
+      "Ground rules for client data and confidentiality",
+      "Written guides and a named owner inside the agency",
     ],
-    tags: ["n8n", "Claude", "OpenAI", "Google Workspace", "Notion", "Slack"],
+    tags: ["Claude Code", "Codex", "Skills & subagents", "MCP", "Search Console", "WordPress"],
     audience: "Agency teams",
   },
   {
@@ -54,17 +54,16 @@ const services = [
     short: "AI in products",
     href: "/services/ai-product-integration/",
     figure: { kind: "product" as const, caption: "fig. 03 · retrieval: a question, its three nearest sources" },
-    problem: "Your client wants “AI” on their site. They mean an assistant that knows their catalogue, not one that makes things up.",
-    body: "I integrate LLMs into your clients' websites and apps, grounded on their own content: RAG assistants that cite sources, semantic search, agents that act on real systems, WordPress with AI inside. Model-agnostic, measured, and safe to put in front of customers.",
+    problem: "When a client asks for a chatbot, I ask what it should know, what it may do and what a wrong answer would cost.",
+    body: "The pilot is built around those answers: a chatbot on your client's content, semantic search, or answers from PDFs and catalogues that point to the page they came from. For agencies, or direct for companies.",
     deliverables: [
-      "RAG chatbots and assistants grounded on site content, with citations",
+      "A written spec: the questions, the allowed actions, the point where a person steps in",
+      "A chatbot on site content, with sources",
       "Semantic search across catalogues, docs and knowledge bases",
-      "AI agents connected to CRM, e-commerce and internal APIs",
-      "AI inside WordPress and WooCommerce: tagging, translation, content tools",
-      "Evaluation, guardrails and cost monitoring before and after launch",
-      "For your agency's clients, or direct for companies",
+      "Answers from PDFs and catalogues, with document and page",
+      "An evaluation set, guardrails and a monthly cost cap",
     ],
-    tags: ["LLM APIs", "RAG", "pgvector", "Supabase", "n8n", "WordPress"],
+    tags: ["Claude", "OpenAI", "Vercel AI SDK", "pgvector", "Supabase", "WordPress"],
     audience: "Agencies & companies",
   },
 ];
@@ -169,7 +168,7 @@ const schema = [
 
     <div class="hero__foot" data-hero-fade>
       <p class="lead">
-        Three ways I work with agencies and their clients: building the sites you design, automating the work your team shouldn't be doing, and putting AI inside the products you launch.
+        I work behind creative agencies on three kinds of problem: ambitious web builds, AI tools the team pays for but barely uses, and AI inside client products.
       </p>
       <ol class="jump" data-bp="ol.index">
         {services.map((s) => (
