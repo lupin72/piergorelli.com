@@ -71,25 +71,26 @@ const services = [
 const matcher = [
   { need: "You won a pitch with a motion-heavy concept and have no one to build it.", to: 0 },
   { need: "Your WordPress or Drupal site is slow, fragile, or nobody dares touch it.", to: 0 },
-  { need: "Your team burns hours on reports, resizes and translations.", to: 1 },
+  { need: "Your team has AI licences, but most people still work the old way.", to: 1 },
   { need: "Leadership wants an AI plan and nobody knows where to start.", to: 1 },
   { need: "A client asked for a chatbot that actually knows their products.", to: 2 },
   { need: "You want AI features to offer your clients.", to: 2 },
 ];
 
 const standards = [
-  { k: "Performance", v: "Lighthouse 95+ on mobile · LCP under 2 s · 60 fps motion" },
-  { k: "Accessibility", v: "WCAG 2.2 AA · keyboard, screen readers, reduced motion" },
-  { k: "Technical SEO", v: "Semantic HTML · structured data · sitemaps · hreflang" },
-  { k: "Handover", v: "Clean Git repo · written docs · CMS training · no lock-in" },
-  { k: "Confidentiality", v: "NDA on request · client data handled with care" },
+  { k: "Performance", v: "A budget agreed at kick-off, measured again before launch. Lighthouse 95+ is the target on my standard stacks." },
+  { k: "Motion", v: "Every animation is profiled for smoothness before it ships." },
+  { k: "Accessibility", v: "Keyboard, focus, contrast, semantics and reduced motion, checked on the finished interface. Target WCAG 2.1 AA." },
+  { k: "Technical SEO", v: "Rendering, metadata, structured data and redirects are part of the build." },
+  { k: "Handover", v: "Repository, setup notes and a CMS guide for the editors." },
+  { k: "Privacy", v: "NDA on request. Personal data anonymised wherever the project allows." },
 ];
 
 const models = [
-  { n: "A", title: "Project", body: "A defined scope with a fixed quote, milestones and a staging link from week one." },
-  { n: "B", title: "Team extension", body: "A senior developer inside your team for a sprint or a season: your tools, your stand-ups." },
-  { n: "C", title: "Retainer", body: "A monthly block of days for maintenance, evolutions and new AI workflows." },
-  { n: "D", title: "Audit", body: "A site or AI audit with a written report and a prioritised roadmap your team can act on." },
+  { n: "A", title: "Project", body: "A defined scope, a written quote, milestones and a staging link from week one." },
+  { n: "B", title: "Ongoing care", body: "Maintenance and evolutions: a monthly block of days, or billed as it comes up." },
+  { n: "C", title: "Audit", body: "A site audit with a written report and a prioritised roadmap your team can act on." },
+  { n: "D", title: "Training", body: "A hands-on session on your team's own projects, then written guides they keep." },
 ];
 
 // Link to posts by id so the URLs follow the slug migration (redesign-plan §3.5).
@@ -249,7 +250,7 @@ const schema = [
   <section class="section wrap">
     <header class="section-head">
       <span class="note note--ink">[03] Included in every project</span>
-      <span class="note">Tolerances · non-negotiable</span>
+      <span class="note">What I check before handover</span>
     </header>
     <h2 class="h2 std__claim" data-reveal="lines">The boring parts, done properly. Every time, without a line item.</h2>
     <dl class="std">
@@ -268,7 +269,7 @@ const schema = [
       <span class="note note--ink">[04] Ways to work together</span>
       <a href="/agencies/" class="note link">Process, NDA, tools →</a>
     </header>
-    <h2 class="h2 models__claim" data-reveal="lines">No price list. A clear scope, a fixed quote, dates you can promise your client.</h2>
+    <h2 class="h2 models__claim" data-reveal="lines">No price list. A written quote and a schedule with no surprises.</h2>
     <div class="models__line" data-draw></div>
     <ol class="models grid-12">
       {models.map((m) => (
