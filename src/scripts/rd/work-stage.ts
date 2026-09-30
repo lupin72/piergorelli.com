@@ -19,6 +19,11 @@ function drawing(item: HTMLElement) {
   const q = (sel: string) => Array.from(item.querySelectorAll<SVGElement>(sel));
   const tl = gsap.timeline({ paused: true, defaults: { ease: "power1.inOut" } });
   const each = (n: number, total: number) => total / Math.max(n, 1);
+  // A travelling mark ([data-b-move]) crosses the page it builds: the rest of the build waits for it
+  // to land and runs a little faster, or the mark and the title overlap mid-way (seen on mobile).
+  const moves = q("[data-b-move]");
+  const t0 = moves.length ? 0.5 : 0;
+  const fit = moves.length ? 0.6 : 1;
 
   const draws = q("[data-p-draw]");
   tl.fromTo(draws, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.75, stagger: each(draws.length, 0.3), ease: "power2.inOut" }, 0);
@@ -29,12 +34,12 @@ function drawing(item: HTMLElement) {
   const bDraws = q("[data-b-draw]");
   tl.fromTo(bDraws, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.7, stagger: 0.1, ease: "power2.inOut" }, 0.95);
   q("[data-b-clip]").forEach((r) => {
-    tl.fromTo(r, { attr: { width: 0 } }, { attr: { width: r.getAttribute("width") ?? 0 }, duration: 0.9, ease: "power2.inOut" }, 1);
+    tl.fromTo(r, { attr: { width: 0 } }, { attr: { width: r.getAttribute("width") ?? 0 }, duration: 0.9 * fit, ease: "power2.inOut" }, 1 + t0);
   });
   const wipes = q("[data-b-wipe]");
-  tl.fromTo(wipes, { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.6, stagger: each(wipes.length, 0.35), ease: "power2.inOut" }, 1.05);
+  tl.fromTo(wipes, { scaleX: 0 }, { scaleX: 1, transformOrigin: "0% 50%", duration: 0.6 * fit, stagger: each(wipes.length, 0.35 * fit), ease: "power2.inOut" }, 1.05 + t0);
   const bIns = q("[data-b-in]");
-  tl.fromTo(bIns, { opacity: 0 }, { opacity: 1, duration: 0.5, stagger: each(bIns.length, 0.4) }, 1.15);
+  tl.fromTo(bIns, { opacity: 0 }, { opacity: 1, duration: 0.5 * fit, stagger: each(bIns.length, 0.4 * fit) }, 1.15 + t0);
   q("[data-b-type]").forEach((el, i) => {
     const text = el.dataset.bType ?? "";
     const p = { v: 0 };
@@ -47,12 +52,12 @@ function drawing(item: HTMLElement) {
         const n = Math.floor(p.v * text.length);
         el.textContent = p.v >= 1 ? text : text.slice(0, n) + (p.v > 0 ? "▌" : "");
       },
-    }, 1.3 + i * 0.12);
+    }, 1.3 + t0 + i * 0.12);
   });
-  q("[data-b-move]").forEach((el) => {
+  moves.forEach((el) => {
     const [x, y, s] = (el.dataset.bMove ?? "0 0 1").split(" ");
     const to = el.getAttribute("transform") ?? "";
-    tl.fromTo(el, { attr: { transform: `translate(${x} ${y}) scale(${s})` } }, { attr: { transform: to }, duration: 1, ease: "power3.inOut" }, 0.9);
+    tl.fromTo(el, { attr: { transform: `translate(${x} ${y}) scale(${s})` } }, { attr: { transform: to }, duration: 0.55, ease: "power3.inOut" }, 0.9);
   });
 
   q("[data-live-clip]").forEach((r) => {
