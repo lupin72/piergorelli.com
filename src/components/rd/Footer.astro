@@ -1,4 +1,6 @@
 ---
+import { CAL_URL } from "../../data/site";
+
 const year = new Date().getFullYear();
 const cols = [
   {
@@ -22,7 +24,7 @@ const cols = [
     title: "Contact",
     links: [
       { href: "mailto:me@piergorelli.com", label: "me@piergorelli.com" },
-      { href: "/contact/", label: "Book a call" },
+      { href: CAL_URL, label: "Book a call" },
     ],
   },
 ];

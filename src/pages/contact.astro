@@ -1,14 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
 import BriefForm from "../components/rd/BriefForm.astro";
+import { CAL_URL, EMAIL } from "../data/site";
 
 const updated = new Date("2026-09-30");
-const EMAIL = "me@piergorelli.com";
-
-// TODO(Pier): Cal.com username (see "Da decidere" in docs/redesign-status.md). Until then the call
-// button opens an email with the subject pre-filled.
-const CAL_URL: string | null = null;
-const callHref = CAL_URL ?? `mailto:${EMAIL}?subject=${encodeURIComponent("30-min call")}`;
 
 const agenda = [
   "Your brief, the constraints and the date that can't move",
@@ -158,8 +153,8 @@ const schema = [
           ))}
         </ol>
         <div class="ticket__foot">
-          <a href={callHref} class="btn" {...(CAL_URL ? { target: "_blank", rel: "noopener" } : {})}>
-            {CAL_URL ? "Pick a slot" : "Ask for a slot"} <span class="arrow">→</span>
+          <a href={CAL_URL} class="btn" target="_blank" rel="noopener">
+            Pick a slot <span class="arrow">↗</span>
           </a>
           <span class="note">CET/CEST</span>
         </div>

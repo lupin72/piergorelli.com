@@ -1,4 +1,5 @@
 ---
+import { CAL_URL } from "../data/site";
 import Base from "../layouts/Base.astro";
 import ServiceFigure from "../components/rd/ServiceFigure.astro";
 
@@ -294,7 +295,7 @@ const schema = [
     </header>
     <h2 class="display cta__title" data-reveal="lines">Tell me what you're building.</h2>
     <div class="cta__actions" data-reveal="up">
-      <a href="/contact/" class="btn">Book a 30-min call <span class="arrow">→</span></a>
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
       <a href="mailto:me@piergorelli.com" class="btn btn--ghost">me@piergorelli.com</a>
     </div>
   </section>

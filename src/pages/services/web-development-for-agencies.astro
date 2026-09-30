@@ -1,4 +1,5 @@
 ---
+import { CAL_URL } from "../../data/site";
 import Base from "../../layouts/Base.astro";
 import ServiceFigure from "../../components/rd/ServiceFigure.astro";
 import WorkVisual from "../../components/rd/WorkVisual.astro";
@@ -336,7 +337,7 @@ const schema = [
     </header>
     <h2 class="display cta__title" data-reveal="lines">Send me the Figma.</h2>
     <div class="cta__actions" data-reveal="up">
-      <a href="/contact/" class="btn">Book a 30-min call <span class="arrow">→</span></a>
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
       <a href="/services/" class="btn btn--ghost">All services</a>
     </div>
   </section>

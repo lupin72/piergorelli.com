@@ -1,4 +1,5 @@
 ---
+import { CAL_URL } from "../../data/site";
 import Base from "../../layouts/Base.astro";
 import ServiceFigure from "../../components/rd/ServiceFigure.astro";
 import WorkVisual from "../../components/rd/WorkVisual.astro";
@@ -356,7 +357,7 @@ const schema = [
     <h2 class="display cta__title" data-reveal="lines">Bring ten real questions.</h2>
     <p class="lead cta__text" data-reveal="up">The ones your client's customers actually ask. They become the first eval set, and the fastest way to see if AI is worth it.</p>
     <div class="cta__actions" data-reveal="up">
-      <a href="/contact/" class="btn">Book a 30-min call <span class="arrow">→</span></a>
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
       <a href="/services/" class="btn btn--ghost">All services</a>
     </div>
   </section>

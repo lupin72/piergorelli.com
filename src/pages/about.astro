@@ -1,4 +1,5 @@
 ---
+import { CAL_URL } from "../data/site";
 import Base from "../layouts/Base.astro";
 import { getCollection } from "astro:content";
 import { postUrl } from "../lib/blog";
@@ -300,7 +301,7 @@ const schema = [
     </header>
     <h2 class="display cta__title" data-reveal="lines">Now you know me. Your turn.</h2>
     <div class="cta__actions" data-reveal="up">
-      <a href="/contact/" class="btn">Ask for a 30-min call <span class="arrow">→</span></a>
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
       <a href="/cv.pdf" class="btn btn--ghost" download>Download CV (PDF)</a>
     </div>
   </section>
