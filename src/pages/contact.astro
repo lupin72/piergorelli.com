@@ -361,8 +361,16 @@ const schema = [
   .step__meta { display: flex; justify-content: space-between; gap: 1rem; max-width: 30ch; }
   .step__title { font-size: var(--step-1); margin: 0.6rem 0 0.5rem; }
   .step__body { color: var(--muted); max-width: 30ch; }
-  @media (max-width: 767px) { .step { grid-column: span 2; } }
-  @media (max-width: 479px) { .step { grid-column: 1 / -1; } }
+  /* Mobile: vertical timeline, one rail through every dot (same as the home process). */
+  @media (max-width: 767px) {
+    .next__line { display: none; }
+    .next { row-gap: 0; }
+    .step { grid-column: 1 / -1; padding: 0 0 2.25rem 1.75rem; }
+    .step::before { content: ""; position: absolute; left: 4px; top: 0.45rem; bottom: -0.45rem; width: 1px; background: var(--ink); }
+    .step:last-child { padding-bottom: 0; }
+    .step:last-child::before { bottom: auto; height: 0; }
+    .step__dot { top: 0.45rem; transform: translateY(-50%); }
+  }
 
   /* Elsewhere */
   .channels { position: relative; isolation: isolate; border-bottom: 1px solid var(--line); }

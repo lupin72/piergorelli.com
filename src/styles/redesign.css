@@ -373,6 +373,7 @@ html.js[data-motion="showcase"]:not(.motion-ready) :is([data-hero-generate], [da
   border: 0;
   background: transparent;
   color: var(--ink);
+  overflow: visible; /* UA dialog is overflow:auto: it clipped the box shadow into square corners. The list scrolls instead. */
 }
 .palette::backdrop {
   background: color-mix(in oklab, var(--bg) 55%, transparent);
