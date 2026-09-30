@@ -5,6 +5,8 @@
  *  - ./palette  on the first ⌘K / Menu press
  */
 
+import { EMAIL } from "../../data/site";
+
 const root = document.documentElement;
 const ACCENTS = ["blue", "orange", "lime"] as const;
 
@@ -103,7 +105,7 @@ console.log(
    ██║     ╚██████╔╝ ●
    ╚═╝      ╚═════╝
 %cReading the source? We'll get along.
-Built with Astro, GSAP & a lot of coffee → me@piergorelli.com`,
+Built with Astro, GSAP, Claude Code and a lot of coffee → ${EMAIL}`,
   "color:#2f5bff;font-family:monospace",
   "font-family:monospace",
 );

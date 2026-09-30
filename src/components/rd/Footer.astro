@@ -1,5 +1,5 @@
 ---
-import { CAL_URL } from "../../data/site";
+import { CAL_URL, EMAIL } from "../../data/site";
 
 const year = new Date().getFullYear();
 const cols = [
@@ -23,7 +23,7 @@ const cols = [
   {
     title: "Contact",
     links: [
-      { href: "mailto:me@piergorelli.com", label: "me@piergorelli.com" },
+      { href: `mailto:${EMAIL}`, label: EMAIL },
       { href: CAL_URL, label: "Book a call" },
     ],
   },
@@ -48,7 +48,7 @@ const cols = [
   <p class="footer-mark" aria-hidden="true">I do dev.</p>
 
   <div class="footer-bottom note">
-    <span>© {year} Pier Gorelli · Made with ♥ in Valencia</span>
+    <span>© {year} Pier Gorelli · Designed and built in Valencia</span>
     <span class="hint">Press <kbd>⌥G</kbd> for the grid · <kbd>⌘K</kbd> for everything else</span>
     <nav class="legal-links" aria-label="Legal">
       <a href="/privacy-policy/" class="link">Privacy</a>

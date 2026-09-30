@@ -4,6 +4,7 @@
  */
 import { navigate } from "astro:transitions/client";
 import { toggleTheme, cycleAccent, toggleGrid } from "./site";
+import { EMAIL } from "../../data/site";
 
 type Item = { label: string; hint: string; group: string; run: () => void };
 
@@ -17,7 +18,9 @@ const go = (href: string) => () => { dialog?.close(); navigate(href); };
 const base: Item[] = [
   { group: "Go to", label: "Home", hint: "/", run: go("/") },
   { group: "Go to", label: "Services", hint: "/services/", run: go("/services/") },
+  { group: "Go to", label: "Web development for agencies", hint: "/services/web-development-for-agencies/", run: go("/services/web-development-for-agencies/") },
   { group: "Go to", label: "AI for agencies", hint: "/services/ai-for-agencies/", run: go("/services/ai-for-agencies/") },
+  { group: "Go to", label: "AI in products", hint: "/services/ai-product-integration/", run: go("/services/ai-product-integration/") },
   { group: "Go to", label: "Work", hint: "/#work", run: go("/#work") },
   { group: "Go to", label: "About", hint: "/about/", run: go("/about/") },
   { group: "Go to", label: "Blog", hint: "/blog/", run: go("/blog/") },
@@ -25,7 +28,7 @@ const base: Item[] = [
   { group: "Do", label: "Toggle light / dark", hint: "theme", run: () => toggleTheme() },
   { group: "Do", label: "Next accent colour", hint: "accent", run: () => cycleAccent() },
   { group: "Do", label: "Show the grid", hint: "⌥G", run: () => { toggleGrid(); dialog?.close(); } },
-  { group: "Do", label: "Copy email address", hint: "me@piergorelli.com", run: () => { navigator.clipboard?.writeText("me@piergorelli.com"); dialog?.close(); } },
+  { group: "Do", label: "Copy email address", hint: EMAIL, run: () => { navigator.clipboard?.writeText(EMAIL); dialog?.close(); } },
 ];
 
 function build() {
