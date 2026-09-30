@@ -1,0 +1,41 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+@font-face { font-family: "Geist"; src: url("file:///Users/pierpaologorelli/Documents/Studio/Javascript/piergorelli.com/website/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+@font-face { font-family: "Geist Mono"; src: url("file:///Users/pierpaologorelli/Documents/Studio/Javascript/piergorelli.com/website/node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+:root { --bg:#f4f4f0; --ink:#0e0e0d; --muted:#65655f; --line:rgb(14 14 13/.1); --line-strong:rgb(14 14 13/.3); --accent:#2f5bff; }
+* { margin:0; box-sizing:border-box; }
+html,body { width:1200px; height:630px; }
+body { background:var(--bg); color:var(--ink); font-family:"Geist"; -webkit-font-smoothing:antialiased; position:relative; overflow:hidden; }
+/* 12-column blueprint grid */
+.grid { position:absolute; inset:0 56px; display:grid; grid-template-columns:repeat(12,1fr); gap:0 20px; }
+.grid i { border-left:1px solid var(--line); border-right:1px solid var(--line); }
+.mono { font-family:"Geist Mono"; font-size:15px; letter-spacing:.02em; text-transform:uppercase; color:var(--muted); }
+.top, .bottom { position:absolute; left:56px; right:56px; display:flex; justify-content:space-between; align-items:center; }
+.top { top:48px; }
+.bottom { bottom:44px; padding-top:20px; border-top:1px solid var(--line-strong); }
+.mark { display:flex; align-items:center; gap:18px; }
+.mark svg { height:34px; overflow:visible; }
+.mark path { fill:none; stroke:var(--ink); stroke-width:4.2; stroke-linecap:square; }
+.mark circle { fill:var(--accent); }
+.name { font-size:22px; font-weight:500; letter-spacing:-.02em; color:var(--ink); }
+h1 { position:absolute; left:52px; top:150px; font-weight:500; font-size:200px; letter-spacing:-.055em; line-height:.86; }
+h1 .dot { color:var(--accent); }
+.frame { position:absolute; left:56px; top:138px; width:720px; height:196px; border:1px dashed var(--accent); }
+.frame span { position:absolute; top:-24px; left:0; font-family:"Geist Mono"; font-size:13px; color:var(--accent); letter-spacing:.04em; }
+.frame b { position:absolute; width:7px; height:7px; background:var(--bg); border:1px solid var(--accent); }
+p.machine { position:absolute; left:56px; top:372px; max-width:760px; font-size:44px; font-weight:500; letter-spacing:-.04em; line-height:1.02; }
+.dot-accent { color:var(--accent); }
+</style></head><body>
+<div class="grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="top">
+  <div class="mark"><svg viewBox="0 0 68 40"><path d="M6 37V3h12a9.5 9.5 0 0 1 0 19H6"/><path d="M57.3 8.7A16 16 0 1 0 62 20H48"/><circle cx="64" cy="36" r="2.6"/></svg><span class="name">Pier Gorelli</span></div>
+  <span class="mono">Web &amp; AI developer · Valencia</span>
+</div>
+<div class="frame"><span>H1.HUMAN · 720×196</span><b style="left:-4px;top:-4px"></b><b style="right:-4px;top:-4px"></b><b style="left:-4px;bottom:-4px"></b><b style="right:-4px;bottom:-4px"></b></div>
+<h1>I do dev<span class="dot">.</span></h1>
+<p class="machine">Web &amp; AI development for creative agencies, when the idea is hard to build.</p>
+<div class="bottom">
+  <span class="mono"><span class="dot-accent">●</span>&nbsp; piergorelli.com</span>
+  <span class="mono">Dev · AI for agencies · AI in products</span>
+</div>
+</body></html>
