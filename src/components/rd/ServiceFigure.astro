@@ -107,6 +107,7 @@ const { kind, caption } = Astro.props;
   .sfig__svg .guide { stroke: var(--line-strong); stroke-dasharray: 3 5; }
   .sfig__svg .accent { stroke: var(--accent); stroke-width: 2; }
   .sfig__svg circle { fill: var(--bg); }
+  .sfig__svg circle[pathLength="1"] { fill: none; } /* plotted outlines: no disc covering the grid before the stroke */
   .sfig__svg .fill { fill: var(--accent); stroke: var(--ink); }
   .sfig__svg text {
     font-family: var(--font-mono);

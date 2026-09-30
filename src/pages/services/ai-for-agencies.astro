@@ -141,11 +141,11 @@ const schema = [
       <span class="note">No fixed prices · scoped on your processes</span>
     </header>
     <h2 class="h2 offer__claim" data-reveal="lines">Start small, prove it on real work, then scale what pays back.</h2>
-    <div class="offer__line" data-draw></div>
-    <ol class="offer grid-12">
+    <div class="seq__line" data-draw></div>
+    <ol class="offer grid-12 seq">
       {offer.map((o) => (
         <li class="offer__item" data-reveal="up">
-          <span class="offer__n">{o.n}</span>
+          <span class="offer__n seq__n">{o.n}</span>
           <h3 class="h3">{o.title}</h3>
           <p>{o.body}</p>
         </li>
@@ -245,8 +245,6 @@ const schema = [
   @media (max-width: 480px) { .report__step { grid-template-columns: 1fr; gap: 0.4rem; } }
 
   .offer__claim { max-width: 20ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
-  .offer__line { height: 1px; background: var(--ink); transform-origin: left; }
-  .offer { row-gap: 2.5rem; padding-top: 2rem; }
   .offer__item { grid-column: span 4; display: flex; flex-direction: column; gap: 0.75rem; }
   .offer__item p { color: var(--muted); max-width: 34ch; }
   .offer__n {
@@ -260,7 +258,7 @@ const schema = [
     font-family: var(--font-mono);
     font-size: 0.85rem;
   }
-  @media (max-width: 767px) { .offer__item { grid-column: 1 / -1; } }
+  @media (max-width: 1099px) { .offer__item { grid-column: 1 / -1; } }
 
   .stack { display: flex; flex-wrap: wrap; gap: 0.6rem; }
   .stack li {

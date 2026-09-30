@@ -259,7 +259,6 @@ const schema = [
       <a href="/agencies/" class="note link">Process, NDA, tools →</a>
     </header>
     <h2 class="h2 models__claim" data-reveal="lines">No price list. A written quote and a schedule with no surprises.</h2>
-    <div class="models__line" data-draw></div>
     <ol class="models grid-12">
       {models.map((m) => (
         <li class="model" data-reveal="up">
@@ -438,8 +437,8 @@ const schema = [
 
   /* Engagement models */
   .models__claim { max-width: 20ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
-  .models__line { height: 1px; background: var(--ink); transform-origin: left; }
-  .models { row-gap: 2.5rem; padding-top: 2rem; }
+  /* Alternatives, not steps: a plain rule, no drawn line joining the circles. */
+  .models { row-gap: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--line); }
   .model { grid-column: span 3; display: flex; flex-direction: column; gap: 0.75rem; }
   .model p { color: var(--muted); max-width: 30ch; }
   .model__n {

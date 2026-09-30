@@ -278,11 +278,11 @@ const schema = [
       <span class="note">{steps.length} steps</span>
     </header>
     <h2 class="h2 claim" data-reveal="lines">A pilot on real content, then numbers.</h2>
-    <div class="process__line" data-draw></div>
-    <ol class="process grid-12">
+    <div class="seq__line" data-draw></div>
+    <ol class="process grid-12 seq">
       {steps.map((s) => (
         <li class="step" data-reveal="up">
-          <span class="step__n">{s.n}</span>
+          <span class="step__n seq__n">{s.n}</span>
           <span class="note">{s.when}</span>
           <h3 class="step__title">{s.title}</h3>
           <p>{s.body}</p>
@@ -552,8 +552,7 @@ const schema = [
   }
 
   /* Process */
-  .process__line { height: 1px; background: var(--ink); transform-origin: left; }
-  .process { row-gap: 2.5rem; padding-top: 2rem; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  @media (min-width: 1100px) { .process { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
   .step { display: flex; flex-direction: column; gap: 0.6rem; }
   .step__title { font-size: var(--step-1); letter-spacing: -0.02em; }
   .step p { color: var(--muted); max-width: 30ch; }
@@ -569,8 +568,6 @@ const schema = [
     font-family: var(--font-mono);
     font-size: 0.85rem;
   }
-  @media (max-width: 1099px) { .process { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 599px) { .process { grid-template-columns: 1fr; } }
 
   /* Stack */
   .stack-table { border-top: 1px solid var(--line); }
