@@ -2,7 +2,7 @@
 import Base from "../layouts/Base.astro";
 import BriefForm from "../components/rd/BriefForm.astro";
 
-const updated = new Date("2026-09-28");
+const updated = new Date("2026-09-30");
 const EMAIL = "me@piergorelli.com";
 
 // TODO(Pier): Cal.com username (see "Da decidere" in docs/redesign-status.md). Until then the call
@@ -16,24 +16,23 @@ const agenda = [
   "Next steps: scope, timing, NDA if you need one",
 ];
 
-// TODO(Pier): confirm the proposal turnaround before launch.
 const steps = [
-  { n: "01", title: "Reply", when: "< 24h", body: "A human answer, usually with a couple of questions and a slot for a call." },
+  { n: "01", title: "Reply", when: "< 24h · Mon–Fri", body: "A human answer, usually with a couple of questions and a slot for a call." },
   { n: "02", title: "Call", when: "30 min", body: "We go through the brief. NDA first, if you prefer." },
-  { n: "03", title: "Proposal", when: "≈ 1 week", body: "Scope, milestones, stack and an estimate. Written, so your team can pass it on." },
-  { n: "04", title: "Kick-off", when: "Day 1", body: "Access to your tools, a repo, staging from the first commit and a weekly demo." },
+  { n: "03", title: "Proposal", when: "≈ 2 weeks", body: "Scope, milestones, stack and a quote, in writing so your team can pass it on." },
+  { n: "04", title: "Kick-off", when: "Day 1", body: "Access to your tools, a repo and staging from the first commit." },
 ];
 
 const channels = [
   { label: "Email", handle: EMAIL, href: `mailto:${EMAIL}`, body: "Briefs, questions, NDAs. The fastest way to reach me." },
   { label: "LinkedIn", handle: "in/piergorelli", href: "https://www.linkedin.com/in/piergorelli/", body: "Where I share new posts and work.", ext: true },
-  { label: "GitHub", handle: "lupin72", href: "https://github.com/lupin72", body: "Open-source bits, including the custom n8n nodes.", ext: true },
-  { label: "RSS", handle: "rss.xml", href: "/rss.xml", body: "One post a week on dev, AI in practice and agency work." },
+  { label: "GitHub", handle: "lupin72", href: "https://github.com/lupin72", body: "Open-source bits and experiments.", ext: true },
+  { label: "RSS", handle: "rss.xml", href: "/rss.xml", body: "New posts on dev, AI in practice and agency work." },
 ];
 
 const faqs = [
   { q: "Can you sign an NDA before we talk?", a: "Yes. Tick the box in the form or just ask by email: I'll sign yours or send mine before you share anything confidential." },
-  { q: "Do you work with companies too, or only with agencies?", a: "Agencies are most of my work, but I also work directly with companies, especially on AI features, automations and sites that need to be fast and accessible." },
+  { q: "Do you work with companies too, or only with agencies?", a: "Agencies are most of my work, but I also work directly with companies, mostly on maintenance and AI in products." },
   { q: "Can I get a quote without a call?", a: "If the brief is clear, yes: I can send a written estimate by email. For anything with open questions, a 30-minute call saves both of us a round of guesses." },
   { q: "What makes a good brief?", a: "What you're building and for whom, the deadline and why it exists, what's already decided (design, CMS, hosting) and what worries you. A deck or a Figma link beats a long email." },
   { q: "Which time zone are you in?", a: "Valencia, Spain (CET/CEST). That means full overlap with the rest of Europe and the UK, and mornings in New York." },
@@ -92,7 +91,7 @@ const schema = [
     <p class="note">[Contact / 06]</p>
     <h1 class="hero__title">
       <span class="display hero__human" data-hero-human data-bp="h1.human">Let's talk.</span>
-      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Send a brief to a freelance web &amp; AI developer in Valencia. Reply within 24 hours.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Send a brief to a freelance web &amp; AI developer in Valencia. Reply within 24 hours, Monday to Friday.</span>
     </h1>
     <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>17</span> tokens · <span data-gen-ms>1480</span> ms</p>
 
@@ -131,7 +130,7 @@ const schema = [
       <span class="note note--ink">[01] The brief</span>
       <span class="note">≈ 2 min · 6 fields</span>
     </header>
-    <h2 class="h2 brief__claim" data-reveal="lines">Tell me what you're building. I'll tell you how it moves.</h2>
+    <h2 class="h2 brief__claim" data-reveal="lines">Tell me what you're building. I'll tell you what it takes.</h2>
     <BriefForm />
   </section>
 
@@ -162,7 +161,7 @@ const schema = [
           <a href={callHref} class="btn" {...(CAL_URL ? { target: "_blank", rel: "noopener" } : {})}>
             {CAL_URL ? "Pick a slot" : "Ask for a slot"} <span class="arrow">→</span>
           </a>
-          <span class="note">EN · ES · IT · CET/CEST</span>
+          <span class="note">CET/CEST</span>
         </div>
       </div>
     </div>
@@ -172,7 +171,7 @@ const schema = [
   <section class="section wrap" id="next">
     <header class="section-head">
       <span class="note note--ink">[03] What happens next</span>
-      <a href="/agencies/" class="note link">How I work with agencies →</a>
+      <span class="note">{steps.length} steps</span>
     </header>
     <div class="next__line" data-draw></div>
     <ol class="next grid-12">
@@ -211,7 +210,7 @@ const schema = [
   <section class="section wrap" id="faq">
     <header class="section-head">
       <span class="note note--ink">[05] Before you write</span>
-      <span class="note">Last updated · <time datetime={updated.toISOString().slice(0, 10)}>28 Sep 2026</time></span>
+      <span class="note">Last updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
     </header>
     <div class="faqs">
       {faqs.map((f) => (
