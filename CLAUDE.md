@@ -40,4 +40,5 @@ Sito personale di Pier Gorelli (Astro 7 + Tailwind 4, Netlify). Redesign in cors
 
 ## Verifica
 Una modifica visiva è verificata quando: `pnpm build` passa, `astro check` ha 0 errori, la pagina è stata vista nel browser, e per il motion `pnpm qa:motion` (Chrome headless, vedi `tools/qa/`) mostra scroll a 60 fps e gli screenshot sono stati guardati. Lighthouse mobile resta ≥ 95 su home, servizi e un articolo (`npx lighthouse <url> --chrome-flags="--headless=new"` su `astro preview`).
+- Il dev server può continuare a servire lo `<style>` scoped vecchio di un `.astro` modificato da shell (sed/python): dopo modifiche fuori dall'editor fai `touch` del file e verifica il valore calcolato (`getComputedStyle`), non solo lo screenshot.
 - La finestra Chrome dell'estensione, quando è in background, sospende `requestAnimationFrame`: WebGL e animazioni sembrano ferme e le misure di frame sono falsate. Per motion e WebGL usa gli script headless.

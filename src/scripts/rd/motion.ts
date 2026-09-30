@@ -14,6 +14,7 @@
  *  [data-draw]                  hairline that draws itself (scaleX), scrubbed
  *  [data-parallax="<percent>"]  scrubbed vertical drift
  *  [data-fill]                  full-row hover fill: [data-hot] set only by real pointer movement
+ *  [data-work-stage]            home Work: plot → build → live drawings, pinned on desktop (work-stage.ts, own chunk)
  *  [data-plot]                  SVG figure: [pathLength="1"] strokes plot themselves, [data-plot-dot] pop in,
  *                               [data-plot-fill] bars grow from the left, [data-plot-solid] outlines fill in, scrubbed
  *  details.faq                  accordion: opens/closes with a height tween ([data-closing] while it folds)
@@ -77,6 +78,12 @@ export function initMotion(): () => void {
         plots();
       });
       ScrollTrigger.refresh();
+      // Home Work stage: its own chunk, only where the section exists.
+      if (document.querySelector("[data-work-stage]")) {
+        import("./work-stage").then(({ initWorkStage }) => {
+          if (!cancelled) cleanups.push(initWorkStage(lenis));
+        });
+      }
     });
 
     // The WebGL contours arrive last, and only where they can run smoothly.
