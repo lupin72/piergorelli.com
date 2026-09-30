@@ -2,6 +2,7 @@
 import { CAL_URL } from "../../data/site";
 
 const year = new Date().getFullYear();
+const stamp = [["Cookies", 0], ["Banners", 0], ["Ads", 0]] as const;
 const cols = [
   {
     title: "Site",
@@ -45,7 +46,25 @@ const cols = [
     ))}
   </div>
 
-  <p class="footer-mark" aria-hidden="true">I do dev.</p>
+  <div class="footer-sign">
+    <p class="footer-mark" aria-hidden="true">I do dev.</p>
+
+    <!-- Drawing title block: the "no cookie banner" statement. Keep in sync with /cookie-policy/. -->
+    <div class="tb note">
+      <dl class="tb__cells">
+        {stamp.map(([label, n], i) => (
+          <div style={`--i: ${i}`}>
+            <dt>{label}</dt>
+            <dd class="tb__val"><span>{n}</span></dd>
+          </div>
+        ))}
+      </dl>
+      <p class="tb__cap">
+        <span>Privacy spec · rev. {year}</span>
+        <a href="/cookie-policy/" class="tb__link">Read<span class="sr-only"> the cookie policy</span> →</a>
+      </p>
+    </div>
+  </div>
 
   <div class="footer-bottom note">
     <span>© {year} Pier Gorelli · Designed and built in Valencia</span>
@@ -63,7 +82,8 @@ const cols = [
     position: relative;
     padding-top: var(--section);
     padding-bottom: 1.25rem;
-    overflow: hidden;
+    /* clip, not hidden: hidden would make the footer the scroller of the title block's view() timeline. */
+    overflow: clip;
   }
   .footer-top { row-gap: 2.5rem; padding-bottom: clamp(48px, 8vw, 120px); }
   .footer-claim { grid-column: 1 / span 6; max-width: 16ch; }
@@ -83,6 +103,75 @@ const cols = [
     margin-inline: -0.04em;
     white-space: nowrap;
   }
+
+  /* Title block: bottom right of the mark on wide screens, under it otherwise. */
+  .footer-sign { position: relative; }
+  .tb {
+    position: relative;
+    width: max-content;
+    max-width: 100%;
+    margin-top: 2rem;
+    border: 1px solid var(--line-strong);
+    background: var(--bg);
+    transition: border-color var(--dur-1) var(--ease-out);
+  }
+  @media (min-width: 1100px) {
+    .tb { position: absolute; right: 0; bottom: 0; margin: 0; }
+  }
+  .tb::before, .tb::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border: solid var(--accent);
+    pointer-events: none;
+  }
+  .tb::before { left: -5px; top: -5px; border-width: 1px 0 0 1px; }
+  .tb::after { right: -5px; bottom: -5px; border-width: 0 1px 1px 0; }
+  .tb:hover { border-color: var(--ink); }
+
+  .tb__cells { display: grid; grid-template-columns: repeat(3, auto); }
+  .tb__cells > div { display: flex; flex-direction: column; gap: 0.35rem; padding: 0.7rem 1rem 0.8rem; }
+  .tb__cells > div + div { border-left: 1px solid var(--line-strong); }
+  .tb dt { color: var(--muted); }
+  .tb__val {
+    font-size: 1.9rem;
+    line-height: 1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tb__cap {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--line-strong);
+    color: var(--muted);
+  }
+  .tb__link { color: var(--accent-text); }
+  /* The whole block is the click target. */
+  .tb__link::after { content: ""; position: absolute; inset: 0; }
+
+  /* The zeros count down 9 → 0 while the footer scrolls in. CSS only (the blog ships no animation JS). */
+  @property --tb-n { syntax: "<integer>"; inherits: false; initial-value: 0; }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .tb__val { counter-reset: tb var(--tb-n); }
+      .tb__val span { display: none; }
+      .tb__val::before { content: counter(tb); }
+      /* Longhands on purpose: the minifier folds a shorthand + timeline into `animation: … view()`, which Chrome drops. */
+      .tb__val {
+        animation-name: tb-count;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        /* Within the block's own entry: it is fully in view at the end of the page, so every count lands on 0. */
+        animation-timeline: view();
+        animation-range: entry calc(var(--i) * 15%) entry calc(70% + var(--i) * 15%);
+      }
+    }
+  }
+  @keyframes tb-count { from { --tb-n: 9; } to { --tb-n: 0; } }
 
   .footer-bottom {
     display: flex;
