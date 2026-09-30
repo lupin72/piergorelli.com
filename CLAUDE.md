@@ -16,7 +16,7 @@ Sito personale di Pier Gorelli (Astro 7 + Tailwind 4, Netlify). Redesign in cors
 - `Base.astro` prop `motion`: `"showcase"` carica `motion.ts` (Lenis, GSAP, intro, cursore, WebGL); `"read"` (blog) resta senza JS di animazione al caricamento — budget JS blog < 15 KB gzip. Le transizioni (`transition.ts`) sul blog si scaricano solo al passaggio su un link.
 - Hook del motion documentati in testa a `src/scripts/rd/motion.ts` (`data-hero`, `data-bp`, `data-reveal`, `data-wireframe`, `data-draw`, `data-parallax`…): riusali sulle nuove pagine.
 - Colore del testo in accento: sempre `var(--accent-text)` (contrasto sul tema chiaro); `var(--accent)` solo per fondi, tratti, riempimenti.
-- `src/data/work.ts` contiene casi studio **segnaposto**: restano etichettati “placeholder” finché Pier non fornisce quelli reali.
+- `src/data/work.ts`: field reports anonimi (nessun nome, link o screenshot di clienti), visual blueprint in `WorkVisual.astro`. Copy: segui `docs/content-strategy.md`; ogni numero o promessa deve stare in `docs/content-facts.md`.
 
 ## Regole di motion (nate da bug reali)
 - Un elemento animato da GSAP non ha `transition` CSS sulla stessa proprietà (causava gli scatti del parallax).

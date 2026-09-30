@@ -49,7 +49,7 @@ export const PILLAR_INFO: Record<PillarKey, {
   agencies: {
     slug: "ai-for-agencies",
     tagline: "What AI changes inside a creative agency, without the jargon.",
-    body: "Use cases, workflows and adoption notes for agency owners and producers: what to automate, what to keep human, how to brief an AI feature. Some posts in Spanish too.",
+    body: "Use cases, workflows and adoption notes for agency owners and producers: what to automate, what to keep human, how to brief an AI feature.",
     seoTitle: "AI for Creative Agencies: Use Cases & Workflows | Pier Gorelli",
     seoDescription: "AI for creative agencies in plain words: automation use cases, n8n workflows, adoption and briefing tips from a developer who works with agencies.",
   },

@@ -1,6 +1,6 @@
 ---
 /** Generative blueprint visuals standing in for project imagery in the prototype. */
-interface Props { kind: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" }
+interface Props { kind: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" | "diagonals" | "captions" }
 const { kind } = Astro.props;
 const bars = [62, 88, 40, 74, 96, 52, 80, 34, 68, 90, 46, 76];
 const audit = [
@@ -16,6 +16,10 @@ const tiles = motifs.map((m, i) => ({ m, x: TX + (i % 5) * (T + G), y: TY + Math
 // Migraine PSP: one month of the patient diary, 0 = none … 3 = attack.
 const days = [0,0,1,0,0,0,0, 0,3,2,0,0,0,1, 0,0,0,0,1,0,0, 0,2,3,1,0,0,0, 0,0,0,0,1,0,0];
 const queue = [1, 0, 0, 1, 0];
+// Retail: slides of uneven width; the last twelfth of each one previews the next slide's colour.
+const slides = [{ x: 20, w: 132 }, { x: 160, w: 96 }, { x: 264, w: 156 }];
+// Image SEO: camera file names turned into names chosen from page context and keyword niche.
+const shots = [0, 1, 2];
 ---
 
 <div class:list={["visual", `visual--${kind}`]} aria-hidden="true">
@@ -86,8 +90,8 @@ const queue = [1, 0, 0, 1, 0];
           {m === "accent" && <circle cx={x + 28} cy={y + 28} r="16" class="motif motif--on-accent" />}
         </g>
       ))}
-      <text x={TX} y="248" class="bp__label">$ import catalogue.xlsx</text>
-      <text x={TX} y="266" class="bp__label">→ 1,284 products · 0 manual edits</text>
+      <text x={TX} y="248" class="bp__label">$ import catalogue.xlsx --map config.json</text>
+      <text x={TX} y="266" class="bp__label">→ taxonomies · CPT · ACF · galleries</text>
     </svg>
   )}
 
@@ -113,6 +117,41 @@ const queue = [1, 0, 0, 1, 0];
         </g>
       ))}
       <text x="56" y="292" class="bp__label">patient app ⇄ back office</text>
+    </svg>
+  )}
+
+  {kind === "diagonals" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+      <path d="M10 260L270 0M102 0L339 300" class="accent-stroke" stroke-dasharray="3 5" />
+      <path d="M150 30V170M158 112L224 46M176 94L236 170" class="k" />
+      <text x="240" y="58" class="bp__label">45°</text>
+      <text x="170" y="24" class="bp__label">K · construction</text>
+      {slides.map(({ x, w }, i) => (
+        <g>
+          <rect x={x} y="192" width={w} height="40" class="frame" />
+          <rect x={x + w - w / 12} y="192" width={w / 12} height="40" class:list={[i === 1 ? "accent-fill" : "slide-hint"]} />
+        </g>
+      ))}
+      <text x="20" y="256" class="bp__label">last 1/12 = colour of the next slide</text>
+    </svg>
+  )}
+
+  {kind === "captions" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+      {shots.map((i) => (
+        <g>
+          <rect x={30 + i * 120} y="36" width="100" height="74" class="frame" />
+          <path d={`M${40 + i * 120} 98L${64 + i * 120} 70L${82 + i * 120} 88L${94 + i * 120} 78L${120 + i * 120} 98`} class="motif" />
+          <circle cx={108 + i * 120} cy="54" r="6" class:list={[i === 1 ? "accent-fill" : "dot"]} />
+          <text x={30 + i * 120} y="128" class="bp__label strike">IMG_04{12 + i}.jpg</text>
+          <rect x={30 + i * 120} y="140" width={i === 1 ? 92 : 78} height="4" rx="2" class:list={[i === 1 ? "accent-fill" : "line"]} />
+          <rect x={30 + i * 120} y="152" width={i === 2 ? 56 : 70} height="4" rx="2" class="line" />
+        </g>
+      ))}
+      <path d="M30 186H370" class="rule" />
+      <text x="30" y="212" class="bp__label">search console · keyword niche · page context</text>
+      <text x="30" y="232" class="bp__label">→ file name · alt · caption</text>
+      <text x="30" y="266" class="bp__label">$ claude › seo-images</text>
     </svg>
   )}
 </div>
@@ -144,6 +183,9 @@ const queue = [1, 0, 0, 1, 0];
   .day--1 { fill: currentColor; fill-opacity: 0.18; stroke: none; }
   .day--2 { fill: currentColor; fill-opacity: 0.45; stroke: none; }
   .day--3 { fill: var(--accent); stroke: none; }
+  .k { fill: none; stroke: currentColor; stroke-width: 16; stroke-linecap: square; }
+  .slide-hint { fill: currentColor; fill-opacity: 0.3; }
+  .strike { text-decoration: line-through; }
   .bp__label { fill: currentColor; fill-opacity: 0.6; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; }
 
   .visual__audit {

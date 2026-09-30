@@ -30,11 +30,6 @@ const path = Astro.url.pathname;
   </nav>
 
   <div class="tools">
-    <div class="lang note" role="group" aria-label="Language">
-      <span aria-current="true">EN</span>
-      <span title="Coming soon">ES<span class="sr-only"> (coming soon)</span></span>
-      <span title="Coming soon">IT<span class="sr-only"> (coming soon)</span></span>
-    </div>
     <button class="tool" type="button" data-action="theme" aria-label="Toggle light / dark theme">
       <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" /><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" /></svg>
     </button>
@@ -173,10 +168,6 @@ const path = Astro.url.pathname;
   .nav__link[aria-current="page"] .note { color: var(--accent-text); }
 
   .tools { justify-self: end; display: flex; align-items: center; gap: 0.5rem; padding-right: 0.75rem; }
-  .lang { display: flex; gap: 0.5rem; margin-right: 0.5rem; }
-  /* dimmed with --muted (4.5:1), not opacity: still legible (WCAG 1.4.3) */
-  .lang > span:not([aria-current]) { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; cursor: not-allowed; }
-  .lang span[aria-current] { color: var(--ink); }
 
   .tool {
     display: grid;
@@ -206,7 +197,7 @@ const path = Astro.url.pathname;
   @media (max-width: 960px) {
     .site-header { grid-template-columns: 1fr auto; }
     .nav { display: none; }
-    .brand__role, .lang, .tool--kbd { display: none; }
+    .brand__role, .tool--kbd { display: none; }
     .tool--menu { display: grid; }
   }
   @media (max-width: 480px) {

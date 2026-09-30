@@ -2,6 +2,8 @@
 import Base from "../layouts/Base.astro";
 import WorkVisual from "../components/rd/WorkVisual.astro";
 import { work } from "../data/work";
+
+const homeWork = ["retail-k", "piergorelli-com", "seo-images"].map((slug) => work.find((w) => w.slug === slug)!);
 import { getPosts, pillarOf, postUrl, formatDate } from "../lib/blog";
 
 const posts = (await getPosts()).slice(0, 3);
@@ -11,30 +13,30 @@ const services = [
     n: "01",
     title: "Web development for agencies",
     href: "/services/web-development-for-agencies/",
-    body: "Award-level, animated sites and headless CMS builds, delivered white-label, on your timeline.",
+    body: "Motion-heavy sites and CMS builds, developed under your agency's name, with the designer still in the room.",
     tags: ["Astro", "GSAP", "WordPress", "Drupal"],
   },
   {
     n: "02",
     title: "AI for agencies",
     href: "/services/ai-for-agencies/",
-    body: "Automate the busywork with n8n and LLMs, and help your team adopt AI without losing the craft.",
-    tags: ["n8n", "Workflows", "Training"],
+    body: "Hands-on training on tools like Claude Code, then the custom skills and workflows your team is missing. Including an honest list of what not to automate.",
+    tags: ["Training", "Claude Code", "Custom workflows"],
   },
   {
     n: "03",
     title: "AI in products",
     href: "/services/ai-product-integration/",
-    body: "LLM features inside your clients' sites and apps: RAG assistants, agents, semantic search.",
-    tags: ["RAG", "Agents", "LLM APIs"],
+    body: "Chatbots and semantic search grounded in your client's content, tested on the questions real users ask, answering with sources.",
+    tags: ["RAG", "Semantic search", "AI SDK"],
   },
 ];
 
 const steps = [
-  { n: "01", title: "Brief", body: "A call, your deck, the constraints. I reply with questions, scope and a date." },
-  { n: "02", title: "Prototype", body: "Motion and tech risks proven in code early, before anyone falls in love with a mock-up." },
-  { n: "03", title: "Build", body: "Staging from day one, weekly demos, your design system respected to the pixel." },
-  { n: "04", title: "Handover", body: "Docs, CMS training and a clean repo. Under your brand, if you prefer." },
+  { n: "01", title: "Brief", body: "A call, your deck, the constraints. I reply with questions and a first idea of scope." },
+  { n: "02", title: "Prototype", body: "The difficult interaction runs in a browser before anyone falls in love with a mock-up." },
+  { n: "03", title: "Build", body: "Staging from day one and a written list of decisions. No big reveal at the end." },
+  { n: "04", title: "Handover", body: "Docs, CMS training and a clean repo, under your brand." },
 ];
 
 const schema = [
@@ -57,7 +59,7 @@ const schema = [
     url: "https://piergorelli.com/",
     founder: { "@id": "https://piergorelli.com/#person" },
     areaServed: ["ES", "IT", "EU"],
-    serviceType: ["Web development", "AI automation", "LLM integration"],
+    serviceType: ["Web development", "AI training", "LLM integration"],
   },
   {
     "@context": "https://schema.org",
@@ -70,7 +72,7 @@ const schema = [
 
 <Base
   title="Freelance Web & AI Developer for Creative Agencies | Pier Gorelli"
-  description="Pier Gorelli builds award-level websites and AI automations for creative agencies: animated front-ends, headless CMS, n8n workflows and LLM features. Based in Valencia, working EN / ES / IT."
+  description="Pier Gorelli builds animated websites, CMS platforms and AI features for creative agencies, always white-label. Plus hands-on AI training for agency teams. Based in Valencia."
   motion="showcase"
   preloader
   schema={schema}
@@ -80,27 +82,27 @@ const schema = [
     <div class="hero__top note">
       <span>Pier Gorelli · freelance web &amp; AI developer</span>
       <span class="hide-sm">39.47° N, 0.38° W · Valencia, ES</span>
-      <span>Available · Q4 2026</span>
+      <span>Taking on new projects</span>
     </div>
 
     <h1 class="hero__title">
       <span class="hero__human display" data-hero-human data-bp="h1.human">I do dev.</span>
-      <span class="hero__machine h2" data-hero-generate data-bp="h1.machine">Web &amp; AI development for creative agencies: shipped fast, animated, with AI inside.</span>
+      <span class="hero__machine h2" data-hero-generate data-bp="h1.machine">Web &amp; AI development for creative agencies, when the idea is hard to build.</span>
     </h1>
 
     <div class="hero__notes">
       <p class="note" data-hero-fade><span class="note--accent">●</span> human · written by hand</p>
       <p class="note" data-hero-fade>
-        <span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>21</span> tokens · <span data-gen-ms>1840</span> ms
+        <span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>17</span> tokens · <span data-gen-ms>1840</span> ms
       </p>
     </div>
 
     <div class="hero__foot">
       <p class="hero__intro lead" data-hero-fade data-bp="p.lead">
-        25 years building for agencies. Today I also bring AI into their workflows and into their clients' products. White-label welcome.
+        Building for the web since 1999, for agencies since 2004, always under their name. Today that includes AI: inside their teams, and inside their clients' products.
       </p>
       <div class="hero__ctas" data-hero-fade data-bp="nav.cta">
-        <a href="/contact/" class="btn">Book a call <span class="arrow">→</span></a>
+        <a href="/contact/" class="btn">Send me the hard part <span class="arrow">→</span></a>
         <a href="#work" class="btn btn--ghost">See the work</a>
       </div>
     </div>
@@ -112,7 +114,7 @@ const schema = [
       <span class="note note--ink">[01] Manifesto</span>
       <span class="note" data-wf-note>fig. 01 · wireframe → production</span>
     </header>
-    {["Design deserves", "engineering that", "never compromises."].map((line, i) => (
+    {["Keep the idea.", "Change what gets", "in its way."].map((line, i) => (
       <div class="wf-row">
         <p class="wf-line h1">
           <span class="outline-text" aria-hidden="true">{line}</span>
@@ -123,15 +125,40 @@ const schema = [
     ))}
     <div class="manifesto__body grid-12">
       <p class="lead" data-reveal="up">
-        Agencies bring the ideas. I make sure they survive production: accessible, fast, and moving exactly the way the designer imagined.
+        Agencies bring the ideas. I get them through production intact. If uneven slides are what make a slider feel alive, I rewrite the maths, not the slides.
       </p>
     </div>
   </section>
 
-  <!-- ── 02 Services ──────────────────────────────────────── -->
+  <!-- ── 02 Work ──────────────────────────────────────────── -->
+  <section class="section wrap" id="work">
+    <header class="section-head">
+      <span class="note note--ink">[02] Selected work</span>
+      <span class="note">Field reports · client names under NDA</span>
+    </header>
+    <p class="work__intro lead" data-reveal="up">Everything I build for agencies ships under their name. So here you'll see how each project was built. Whose it is stays with them.</p>
+    <div class="work grid-12">
+      {homeWork.map((w, i) => (
+        <article class:list={["work__item", `work__item--${i}`]} data-reveal="up">
+          <a href="#work" class="work__link">
+            <WorkVisual kind={w.visual} />
+            <div class="work__meta">
+              <span class="note">{String(i + 1).padStart(2, "0")}{w.year && ` / ${w.year}`}</span>
+              <span class="note">{w.stack.join(" · ")}</span>
+            </div>
+            <h2 class="h3 work__title">{w.title}</h2>
+            <p class="work__client note">{w.client}</p>
+            <p class="work__summary">{w.summary}</p>
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── 03 Services ──────────────────────────────────────── -->
   <section class="section wrap" id="services">
     <header class="section-head">
-      <span class="note note--ink">[02] Services</span>
+      <span class="note note--ink">[03] Services</span>
       <a href="/services/" class="note link">All services →</a>
     </header>
     <ol class="services">
@@ -151,37 +178,13 @@ const schema = [
     </ol>
   </section>
 
-  <!-- ── 03 Work ──────────────────────────────────────────── -->
-  <section class="section wrap" id="work">
-    <header class="section-head">
-      <span class="note note--ink">[03] Selected work</span>
-      <span class="note">2024–2026</span>
-    </header>
-    <div class="work grid-12">
-      {work.map((w, i) => (
-        <article class:list={["work__item", `work__item--${i}`]} data-reveal="up">
-          <a href="#work" class="work__link">
-            <WorkVisual kind={w.visual} />
-            <div class="work__meta">
-              <span class="note">{String(i + 1).padStart(2, "0")} / {w.year}</span>
-              <span class="note">{w.stack.join(" · ")}</span>
-            </div>
-            <h3 class="h3 work__title">{w.title}</h3>
-            <p class="work__client note">{w.client}{w.placeholder && " · placeholder"}</p>
-            <p class="work__summary">{w.summary}</p>
-          </a>
-        </article>
-      ))}
-    </div>
-  </section>
-
   <!-- ── 04 Process ───────────────────────────────────────── -->
   <section class="section wrap" id="process">
     <header class="section-head">
       <span class="note note--ink">[04] How I work with agencies</span>
-      <a href="/agencies/" class="note link">NDA, white-label, tools →</a>
+      <span class="note">White-label · under NDA</span>
     </header>
-    <h2 class="h2 process__claim" data-reveal="lines">Your brand on the front. My code underneath. Nobody has to know.</h2>
+    <h2 class="h2 process__claim" data-reveal="lines">Your brand on the front. My code underneath.</h2>
     <div class="process__line" data-draw></div>
     <ol class="process grid-12">
       {steps.map((s) => (
@@ -218,12 +221,12 @@ const schema = [
   <section class="section wrap cta">
     <header class="section-head">
       <span class="note note--ink">[06] Next</span>
-      <span class="note">Reply within 24h · EN / ES / IT</span>
+      <span class="note">Reply within 24h, Mon to Fri</span>
     </header>
-    <h2 class="display cta__title" data-reveal="lines">Got a brief? Let's make it move.</h2>
+    <h2 class="display cta__title" data-reveal="lines">Send me the part of the brief that worries you.</h2>
     <div class="cta__actions" data-reveal="up">
-      <a href="/contact/" class="btn">Book a 30-min call <span class="arrow">→</span></a>
-      <a href="mailto:me@piergorelli.com" class="btn btn--ghost">me@piergorelli.com</a>
+      <a href="mailto:me@piergorelli.com" class="btn">Start with an email <span class="arrow">→</span></a>
+      <a href="/contact/" class="btn btn--ghost">Or send a brief</a>
     </div>
   </section>
 </Base>
@@ -308,6 +311,7 @@ const schema = [
   }
 
   /* Work */
+  .work__intro { max-width: 40ch; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
   .work { row-gap: clamp(3rem, 6vw, 6rem); }
   .work__item--0 { grid-column: 1 / span 7; }
   .work__item--1 { grid-column: 9 / span 4; margin-top: 30%; }
