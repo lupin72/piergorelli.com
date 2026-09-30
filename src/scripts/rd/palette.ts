@@ -17,11 +17,11 @@ const go = (href: string) => () => { dialog?.close(); navigate(href); };
 
 const base: Item[] = [
   { group: "Go to", label: "Home", hint: "/", run: go("/") },
+  { group: "Go to", label: "Work", hint: "/#work", run: go("/#work") },
   { group: "Go to", label: "Services", hint: "/services/", run: go("/services/") },
   { group: "Go to", label: "Web development for agencies", hint: "/services/web-development-for-agencies/", run: go("/services/web-development-for-agencies/") },
   { group: "Go to", label: "AI for agencies", hint: "/services/ai-for-agencies/", run: go("/services/ai-for-agencies/") },
   { group: "Go to", label: "AI in products", hint: "/services/ai-product-integration/", run: go("/services/ai-product-integration/") },
-  { group: "Go to", label: "Work", hint: "/#work", run: go("/#work") },
   { group: "Go to", label: "About", hint: "/about/", run: go("/about/") },
   { group: "Go to", label: "Blog", hint: "/blog/", run: go("/blog/") },
   { group: "Go to", label: "Contact", hint: "/contact/", run: go("/contact/") },
