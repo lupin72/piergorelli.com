@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # QA screenshots
 tools/qa/out/
+
+# private working docs (plan, status, content notes): local only, not published
+/docs/
