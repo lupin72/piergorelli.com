@@ -206,7 +206,8 @@ const lighthouse = [98, 100, 100, 100];
                 <text x="60" y="112" class="lbl lbl--a" data-b-in>h1.human · 720×196</text>
                 <text x="60" y="222" class="hed hed--outline" data-b-in>I do dev.</text>
                 <clipPath id="ws-h1clip"><rect x="40" y="110" width="460" height="140" data-b-clip /></clipPath>
-                <text x="60" y="222" class="hed" clip-path="url(#ws-h1clip)">I do dev.</text>
+                {/* Clip on a group: WebKit ignores clip-path set directly on <text>. */}
+                <g clip-path="url(#ws-h1clip)"><text x="60" y="222" class="hed">I do dev.</text></g>
                 {hills.map((d, i) => <path d={d} class={i === 4 ? "hill hill--a" : "hill"} data-b-in />)}
                 <rect x="60" y="270" width="300" height="10" rx="5" class="bar" data-b-wipe />
                 <rect x="60" y="290" width="220" height="10" rx="5" class="bar" data-b-wipe />
