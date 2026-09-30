@@ -1,0 +1,65 @@
+---
+/**
+ * First-visit intro: the monogram plots itself while a counter runs to 100,
+ * then the sheet lifts. Pure CSS, so it never blocks on JS. Shown once per session
+ * (html[data-preloaded] is set by the head script in Base.astro).
+ */
+import Monogram from "./Monogram.astro";
+---
+
+<div class="preloader" data-preloader aria-hidden="true">
+  <div class="preloader__meta note">
+    <span>Plotting piergorelli.com</span>
+    <span>rev. 2026</span>
+  </div>
+  <Monogram class="preloader__mark is-plotting" />
+  <div class="preloader__meta note">
+    <span>Human + machine</span>
+    <span class="preloader__count"></span>
+  </div>
+</div>
+
+<style>
+  @property --n {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: false;
+  }
+
+  .preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 95;
+    display: none;
+    grid-template-rows: auto 1fr auto;
+    justify-items: center;
+    align-items: center;
+    padding: 1.25rem var(--gutter);
+    background: var(--ink);
+    color: var(--bg);
+    clip-path: inset(0 0 0 0);
+    animation: lift 0.9s var(--ease-in-out) 1.2s forwards;
+  }
+  :global(html.js:not([data-preloaded])) .preloader { display: grid; }
+
+  .preloader__meta {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    color: color-mix(in oklab, var(--bg) 60%, transparent);
+  }
+  .preloader :global(.preloader__mark) {
+    font-size: clamp(5rem, 16vw, 12rem);
+  }
+  .preloader__count {
+    font-variant-numeric: tabular-nums;
+    animation: count 1.1s var(--ease-in-out) forwards;
+    counter-reset: n var(--n);
+  }
+  .preloader__count::after { content: counter(n) "%"; }
+
+  @keyframes count { to { --n: 100; } }
+  @keyframes lift {
+    to { clip-path: inset(0 0 100% 0); visibility: hidden; }
+  }
+</style>

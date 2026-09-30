@@ -1,31 +1,377 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import About from '../components/About.astro'; 
-import Blog from '../components/Blog.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import Mission from '../components/Mission.astro';
-import Services from '../components/Services.astro';
-import Hero from '../components/Hero.astro';
-import SiteData from "../constants/siteData.json";
+import Base from "../layouts/Base.astro";
+import WorkVisual from "../components/rd/WorkVisual.astro";
+import { work } from "../data/work";
+import { CAL_URL } from "../data/site";
+
+const homeWork = ["retail-k", "piergorelli-com", "seo-images"].map((slug) => work.find((w) => w.slug === slug)!);
+import { getPosts, pillarOf, postUrl, formatDate } from "../lib/blog";
+
+const posts = (await getPosts()).slice(0, 3);
+
+const services = [
+  {
+    n: "01",
+    title: "Web development for agencies",
+    href: "/services/web-development-for-agencies/",
+    body: "Motion-heavy sites and CMS builds, built closely with your designers and delivered ready for your team to own.",
+    tags: ["Astro", "GSAP", "WordPress", "Drupal"],
+  },
+  {
+    n: "02",
+    title: "AI for agencies",
+    href: "/services/ai-for-agencies/",
+    body: "Hands-on training on tools like Claude Code, followed by the custom skills and workflows your team is missing. Including an honest list of what not to automate.",
+    tags: ["Training", "Claude Code", "Custom workflows"],
+  },
+  {
+    n: "03",
+    title: "AI in products",
+    href: "/services/ai-product-integration/",
+    body: "Chatbots and semantic search grounded in your clients' content, tested on the questions real users ask, answering with sources.",
+    tags: ["RAG", "Semantic search", "AI SDK"],
+  },
+];
+
+const steps = [
+  { n: "01", title: "Brief", body: "A call, your deck, the constraints. I reply with questions and a first idea of scope." },
+  { n: "02", title: "Prototype", body: "The difficult interaction runs in a browser before anyone falls in love with a mock-up." },
+  { n: "03", title: "Build", body: "Staging from day one and a written list of decisions. No big reveal at the end." },
+  { n: "04", title: "Handover", body: "Docs, CMS training and a clean repo." },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "https://piergorelli.com/#person",
+    name: "Pier Gorelli",
+    jobTitle: "Freelance web & AI developer",
+    url: "https://piergorelli.com/",
+    email: "mailto:me@piergorelli.com",
+    address: { "@type": "PostalAddress", addressLocality: "Valencia", addressCountry: "ES" },
+    knowsLanguage: ["en", "es", "it"],
+    sameAs: ["https://www.linkedin.com/in/piergorelli/", "https://github.com/lupin72"],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: "Pier Gorelli | Web & AI development for creative agencies",
+    url: "https://piergorelli.com/",
+    founder: { "@id": "https://piergorelli.com/#person" },
+    areaServed: ["ES", "IT", "EU"],
+    serviceType: ["Web development", "AI training", "LLM integration"],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Pier Gorelli",
+    url: "https://piergorelli.com/",
+  },
+];
 ---
 
-
-<Layout 
-seo={{
-  title: SiteData.default.title,
-  description: SiteData.default.description
-}}
+<Base
+  title="Freelance Web & AI Developer for Creative Agencies | Pier Gorelli"
+  description="Pier Gorelli builds animated websites, CMS platforms and AI features for creative agencies. Plus hands-on AI training for agency teams. Based in Valencia."
+  motion="showcase"
+  preloader
+  schema={schema}
 >
-	<Header textColor="white" headerClasses="opacity-1" backgroundColor="bg-boulder-950" menuColor="#ffffff"/>
-	<main>
-		<Hero/>
-    <About actionText="More about me" actionLink="/about/"/>
-    <Mission/>
-    <Services size={58} strokeWidth={0.5} customClasses='text-boulder-500' subtitle="03"/>
-    <Blog limit="3"/>
-	</main>
-  <Footer />
-</Layout>
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero wrap" data-hero>
+    <div class="hero__top note">
+      <span>Pier Gorelli · freelance web &amp; AI developer</span>
+      <span class="hide-sm">39.47° N, 0.38° W · Valencia, ES</span>
+      <span>Taking on new projects</span>
+    </div>
 
+    <h1 class="hero__title">
+      <span class="hero__human display" data-hero-human data-bp="h1.human">I do dev.</span>
+      <span class="hero__machine h2" data-hero-generate data-bp="h1.machine">Web &amp; AI development for creative agencies, when the idea is hard to build.</span>
+    </h1>
 
+    <div class="hero__notes">
+      <p class="note" data-hero-fade><span class="note--accent">●</span> human · written by hand</p>
+      <p class="note" data-hero-fade>
+        <span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>17</span> tokens · <span data-gen-ms>1840</span> ms
+      </p>
+    </div>
+
+    <div class="hero__foot">
+      <p class="hero__intro lead" data-hero-fade data-bp="p.lead">
+        Building for the web since 1999, for agencies since 2004. Today that includes AI: inside their teams, and inside their clients' products.
+      </p>
+      <div class="hero__ctas" data-hero-fade data-bp="nav.cta">
+        <a href="/contact/" class="btn">Send me the hard part <span class="arrow">→</span></a>
+        <a href="#work" class="btn btn--ghost">See the work</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 01 Manifesto: wireframe → production ─────────────── -->
+  <section class="section wrap manifesto" data-wireframe>
+    <header class="section-head">
+      <span class="note note--ink">[01] Manifesto</span>
+      <span class="note" data-wf-note>fig. 01 · wireframe → production</span>
+    </header>
+    {["Keep the idea.", "Change what gets", "in its way."].map((line, i) => (
+      <div class="wf-row">
+        <p class="wf-line h1">
+          <span class="outline-text" aria-hidden="true">{line}</span>
+          <span class="wf-solid" data-wf-solid><span class="wf-solid__inner">{line}</span></span>
+        </p>
+        <span class="wf-dim note" data-wf-note aria-hidden="true">{["↤ 12 col ↦", "font-size: var(--step-4)", "ls −0.05em"][i]}</span>
+      </div>
+    ))}
+    <div class="manifesto__body grid-12">
+      <p class="lead" data-reveal="up">
+        Agencies bring the ideas. I get them through production intact. If uneven slides are what make a slider feel alive, I rewrite the maths, not the slides.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── 02 Work ──────────────────────────────────────────── -->
+  <section class="section wrap" id="work">
+    <header class="section-head">
+      <span class="note note--ink">[02] Selected work</span>
+      <span class="note">Field reports · client names under NDA</span>
+    </header>
+    <p class="work__intro lead" data-reveal="up">Client work stays confidential. So here you'll see how each project was built, not whose it is.</p>
+    <div class="work grid-12">
+      {homeWork.map((w, i) => {
+        const Card = w.href ? "a" : "div";
+        return (
+          <article class:list={["work__item", `work__item--${i}`]} data-reveal="up">
+            <Card href={w.href} class="work__link">
+              <WorkVisual kind={w.visual} />
+              <div class="work__meta">
+                <span class="note">{String(i + 1).padStart(2, "0")}{w.year && ` / ${w.year}`}</span>
+                <span class="note">{w.stack.join(" · ")}</span>
+              </div>
+              <h2 class="h3 work__title">{w.title}</h2>
+              <p class="work__client note">{w.client}</p>
+              <p class="work__summary">{w.summary}</p>
+            </Card>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- ── 03 Services ──────────────────────────────────────── -->
+  <section class="section wrap" id="services">
+    <header class="section-head">
+      <span class="note note--ink">[03] Services</span>
+      <a href="/services/" class="note link">All services →</a>
+    </header>
+    <ol class="services">
+      {services.map((s) => (
+        <li class="service" data-reveal="up">
+          <a href={s.href} class="service__link grid-12" data-fill>
+            <span class="service__n note" aria-hidden="true">{s.n}</span>
+            <h2 class="service__title h2">{s.title}</h2>
+            <p class="service__body">{s.body}</p>
+            <ul class="service__tags">
+              {s.tags.map((t) => <li class="note">{t}</li>)}
+            </ul>
+            <span class="service__arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 04 Process ───────────────────────────────────────── -->
+  <section class="section wrap" id="process">
+    <header class="section-head">
+      <span class="note note--ink">[04] How I work with agencies</span>
+      <span class="note">Under NDA · anonymised</span>
+    </header>
+    <h2 class="h2 process__claim" data-reveal="lines">Your design on top. My code underneath.</h2>
+    <div class="process__line" data-draw></div>
+    <ol class="process grid-12">
+      {steps.map((s) => (
+        <li class="step" data-reveal="up">
+          <span class="step__dot" aria-hidden="true"></span>
+          <span class="note">{s.n}</span>
+          <h3 class="step__title">{s.title}</h3>
+          <p class="step__body">{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 05 Blog ──────────────────────────────────────────── -->
+  <section class="section wrap" id="blog">
+    <header class="section-head">
+      <span class="note note--ink">[05] From the blog</span>
+      <a href="/blog/" class="note link">All posts →</a>
+    </header>
+    <ul class="posts">
+      {posts.map((p) => (
+        <li data-reveal="up">
+          <a href={postUrl(p)} class="post grid-12">
+            <span class="post__date note">{formatDate(p.data.pubDate)}</span>
+            <span class="post__title h3">{p.data.title}</span>
+            <span class="post__pillar note">{pillarOf(p)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ── 06 CTA ───────────────────────────────────────────── -->
+  <section class="section wrap cta">
+    <header class="section-head">
+      <span class="note note--ink">[06] Next</span>
+      <span class="note">30 minutes</span>
+    </header>
+    <h2 class="display cta__title" data-reveal="lines">Tell me what you're building.</h2>
+    <div class="cta__actions" data-reveal="up">
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
+      <a href="/contact/" class="btn btn--ghost">Or send a brief</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+    padding-top: 6rem;
+    padding-bottom: 2rem;
+    gap: 1.5rem;
+  }
+  .hero__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line-strong);
+  }
+  .hero__title { align-self: end; display: flex; flex-direction: column; gap: 0.35em; font-weight: 500; }
+  .hero__human { display: block; margin-left: -0.05em; }
+  .hero__machine { display: block; max-width: 24ch; color: var(--ink); }
+  .hero__notes { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+  .hero__foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .hero__intro { max-width: 34ch; color: var(--muted); }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  @media (max-width: 767px) { .hide-sm { display: none; } }
+
+  /* Manifesto (wireframe rows are styled globally in redesign.css) */
+  .manifesto__body { margin-top: clamp(48px, 7vw, 112px); }
+  .manifesto__body p { grid-column: 7 / -1; }
+  @media (max-width: 767px) { .manifesto__body p { grid-column: 1 / -1; } }
+
+  /* Services */
+  .services { position: relative; isolation: isolate; border-bottom: 1px solid var(--line); }
+  .service { border-top: 1px solid var(--line); }
+  .service__link {
+    position: relative;
+    align-items: baseline;
+    row-gap: 0.75rem;
+    padding-block: clamp(1.5rem, 3vw, 2.75rem);
+    transition: color var(--dur-1) var(--ease-out);
+  }
+  .service__link::before {
+    content: "";
+    position: absolute;
+    inset: 0 calc(-1 * var(--gutter));
+    background: var(--ink);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--dur-2) var(--ease-in-out);
+    z-index: -1;
+  }
+  :global(html:not(.fill-js)) .service__link:hover, .service__link[data-hot] { color: var(--bg); }
+  :global(html:not(.fill-js)) .service__link:hover::before, .service__link[data-hot]::before { transform: scaleY(1); transform-origin: top; }
+  :global(html:not(.fill-js)) .service__link:hover .note, .service__link[data-hot] .note { color: color-mix(in oklab, var(--bg) 65%, transparent); }
+  .service__n { grid-column: 1 / span 1; }
+  .service__title { grid-column: 2 / span 6; }
+  .service__body { grid-column: 8 / span 4; opacity: 0.8; }
+  .service__tags { grid-column: 8 / span 4; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
+  .service__arrow {
+    grid-column: 12;
+    grid-row: 1;
+    justify-self: end;
+    font-size: var(--step-2);
+    transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1);
+  }
+  :global(html:not(.fill-js)) .service__link:hover .service__arrow, .service__link[data-hot] .service__arrow { transform: rotate(-45deg); color: var(--accent-text); }
+  @media (max-width: 767px) {
+    .service__n, .service__title, .service__body, .service__tags { grid-column: 1 / -1; }
+    .service__arrow { display: none; }
+  }
+
+  /* Work */
+  .work__intro { max-width: 40ch; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
+  .work { row-gap: clamp(3rem, 6vw, 6rem); }
+  .work__item--0 { grid-column: 1 / span 7; }
+  .work__item--1 { grid-column: 9 / span 4; margin-top: 30%; }
+  .work__item--2 { grid-column: 3 / span 6; }
+  @media (max-width: 767px) {
+    .work__item--0, .work__item--1, .work__item--2 { grid-column: 1 / -1; margin-top: 0; }
+  }
+  .work__link { display: block; }
+  .work__link :global(.visual) { transition: border-radius var(--dur-2) var(--ease-in-out); }
+  a.work__link:hover :global(.visual) { border-radius: 28px; }
+  .work__meta { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1rem; }
+  .work__title { margin-top: 0.9rem; }
+  .work__client { margin-top: 0.5rem; }
+  .work__summary { margin-top: 0.75rem; max-width: 42ch; color: var(--muted); }
+
+  /* Process */
+  .process__claim { max-width: 18ch; margin-bottom: clamp(3rem, 6vw, 5rem); }
+  .process__line { height: 1px; background: var(--ink); transform-origin: left; }
+  .process { row-gap: 2.5rem; }
+  .step { grid-column: span 3; position: relative; padding-top: 1.5rem; }
+  .step__dot {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 99px;
+    background: var(--accent);
+  }
+  .step__title { font-size: var(--step-1); margin: 0.6rem 0 0.5rem; }
+  .step__body { color: var(--muted); max-width: 30ch; }
+  /* Mobile: the timeline turns vertical, one rail through all four dots (in a 2×2 grid the line only joined the first row). */
+  @media (max-width: 767px) {
+    .process__line { display: none; }
+    .process { row-gap: 0; }
+    .step { grid-column: 1 / -1; padding: 0 0 2.25rem 1.75rem; }
+    .step::before { content: ""; position: absolute; left: 4px; top: 0.45rem; bottom: -0.45rem; width: 1px; background: var(--ink); }
+    .step:last-child { padding-bottom: 0; }
+    .step:last-child::before { bottom: auto; height: 0; }
+    .step__dot { top: 0.45rem; transform: translateY(-50%); }
+  }
+
+  /* Blog */
+  .posts { border-bottom: 1px solid var(--line); }
+  .posts li { border-top: 1px solid var(--line); }
+  .post { align-items: baseline; padding-block: 1.6rem; row-gap: 0.4rem; }
+  .post__date { grid-column: 1 / span 2; }
+  .post__title { grid-column: 3 / span 7; transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1); }
+  .post__pillar { grid-column: 11 / span 2; justify-self: end; }
+  .post:hover .post__title { transform: translateX(1rem); color: var(--accent-text); }
+  @media (max-width: 767px) {
+    .post__date, .post__title { grid-column: 1 / -1; }
+    .post__pillar { grid-column: 1 / -1; justify-self: start; }
+  }
+
+  /* CTA */
+  .cta__title { max-width: 11ch; }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: clamp(2rem, 4vw, 3.5rem); }
+</style>

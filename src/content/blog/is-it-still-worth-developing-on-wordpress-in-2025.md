@@ -9,7 +9,7 @@ tags: ["wordpress", "development"]
 ---
 The start of a new year is always a great time to ask big questions and set new goals: hitting the gym, working on that side project that’s been gathering dust in a drawer, or, why not, considering whether WordPress is still the right choice for your projects.
 
-A quick disclaimer: this isn’t a post to stir up controversy. In fact, it’s 2025, and I’m actively working on a WordPress project. But the question remains crucial—not just for developers who constantly evaluate their tools, but for anyone using WordPress, especially in the wake of the controversial **WP-Engine Gate**.
+A quick disclaimer: this isn’t a post to stir up controversy. In fact, it’s 2025, and I’m actively working on a WordPress project. But the question remains crucial, not just for developers who constantly evaluate their tools, but for anyone using WordPress, especially in the wake of the controversial **WP-Engine Gate**.
 
 ---
 

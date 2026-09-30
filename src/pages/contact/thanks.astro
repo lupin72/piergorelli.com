@@ -1,0 +1,33 @@
+---
+import Base from "../../layouts/Base.astro";
+// Fallback confirmation for the contact form when JS is off (Netlify redirects here via the form `action`).
+---
+
+<Base
+  title="Brief received | Pier Gorelli"
+  description="Thanks for your message. Pier Gorelli replies within 24 hours, Monday to Friday."
+  noindex
+>
+  <section class="thanks wrap">
+    <p class="note note--accent">200 OK · brief received</p>
+    <h1 class="display">Thanks.</h1>
+    <p class="lead thanks__body">I'll reply within 24 hours, Monday to Friday, usually with a couple of questions and a slot for a call.</p>
+    <div class="thanks__actions">
+      <a href="/" class="btn">Back to the home page <span class="arrow">→</span></a>
+      <a href="/blog/" class="btn btn--ghost">Read the blog</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .thanks {
+    min-height: 80svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1.5rem;
+    padding-top: 7rem;
+  }
+  .thanks__body { max-width: 36ch; color: var(--muted); }
+  .thanks__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+</style>

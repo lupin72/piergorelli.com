@@ -1,35 +1,467 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import AboutComponent from '../components/About.astro';
-import Mission from '../components/Mission.astro';
-import Title from '../components/Title.astro';
-import ParallaxImage from '../components/ParallaxImage.astro';
-import catWithLaptop from '../assets/images/cat-with-laptop.jpg';
-import SiteData from "../constants/siteData.json";
-import Experience from '../components/Experience.astro';
+import { CAL_URL } from "../data/site";
+import Base from "../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import { postUrl } from "../lib/blog";
 
+// Link to posts by id so the URLs follow the slug migration (redesign-plan §3.5).
+const posts = Object.fromEntries((await getCollection("blog")).map((p) => [p.id, postUrl(p)]));
+const post = (id: string) => posts[id] ?? "/blog/";
+
+const updated = new Date("2026-09-30");
+
+const spec = [
+  { k: "Based", v: "Valencia, Spain" },
+  { k: "From", v: "Milan, Italy" },
+  { k: "Mode", v: "Remote · by project" },
+  { k: "Status", v: "Taking on new projects", live: true },
+];
+
+// Years confirmed by Pier on 30/09/2026 (docs/content-facts.md).
+const log = [
+  {
+    v: "v0.1", year: "1999", title: "Hello, World",
+    body: "My first personal site, hosted on Jumpy thanks to a CD-ROM from an issue of “Io Programmo”. Tiled background, lightsaber dividers, table layouts. I was hooked.",
+    tags: ["HTML", "Tables", "DHTML"],
+  },
+  {
+    v: "v1.0", year: "2004", title: "Technical director at Siris, Milan",
+    body: "Enterprise sites and forums in Java, Spring and Oracle on the TeamSite platform. Where I learned that big projects live or die on process.",
+    tags: ["Java", "Spring", "Oracle"],
+  },
+  {
+    v: "v2.0", year: "2010", title: "Technical director at Insana, Milan",
+    body: "Healthcare and pharma: medical information portals, an AngularJS search engine for rare-disease treatment centres, WooCommerce stores, built with creatives and strategists, not after them.",
+    tags: ["WordPress", "Drupal", "AngularJS", "Liferay"],
+  },
+  {
+    v: "v3.0", year: "2012", title: "Valencia, then freelance",
+    body: "Platforms and apps end to end: a patient support program for healthcare professionals, hybrid apps for osteopaths, a video platform on AWS, an ERP sync for 20,000+ WooCommerce products.",
+    tags: ["Angular", "Laravel", "Ionic", "AWS"],
+  },
+  {
+    v: "v4.0", year: "2024", title: "Site 2.0 and a blog",
+    body: "A quarter of a century after the first one, a site that finally looks like what I had in mind, and a blog where I write down what holds up on real projects.",
+    tags: ["Astro", "Writing"],
+  },
+  {
+    v: "v5.0", year: "2025", title: "AI in practice",
+    body: "Custom n8n nodes, LLM workflows and a Kubernetes cluster on my desk: testing AI on real work before recommending it to anyone.",
+    tags: ["n8n", "LLMs", "Kubernetes"],
+    link: { href: post("creating-a-custom-n8n-node-for-wordpress-managing-custom-post-types"), label: "Read: a custom n8n node for WordPress" },
+  },
+  {
+    v: "v6.0", year: "2026", title: "Tech & AI partner for creative agencies",
+    body: "Everything above, pointed at one job: development and AI for agencies and their clients. Claude Code training, custom skills, an image SEO framework that runs every day. For agencies and their clients, with white-label delivery when the project calls for it.",
+    tags: ["Web", "AI", "Claude Code"],
+    head: true,
+  },
+];
+
+const principles = [
+  { line: "Accessible.", dim: "WCAG 2.1 AA" },
+  { line: "Superfast.", dim: "LCP < 2 s target · motion profiled" },
+  { line: "Just cool.", dim: "…when it serves the idea" },
+];
+
+const toolbox = [
+  { k: "Front-end & motion", v: ["Astro", "TypeScript", "GSAP", "Lenis", "Swiper", "WebGL", "Angular", "React", "Tailwind"] },
+  { k: "CMS", v: ["WordPress", "Sage", "Headless WordPress", "Drupal", "WooCommerce"] },
+  { k: "Back-end", v: ["PHP", "Laravel", "Filament", "Node.js", "REST APIs"] },
+  { k: "Apps", v: ["Ionic", "Angular", "PWA"] },
+  { k: "AI", v: ["Claude Code", "Codex", "Vercel AI SDK", "MCP", "RAG"] },
+  { k: "Infra & testing", v: ["Netlify", "AWS", "Docker", "Kubernetes", "k6"] },
+];
+
+const offClock = [
+  { n: "01", title: "I run a Kubernetes cluster on my desk", body: "A Turing Pi 2 homelab where new tools get broken before they reach a client.", href: post("how-to-buld-a-desktop-kubernetescluster-with-turing-pi2-part-1") },
+  { n: "02", title: "I write about working remotely", body: "What years of freelancing from Italy and Spain taught me about focus, clients and boundaries.", href: post("freelance-and-full-remote-a-guide-to-surviving-part-1") },
+  { n: "03", title: "I read, then review", body: "Books on learning and growth, starting with Adam Grant's Hidden Potential.", href: post("hidden-potential-by-adam-grant-review") },
+];
+
+const faqs = [
+  { q: "Where are you based? Do you work remotely?", a: "I live and work in Valencia, Spain. Most projects run remotely with agencies in Spain, Italy and the rest of Europe; I travel for kick-offs or workshops when a project needs it." },
+  { q: "Do you work white-label for agencies?", a: "When the project needs it, yes. I work under NDA, inside your tools and processes, and your client can deal only with your agency." },
+  { q: "What kind of projects do you take on?", a: "Animated marketing and campaign sites, headless and classic CMS builds, web apps and platforms, AI training and custom workflows for agency teams, and chatbots and semantic search inside your clients' products." },
+  { q: "Are you available for new projects?", a: "Yes, I'm taking on new projects. A 30-minute call is enough to tell you whether I'm the right fit and when I could start." },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    url: "https://piergorelli.com/about/",
+    dateModified: updated.toISOString().slice(0, 10),
+    mainEntity: {
+      "@type": "Person",
+      "@id": "https://piergorelli.com/#person",
+      name: "Pier Gorelli",
+      alternateName: "Pierpaolo Gorelli",
+      jobTitle: "Freelance web & AI developer",
+      description: "Italian freelance web and AI developer based in Valencia, Spain, working with creative agencies since 2004.",
+      url: "https://piergorelli.com/",
+      email: "mailto:me@piergorelli.com",
+      nationality: { "@type": "Country", name: "Italy" },
+      address: { "@type": "PostalAddress", addressLocality: "Valencia", addressCountry: "ES" },
+      knowsLanguage: ["it", "es", "en"],
+      knowsAbout: ["Web development", "Front-end animation", "GSAP", "Astro", "WordPress", "Drupal", "Laravel", "Angular", "Claude Code", "AI training", "LLM integration", "Retrieval-augmented generation"],
+      sameAs: ["https://www.linkedin.com/in/piergorelli/", "https://github.com/lupin72"],
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://piergorelli.com/" },
+      { "@type": "ListItem", position: 2, name: "About", item: "https://piergorelli.com/about/" },
+    ],
+  },
+];
 ---
 
+<Base
+  title="Pier Gorelli | Freelance Web & AI Developer in Valencia"
+  description="Italian freelance web & AI developer based in Valencia, Spain. Building for the web since 1999, for creative agencies since 2004: sites, apps and AI."
+  motion="showcase"
+  type="profile"
+  schema={schema}
+>
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero wrap" data-hero>
+    <nav class="note crumbs" aria-label="Breadcrumb">
+      <a href="/" class="link">Home</a> / <span class="note--ink">About</span>
+    </nav>
+    <p class="note">[About / 03]</p>
+    <h1 class="hero__title">
+      <span class="display hero__human" data-hero-human data-bp="h1.human">Hi, I'm Pier.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Freelance web &amp; AI developer in Valencia, building for creative agencies since 2004.</span>
+    </h1>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>18</span> tokens · <span data-gen-ms>1520</span> ms</p>
 
-<Layout 
-	seo={{
-		title: SiteData.pages.about.title,
-		description: SiteData.default.description
-	}}
-	>
-	<Header textColor="black" headerClasses="" menuColor="#000000"/>
-	<main>
-		<Title title="About me" />
-		<ParallaxImage
-			src={catWithLaptop.src}
-			alt="About me"
-			class="w-100 h-[46vw] object-cover"
-		/>
-		<AboutComponent actionLink="/services/" actionText="Discover my services"/>
-    <Mission/>
-		<Experience subtitle="03"/>
-	</main>
-  <Footer />
-</Layout>
+    <dl class="spec" data-hero-fade data-bp="dl.spec">
+      {spec.map((s) => (
+        <div class="spec__row">
+          <dt class="note">{s.k}</dt>
+          <dd>{s.live && <span class="spec__live" aria-hidden="true"></span>}{s.v}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- ── 01 Story ─────────────────────────────────────────── -->
+  <section class="section wrap" id="story">
+    <header class="section-head">
+      <span class="note note--ink">[01] Long story short</span>
+      <span class="note">Valencia, ES</span>
+    </header>
+    <div class="story grid-12">
+      <figure class="portrait" data-reveal="up">
+        <div class="portrait__frame" aria-hidden="true">
+          <span class="portrait__mono">PG</span>
+          <span class="portrait__dim note">↤ 4 : 5 ↦</span>
+        </div>
+        <figcaption class="note">fig. 01 · portrait · placeholder</figcaption>
+      </figure>
+
+      <div class="story__text">
+        <p class="h3 story__lead" data-reveal="lines">
+          I built my first website with tables. Twenty-seven years later, I still care where every cell ends up.
+        </p>
+        <div class="story__body">
+          <p data-reveal="up">
+            <span class="note story__note">1999 · &lt;table&gt;</span>
+            I'm Pier(paolo) Gorelli, an Italian developer living in Valencia. I found my first hosting on a CD-ROM inside <em>Io Programmo</em>, back when HTML tables were the only way to build a layout and Flash was the future. Later came the nights making our first CMS and FCKeditor behave on both Netscape and Internet Explorer: two dialects of JavaScript, no mercy. I saw floats free us from tables, built corporate sites in ASP on MS Access and raised a glass at Flash's funeral.
+          </p>
+          <p data-reveal="up">
+            <span class="note story__note">2004 → Milan</span>
+            For more than a decade I led development in Milan, as technical director first at Siris and then at Insana: enterprise sites in Java and Oracle, medical information portals for healthcare and pharma brands, e-commerce, search engines. Always next to creatives, strategists and account managers, which is where I learned to speak agency. Patient projects also taught me to anonymise data by default. I still do, on every project, because it protects people.
+          </p>
+          <p data-reveal="up">
+            <span class="note story__note">2012 → freelance</span>
+            At the end of 2011 I moved to Valencia, and in 2012 I went freelance from here: websites with demanding motion, headless and classic CMS builds, web apps and hybrid mobile apps, working with agencies in Italy and Spain.
+          </p>
+          <p data-reveal="up">
+            <span class="note story__note">2025 → AI</span>
+            Today AI is part of the job. I train agency teams on tools like Claude Code, build the custom skills they're missing, and put chatbots and semantic search into their clients' products. I also say no a lot, especially when the hype is high. If a tool hasn't proved its value on real work, I don't adopt it, and I don't recommend it. What holds up ends up on the <a href="/blog/" class="link link--inline">blog</a>.
+          </p>
+          <p data-reveal="up">One rule above everything: I tell clients the truth, including when it's inconvenient. Trust lasts longer than any excuse.</p>
+          <p class="story__quote" data-reveal="up"><em>I like it best when geometry turns into art. Once, a whole site grew out of the diagonals of a single letter.</em></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 Changelog ─────────────────────────────────────── -->
+  <section class="section wrap" id="changelog">
+    <header class="section-head">
+      <span class="note note--ink">[02] Changelog</span>
+      <span class="note">git log --reverse --oneline</span>
+    </header>
+    <div class="log__line" data-draw></div>
+    <ol class="log">
+      {log.map((e) => (
+        <li class:list={["log__entry grid-12", { "log__entry--head": e.head }]} data-reveal="up">
+          <span class="log__v note">{e.v}{e.head && <span class="note--accent"> (HEAD)</span>}</span>
+          <span class="log__year h3">{e.year}</span>
+          <h2 class="log__title">{e.title}</h2>
+          <div class="log__body">
+            <p>{e.body}</p>
+            <ul class="log__tags">{e.tags.map((t) => <li class="note">{t}</li>)}</ul>
+            {e.link && <a href={e.link.href} class="note link log__link">{e.link.label} →</a>}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 03 Principles: wireframe → production ────────────── -->
+  <section class="section wrap principles" data-wireframe>
+    <header class="section-head">
+      <span class="note note--ink">[03] Principles</span>
+      <span class="note" data-wf-note>fig. 02 · spec → build</span>
+    </header>
+    {principles.map((p) => (
+      <div class="wf-row">
+        <p class="wf-line">
+          <span class="outline-text" aria-hidden="true">{p.line}</span>
+          <span class="wf-solid" data-wf-solid><span class="wf-solid__inner">{p.line}</span></span>
+        </p>
+        <span class="wf-dim note" data-wf-note aria-hidden="true">{p.dim}</span>
+      </div>
+    ))}
+    <div class="principles__body grid-12">
+      <p class="lead" data-reveal="up">
+        When a design file opens, the first thing I notice is how it makes me feel. The second is the modules I can already see in it. The rest of the job is keeping both alive in a browser: on a phone, with a keyboard, with motion turned off.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── 04 Toolbox ───────────────────────────────────────── -->
+  <section class="section wrap" id="toolbox">
+    <header class="section-head">
+      <span class="note note--ink">[04] Toolbox</span>
+      <span class="note">Every tool here earned its place on a real project</span>
+    </header>
+    <dl class="tools">
+      {toolbox.map((g) => (
+        <div class="tools__row grid-12" data-reveal="up">
+          <dt class="note note--ink">{g.k}</dt>
+          <dd><ul class="stack">{g.v.map((t) => <li>{t}</li>)}</ul></dd>
+        </div>
+      ))}
+    </dl>
+    <p class="note tools__foot" data-reveal="up">Industries so far: healthcare &amp; pharma · retail · manufacturing · e-commerce · e-learning · sport media · corporate</p>
+  </section>
+
+  <!-- ── 05 Off the clock ─────────────────────────────────── -->
+  <section class="section wrap" id="off-the-clock">
+    <header class="section-head">
+      <span class="note note--ink">[05] Off the clock</span>
+      <a href="/blog/" class="note link">All posts →</a>
+    </header>
+    <ul class="off grid-12">
+      {offClock.map((o) => (
+        <li class="off__item" data-reveal="up">
+          <a href={o.href} class="off__link">
+            <span class="note note--accent">{o.n}</span>
+            <h2 class="off__title">{o.title}</h2>
+            <p class="off__body">{o.body}</p>
+            <span class="note off__more">Read on the blog →</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ── 06 FAQ ───────────────────────────────────────────── -->
+  <section class="section wrap" id="faq">
+    <header class="section-head">
+      <span class="note note--ink">[06] FAQ</span>
+      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
+    </header>
+    <div class="faqs">
+      {faqs.map((f) => (
+        <details class="faq" data-reveal="up">
+          <summary><span class="h3">{f.q}</span><span class="faq__icon" aria-hidden="true"></span></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── 07 CTA ───────────────────────────────────────────── -->
+  <section class="section wrap cta">
+    <header class="section-head">
+      <span class="note note--ink">[07] Next</span>
+      <span class="note">30 minutes</span>
+    </header>
+    <h2 class="display cta__title" data-reveal="lines">Now you know me. Your turn.</h2>
+    <div class="cta__actions" data-reveal="up">
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
+      <a href="/cv.pdf" class="btn btn--ghost" download>Download CV (PDF)</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    min-height: 92svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1.25rem;
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+  }
+  .crumbs { margin-bottom: auto; }
+  .hero__title { display: flex; flex-direction: column; gap: 0.3em; font-weight: 500; }
+  .hero__human { display: block; margin-left: -0.05em; }
+  .hero__machine { display: block; max-width: 24ch; }
+
+  .spec {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .spec__row { padding: 1rem 1rem 0 0; display: flex; flex-direction: column; gap: 0.35rem; }
+  .spec__row + .spec__row { padding-left: 1rem; border-left: 1px solid var(--line); }
+  .spec dd { display: flex; align-items: center; gap: 0.5rem; }
+  .spec__live {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 99px;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent);
+    animation: live 2.4s var(--ease-out) 2; /* stops within 5 s (WCAG 2.2.2) */
+  }
+  @keyframes live { 70%, 100% { box-shadow: 0 0 0 7px transparent; } }
+  @media (max-width: 899px) {
+    .spec { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; }
+    .spec__row, .spec__row + .spec__row { padding: 0.9rem 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  }
+  @media (prefers-reduced-motion: reduce) { .spec__live { animation: none; } }
+
+  /* Story */
+  .story { row-gap: 3rem; align-items: start; }
+  .portrait { grid-column: 1 / span 4; position: sticky; top: 6rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .portrait__frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+    background:
+      linear-gradient(var(--line), var(--line)) center / 1px 100% no-repeat,
+      linear-gradient(var(--line), var(--line)) center / 100% 1px no-repeat,
+      repeating-linear-gradient(0deg, transparent 0 23px, var(--line) 23px 24px),
+      repeating-linear-gradient(90deg, transparent 0 23px, var(--line) 23px 24px),
+      var(--bg-raised);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+  }
+  .portrait__mono {
+    font-size: var(--step-4);
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--accent);
+  }
+  .portrait__dim { position: absolute; left: 0; right: 0; top: 0.75rem; text-align: center; color: var(--accent-text); }
+  .story__text { grid-column: 6 / -1; }
+  .story__lead { max-width: 24ch; }
+  .story__body { margin-top: clamp(2.5rem, 5vw, 4rem); display: flex; flex-direction: column; gap: 1.5rem; max-width: 60ch; }
+  .story__body p { color: var(--muted); }
+  .story__note { display: block; margin-bottom: 0.4rem; color: var(--accent-text); }
+  .story__body .story__quote { font-size: var(--step-1); color: var(--ink); padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  @media (max-width: 767px) {
+    .portrait { grid-column: 1 / -1; position: static; }
+    .story__text { grid-column: 1 / -1; }
+  }
+
+  /* Changelog */
+  .log { border-bottom: 1px solid var(--line); }
+  .log__line { height: 1px; background: var(--ink); transform-origin: left; }
+  .log__entry:first-child { border-top: 0; }
+  .log__entry {
+    position: relative;
+    align-items: baseline;
+    row-gap: 0.75rem;
+    padding-block: clamp(1.5rem, 3vw, 2.5rem);
+    border-top: 1px solid var(--line);
+  }
+  .log__v { grid-column: 1 / span 1; }
+  .log__year { grid-column: 2 / span 2; font-variant-numeric: tabular-nums; transition: color var(--dur-1); }
+  .log__title { grid-column: 4 / span 4; font-size: var(--step-1); letter-spacing: -0.02em; line-height: 1.15; }
+  .log__body { grid-column: 8 / -1; display: flex; flex-direction: column; gap: 0.9rem; }
+  .log__body p { color: var(--muted); max-width: 48ch; }
+  .log__tags { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; }
+  .log__link { width: fit-content; color: var(--ink); }
+  .log__entry:hover .log__year { color: var(--accent-text); }
+  .log__entry--head::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--accent);
+  }
+  .log__entry--head .log__year { color: var(--accent-text); }
+  @media (max-width: 767px) {
+    .log__v { grid-column: 1 / span 1; }
+    .log__year { grid-column: 2 / -1; }
+    .log__title, .log__body { grid-column: 1 / -1; }
+  }
+
+  /* Principles */
+  .principles .wf-line { font-size: var(--step-5); letter-spacing: -0.055em; line-height: 0.86; }
+  .principles__body { margin-top: clamp(48px, 7vw, 112px); }
+  .principles__body p { grid-column: 7 / -1; }
+  @media (max-width: 767px) {
+    .principles .wf-line { font-size: var(--step-4); }
+    .principles__body p { grid-column: 1 / -1; }
+  }
+
+  /* Toolbox */
+  .tools { border-top: 1px solid var(--line); }
+  .tools__row { align-items: baseline; row-gap: 0.9rem; padding-block: 1.4rem; border-bottom: 1px solid var(--line); }
+  .tools__row dt { grid-column: 1 / span 3; }
+  .tools__row dd { grid-column: 4 / -1; }
+  .stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .stack li {
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  .stack li:hover { background: var(--ink); color: var(--bg); }
+  .tools__foot { margin-top: 1.5rem; }
+  @media (max-width: 767px) { .tools__row dt, .tools__row dd { grid-column: 1 / -1; } }
+
+  /* Off the clock */
+  .off { row-gap: 2rem; }
+  .off__item { grid-column: span 4; }
+  .off__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    height: 100%;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line-strong);
+  }
+  .off__title { font-size: var(--step-2); max-width: 14ch; transition: color var(--dur-1); }
+  .off__body { color: var(--muted); max-width: 34ch; }
+  .off__more { margin-top: auto; padding-top: 0.5rem; }
+  .off__link:hover .off__title { color: var(--accent-text); }
+  @media (max-width: 767px) { .off__item { grid-column: 1 / -1; } }
+
+
+  /* CTA */
+  .cta__title { max-width: 12ch; }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: clamp(2rem, 4vw, 3.5rem); }
+</style>

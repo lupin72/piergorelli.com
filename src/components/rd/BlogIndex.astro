@@ -1,0 +1,407 @@
+---
+/**
+ * Blog index — shared by /blog/ (all posts) and /blog/topic/[slug]/ (one pillar).
+ * Reading page: zero animation JS. Motion is CSS only (inked title, scroll-driven row reveal,
+ * cover preview on hover) and disappears with prefers-reduced-motion.
+ */
+import { Image } from "astro:assets";
+import {
+  PILLARS,
+  PILLAR_INFO,
+  pillarKeyOf,
+  postUrl,
+  topicUrl,
+  readingMinutes,
+  wordCount,
+  formatDate,
+  type PillarKey,
+  type Post,
+} from "../../lib/blog";
+
+interface Props {
+  /** Every post, newest first (numbering and counts are always global). */
+  posts: Post[];
+  active?: PillarKey;
+}
+
+const { posts, active } = Astro.props;
+
+const number = (p: Post) => `#${String(posts.length - posts.indexOf(p)).padStart(3, "0")}`;
+const shown = active ? posts.filter((p) => pillarKeyOf(p) === active) : posts;
+const [featured, ...rest] = shown;
+const list = active ? shown : rest;
+
+const count = (k: PillarKey) => posts.filter((p) => pillarKeyOf(p) === k).length;
+const keys = Object.keys(PILLARS) as PillarKey[];
+const topics = keys.filter((k) => count(k) > 0);
+const pillars = keys.filter((k) => !PILLAR_INFO[k].tag);
+
+const years = [...new Set(list.map((p) => p.data.pubDate.getFullYear()))].map((y) => ({
+  year: y,
+  posts: list.filter((p) => p.data.pubDate.getFullYear() === y),
+}));
+
+const words = shown.reduce((n, p) => n + wordCount(p), 0);
+const since = Math.min(...shown.map((p) => p.data.pubDate.getFullYear()));
+const spec = [
+  ["Entries", String(shown.length).padStart(2, "0")],
+  ["Words", words.toLocaleString("en")],
+  ["Since", String(since)],
+  ["Last entry", formatDate(shown[0].data.pubDate)],
+];
+
+const info = active ? PILLAR_INFO[active] : undefined;
+const human = active ? `${PILLARS[active]}.` : "Field notes.";
+const machine = info ? info.tagline : "A web development & AI blog, written from real agency projects.";
+---
+
+<section class="bhead wrap">
+  <div class="bhead__top note">
+    <nav aria-label="Breadcrumb">
+      <a href="/" class="link">Home</a>{" / "}
+      {active ? <><a href="/blog/" class="link">Blog</a>{" / "}<span class="note--ink">{PILLARS[active]}</span></> : <span class="note--ink">Blog</span>}
+    </nav>
+    <span>[Blog / 04]</span>
+    <span class="hide-sm">{info?.tag ? "tag · outside the themes" : "Dev · AI · Agencies · Reviews"}</span>
+    <span>Notes from current work</span>
+  </div>
+
+  <h1 class="bhead__title">
+    <span class="bhead__human display">{human}</span>
+    <span class="bhead__machine h3">{machine}</span>
+  </h1>
+  <span class="bhead__dim note" aria-hidden="true">↤ h1 · var(--step-5) · ls −0.055em ↦</span>
+
+  <div class="bhead__foot grid-12">
+    <p class="bhead__lead lead">
+      {info
+        ? info.body
+        : "Notes on web development and applied AI from 25 years of building for creative agencies: Astro, GSAP, WordPress, n8n, LLM integrations: what worked, what broke, and why."}
+    </p>
+    <dl class="spec">
+      {spec.map(([k, v]) => (
+        <div><dt class="note">{k}</dt><dd>{v}</dd></div>
+      ))}
+    </dl>
+    <div class="bhead__actions">
+      <button type="button" class="btn" data-action="palette">Search posts <kbd class="note">⌘K</kbd></button>
+      <a href="/rss.xml" class="btn btn--ghost">RSS</a>
+    </div>
+  </div>
+
+  <nav class="topics" aria-label="Topics">
+    <ul>
+      <li><a href="/blog/" class="topic" aria-current={active ? undefined : "page"}>All <span class="note">{posts.length}</span></a></li>
+      {topics.map((k) => (
+        <li>
+          <a href={topicUrl(k)} class="topic" aria-current={k === active ? "page" : undefined}>
+            {PILLARS[k]} <span class="note">{count(k)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</section>
+
+{!active && featured && (
+  <section class="section wrap featured">
+    <header class="section-head">
+      <span class="note note--ink">Latest entry</span>
+      <span class="note">{number(featured)}</span>
+    </header>
+    <a href={postUrl(featured)} class="feat grid-12">
+      <figure class="feat__cover">
+        <Image src={featured.data.cover} alt={featured.data.alt} widths={[640, 1024, 1400]} sizes="(min-width: 768px) 58vw, 100vw" loading="eager" fetchpriority="high" />
+        <figcaption class="note">fig. 01 · {featured.data.alt}</figcaption>
+      </figure>
+      <div class="feat__body">
+        <span class="note note--accent">{PILLARS[pillarKeyOf(featured)]}</span>
+        <h2 class="feat__title h2">{featured.data.title}</h2>
+        <p class="feat__desc">{featured.data.description}</p>
+        <dl class="feat__meta">
+          <div><dt class="note">Published</dt><dd>{formatDate(featured.data.pubDate)}</dd></div>
+          <div><dt class="note">Reading</dt><dd>{readingMinutes(featured)} min</dd></div>
+        </dl>
+        <span class="feat__cta">Read the entry <span class="arrow" aria-hidden="true">→</span></span>
+      </div>
+    </a>
+  </section>
+)}
+
+{list.length > 0 && (
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[01] Index</span>
+      <span class="note">{list.length} {list.length === 1 ? "entry" : "entries"} · newest first</span>
+    </header>
+    {years.map(({ year, posts: items }) => (
+      <div class="year">
+        <h2 class="year__head">
+          <span class="year__n outline-text">{year}</span>
+          <span class="note">{items.length} {items.length === 1 ? "entry" : "entries"}</span>
+        </h2>
+        <ol class="entries">
+          {items.map((p) => (
+            <li>
+              <a href={postUrl(p)} class="entry grid-12">
+                <span class="entry__n note">{number(p)}</span>
+                <time class="entry__date note" datetime={p.data.pubDate.toISOString()}>{formatDate(p.data.pubDate)}</time>
+                <span class="entry__main">
+                  <span class="entry__title">{p.data.title}</span>
+                  <span class="entry__desc">{p.data.description}</span>
+                </span>
+                <span class="entry__meta note">
+                  <span>{PILLARS[pillarKeyOf(p)]}</span>
+                  <span>{readingMinutes(p)} min</span>
+                </span>
+                <span class="entry__arrow" aria-hidden="true">→</span>
+                <span class="entry__thumb" aria-hidden="true">
+                  <Image src={p.data.cover} alt="" width={420} height={300} loading="lazy" />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ))}
+  </section>
+)}
+
+<section class="section wrap">
+  <header class="section-head">
+    <span class="note note--ink">[02] What I write about</span>
+    <span class="note">Four themes · written between projects</span>
+  </header>
+  <ul class="pillars grid-12">
+    {pillars.map((k, i) => (
+      <li class:list={["pillar", { "is-active": k === active }]}>
+        <span class="note">{String(i + 1).padStart(2, "0")}</span>
+        <h3 class="pillar__title">{PILLARS[k]}</h3>
+        <p class="pillar__body">{PILLAR_INFO[k].body}</p>
+        {count(k) > 0
+          ? <a href={topicUrl(k)} class="note note--ink link pillar__link">{count(k)} {count(k) === 1 ? "entry" : "entries"} →</a>
+          : <span class="note pillar__link">First entry coming soon</span>}
+      </li>
+    ))}
+  </ul>
+</section>
+
+<section class="section wrap subscribe">
+  <header class="section-head">
+    <span class="note note--ink">[03] Subscribe</span>
+    <span class="note">RSS · LinkedIn · in English</span>
+  </header>
+  <div class="grid-12">
+    <h2 class="h2 subscribe__title">No schedule. No newsletter spam.</h2>
+    <div class="subscribe__body">
+      <p>Follow along via RSS or on LinkedIn, where every post goes out the day it's published. Got a topic you'd like me to dig into, or a project behind the question? Write me.</p>
+      <div class="bhead__actions">
+        <a href="/rss.xml" class="btn">RSS feed <span class="arrow">→</span></a>
+        <a href="https://www.linkedin.com/in/piergorelli/" class="btn btn--ghost" target="_blank" rel="me noopener">LinkedIn <span class="arrow">↗</span></a>
+        <a href="/contact/" class="btn btn--ghost">Suggest a topic</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Head */
+  .bhead { padding-top: 6rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  .bhead__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line-strong);
+  }
+  .bhead__title { display: flex; flex-direction: column; gap: 0.4em; margin-top: clamp(3rem, 10vw, 9rem); }
+  .bhead__human {
+    display: block;
+    margin-left: -0.05em;
+    animation: ink var(--dur-3) var(--ease-out) 0.15s both;
+  }
+  .bhead__machine { display: block; max-width: 26ch; color: var(--muted); }
+  .bhead__dim {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--accent-text);
+  }
+  .bhead__dim::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: color-mix(in oklab, var(--accent) 45%, transparent);
+    transform-origin: left;
+    animation: draw var(--dur-3) var(--ease-in-out) 0.3s both;
+  }
+  @keyframes ink {
+    from { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+    40% { color: transparent; -webkit-text-stroke: 1.5px var(--ink); }
+    to { color: var(--ink); -webkit-text-stroke: 0 transparent; }
+  }
+  @keyframes draw { from { transform: scaleX(0); } }
+
+  .bhead__foot {
+    align-items: end;
+    row-gap: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .bhead__lead { grid-column: 1 / span 6; max-width: 40ch; color: var(--muted); }
+  .spec { grid-column: 7 / span 6; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .spec div { display: flex; flex-direction: column; gap: 0.25rem; }
+  .spec dd { font-variant-numeric: tabular-nums; }
+  .bhead__actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .bhead__actions kbd { color: inherit; opacity: 0.6; }
+  @media (max-width: 767px) {
+    .hide-sm { display: none; }
+    .bhead__lead, .spec { grid-column: 1 / -1; }
+    .spec { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Topic filter: real links, one static page per pillar */
+  .topics { margin-top: 1rem; }
+  .topics ul { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .topic {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: 2.5rem;
+    padding-inline: 1rem;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  .topic:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+  .topic[aria-current="page"] { background: var(--ink); color: var(--bg); box-shadow: none; }
+  .topic[aria-current="page"] .note { color: inherit; opacity: 0.6; }
+
+  /* Featured */
+  .feat { align-items: end; row-gap: 2rem; }
+  .feat__cover { grid-column: 1 / span 7; }
+  .feat__cover :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: border-radius var(--dur-2) var(--ease-in-out);
+  }
+  .feat:hover .feat__cover :global(img) { border-radius: 28px; }
+  .feat__cover figcaption { margin-top: 0.75rem; }
+  .feat__body { grid-column: 8 / span 5; display: flex; flex-direction: column; gap: 1.25rem; padding-bottom: 2.4rem; }
+  .feat__title { font-size: var(--step-2); line-height: 1.05; transition: color var(--dur-1); }
+  .feat:hover .feat__title { color: var(--accent-text); }
+  .feat__desc { color: var(--muted); }
+  .feat__meta { display: flex; gap: 2rem; padding-top: 0.75rem; border-top: 1px solid var(--line); }
+  .feat__meta div { display: flex; flex-direction: column; gap: 0.25rem; }
+  .feat__cta { font-weight: 500; }
+  .feat__cta .arrow { display: inline-block; transition: transform var(--dur-1) var(--ease-out); }
+  .feat:hover .feat__cta .arrow { transform: translateX(4px) rotate(-45deg); }
+  @media (max-width: 1023px) {
+    .feat__cover { grid-column: 1 / -1; }
+    .feat__body { grid-column: 1 / -1; padding-bottom: 0; }
+  }
+
+  /* Index */
+  .year + .year { margin-top: clamp(3rem, 6vw, 5rem); }
+  .year__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .year__n { font-size: var(--step-4); letter-spacing: -0.05em; line-height: 0.8; }
+  .entries { border-bottom: 1px solid var(--line); }
+  .entries li { border-top: 1px solid var(--line); }
+  .entry { position: relative; align-items: baseline; row-gap: 0.5rem; padding-block: 1.75rem; }
+  .entry__n { grid-column: 1 / span 1; }
+  .entry__date { grid-column: 2 / span 2; }
+  .entry__main { grid-column: 4 / span 6; display: flex; flex-direction: column; gap: 0.6rem; }
+  .entry__title {
+    font-size: var(--step-2);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    text-wrap: balance;
+    transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1);
+  }
+  .entry__desc { color: var(--muted); max-width: 56ch; }
+  .entry__meta { grid-column: 10 / span 2; display: flex; flex-direction: column; gap: 0.25rem; }
+  .entry__arrow {
+    grid-column: 12;
+    justify-self: end;
+    font-size: var(--step-1);
+    transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1);
+  }
+  .entry:hover .entry__title { transform: translateX(1rem); color: var(--accent-text); }
+  .entry:hover .entry__arrow { transform: rotate(-45deg); color: var(--accent-text); }
+
+  /* Cover preview: a blueprint box that opens from its centre (fine pointers only) */
+  .entry__thumb { display: none; }
+  @media (hover: hover) and (pointer: fine) and (min-width: 1024px) {
+    .entry__thumb {
+      display: block;
+      position: absolute;
+      z-index: 2;
+      right: 4.5rem;
+      top: 50%;
+      width: clamp(12rem, 17vw, 16rem);
+      aspect-ratio: 7 / 5;
+      translate: 0 -50%;
+      rotate: 2deg;
+      /* hoverable (WCAG 1.4.13): the pointer can move onto the preview without it closing; Esc closes it (site.ts) */
+      clip-path: inset(50% 50% 50% 50%);
+      transition: clip-path var(--dur-2) var(--ease-in-out), rotate var(--dur-2) var(--ease-in-out);
+    }
+    .entry__thumb :global(img) { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+    .entry:hover .entry__thumb { clip-path: inset(0 0 0 0); rotate: 0deg; }
+    :global(html[data-hover-off]) .entry:hover .entry__thumb { clip-path: inset(50% 50% 50% 50%); }
+  }
+
+  @media (max-width: 767px) {
+    .entry__n { grid-column: 1 / span 1; }
+    .entry__date { grid-column: 2 / -1; justify-self: end; }
+    .entry__main, .entry__meta { grid-column: 1 / -1; }
+    .entry__meta { flex-direction: row; gap: 1rem; }
+    .entry__arrow { display: none; }
+  }
+
+  /* Rows ink in as they scroll into view — CSS only, where supported */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .entries li, .pillar {
+        animation: rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 55%;
+      }
+    }
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(1.75rem); } }
+
+  /* Pillars */
+  .pillars { row-gap: 2.5rem; }
+  .pillar {
+    grid-column: span 3;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line-strong);
+  }
+  .pillar.is-active { border-top-color: var(--accent); box-shadow: inset 0 2px 0 var(--accent); }
+  .pillar__title { font-size: var(--step-1); letter-spacing: -0.02em; line-height: 1.15; }
+  .pillar__body { color: var(--muted); }
+  .pillar__link { margin-top: auto; padding-top: 0.5rem; align-self: start; }
+  @media (max-width: 1023px) { .pillar { grid-column: span 6; } }
+  @media (max-width: 767px) { .pillar { grid-column: 1 / -1; } }
+
+  /* Subscribe */
+  .subscribe .grid-12 { row-gap: 2rem; align-items: end; }
+  .subscribe__title { grid-column: 1 / span 6; max-width: 14ch; }
+  .subscribe__body { grid-column: 8 / span 5; display: flex; flex-direction: column; gap: 1.5rem; }
+  .subscribe__body p { color: var(--muted); max-width: 44ch; }
+  @media (max-width: 1023px) { .subscribe__title, .subscribe__body { grid-column: 1 / -1; } }
+</style>

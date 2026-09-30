@@ -1,0 +1,156 @@
+---
+import { ClientRouter } from "astro:transitions";
+import Header from "../components/rd/Header.astro";
+import Footer from "../components/rd/Footer.astro";
+import Preloader from "../components/rd/Preloader.astro";
+import Monogram from "../components/rd/Monogram.astro";
+import "../styles/redesign.css";
+
+interface Props {
+  title: string;
+  description: string;
+  /** "showcase" loads Lenis + GSAP; "read" keeps the page free of animation JS. */
+  motion?: "showcase" | "read";
+  image?: string;
+  type?: "website" | "article" | "profile";
+  schema?: Record<string, unknown>[];
+  preloader?: boolean;
+  /** Utility pages (form confirmations): kept out of search results. */
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  motion = "read",
+  image = "/i-do-things.png",
+  type = "website",
+  schema = [],
+  preloader = false,
+  noindex = false,
+} = Astro.props;
+
+const site = Astro.site ?? new URL("https://piergorelli.com");
+const canonical = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL(image, site).href;
+---
+
+<!doctype html>
+<html lang="en" data-motion={motion} data-theme="light" data-accent="blue">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="alternate" hreflang="en" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="Pier Gorelli | Blog" href="/rss.xml" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" id="favicon" />
+    <meta name="theme-color" content="#f4f4f0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Pier Gorelli" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@PGorelli91424" />
+
+    {schema.map((item) => (
+      <script type="application/ld+json" set:html={JSON.stringify(item)} />
+    ))}
+
+    <!-- Theme + accent before first paint; re-applied after every client-side navigation. -->
+    <script is:inline>
+      (() => {
+        const read = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+        const apply = (doc) => {
+          const root = doc.documentElement;
+          const theme = read("pg-theme") ?? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+          root.dataset.theme = theme;
+          root.dataset.accent = read("pg-accent") ?? "blue";
+          root.classList.add("js");
+          let seen = null;
+          try { seen = sessionStorage.getItem("pg-preloaded"); } catch {}
+          if (seen || matchMedia("(prefers-reduced-motion: reduce)").matches) root.dataset.preloaded = "yes";
+        };
+        apply(document);
+        document.addEventListener("astro:before-swap", (e) => apply(e.newDocument));
+      })();
+    </script>
+
+    <!-- Cookieless stats (Umami Cloud). Production builds only, counted only on the real domain;
+         client-side navigations are tracked through history.pushState. Listed in the cookie policy. -->
+    {import.meta.env.PROD && (
+      <script
+        is:inline
+        defer
+        src="https://cloud.umami.is/script.js"
+        data-website-id="4abb51c3-b9d2-4b64-a181-35434d036431"
+        data-domains="piergorelli.com"
+        data-do-not-track="true"
+      ></script>
+    )}
+
+    <ClientRouter fallback="swap" />
+  </head>
+
+  <body class="frame">
+    <a href="#main" class="skip note">Skip to content</a>
+    {preloader && <Preloader />}
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <div class="pt" transition:persist="pt" aria-hidden="true">
+      <div class="pt__cols grid-12">{Array.from({ length: 12 }, () => <span />)}</div>
+      <div class="pt__meta note">
+        <span>Plotting <span class="pt__to"></span></span>
+        <span>rev. 2026</span>
+      </div>
+      <div class="pt__stage">
+        <span class="pt__guide pt__guide--h" style="top: 0" />
+        <span class="pt__guide pt__guide--h" style="bottom: 0" />
+        <span class="pt__guide pt__guide--v" style="left: 0" />
+        <span class="pt__guide pt__guide--v" style="right: 0" />
+        <div class="pt__box"><span class="pt__label note" data-text="PG · 68×40"></span></div>
+        <Monogram class="pt__mark" />
+      </div>
+      <div class="pt__meta note">
+        <span>Pier Gorelli · web &amp; AI dev</span>
+        <span class="pt__count">0%</span>
+      </div>
+    </div>
+
+    <div class="grid-overlay" aria-hidden="true">
+      <div class="grid-12">{Array.from({ length: 12 }, () => <span />)}</div>
+    </div>
+
+    <script>
+      import "../scripts/rd/site";
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .skip {
+    position: fixed;
+    left: 1rem;
+    top: -3rem;
+    z-index: 100;
+    padding: 0.6rem 0.9rem;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 999px;
+    transition: top var(--dur-1) var(--ease-out);
+  }
+  .skip:focus { top: 1rem; }
+  @media (prefers-reduced-motion: reduce) { .skip { transition: none; } }
+</style>

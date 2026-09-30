@@ -1,0 +1,282 @@
+---
+import Base from "../../layouts/Base.astro";
+import { CAL_URL, EMAIL } from "../../data/site";
+
+const SITE = "https://piergorelli.com";
+const PAGE = `${SITE}/work/piergorelli-com/`;
+
+// Measured with tools/qa/js-weight.mjs (gzip, as the browser loads it) and Lighthouse mobile on the local build.
+// Provisional until launch: re-measure on production and fill in `measured`.
+const updated = new Date("2026-09-30");
+const measured = { date: "30 Sep 2026", where: "local build, provisional" };
+const pageTypes = [
+  { name: "Showcase", pages: "Home · Services · About · Contact", js: 63, lighthouse: ["98", "100", "96", "100"], loads: "Common code + GSAP, Lenis, motion, WebGL hero" },
+  { name: "Reading", pages: "Blog · Articles · Legal · 404", js: 8, lighthouse: ["99", "100", "100", "100"], loads: "Common code: theme, ⌘K, View Transitions" },
+];
+const maxJs = Math.max(...pageTypes.map((p) => p.js));
+
+const build = [
+  { n: "01", title: "Static by default", body: "Astro 7 and Tailwind 4. Every page is HTML generated at build time, with no framework running in the browser." },
+  { n: "02", title: "Motion on demand", body: "GSAP and Lenis load only on showcase pages. The WebGL contour lines in the hero are a shader of about 2 KB." },
+  { n: "03", title: "Transitions", body: "Native View Transitions. The monogram sheet loads when the pointer or the focus reaches a link, not before." },
+  { n: "04", title: "The blueprint layer", body: "A grid behind every page (⌥G), ⌘K for everything else, a blueprint cursor, and a ruler in the header that follows your reading with no JavaScript." },
+  { n: "05", title: "Accessible first", body: "WCAG 2.1 AA. With reduced motion there is no intro and no custom cursor, and the content is visible at once. Everything works from the keyboard." },
+];
+
+const checks = [
+  { k: "axe", v: "0 violations on 26 pages" },
+  { k: "Keyboard", v: "Every page, every control" },
+  { k: "Reduced motion", v: "No intro, no cursor, content at once" },
+  { k: "Reflow", v: "No horizontal scroll at 320 px" },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "@id": `${PAGE}#work`,
+    name: "piergorelli.com, redesigned",
+    url: PAGE,
+    dateCreated: "2026",
+    dateModified: updated.toISOString().slice(0, 10),
+    creator: { "@type": "Person", "@id": `${SITE}/#person`, name: "Pier Gorelli" },
+    about: "Redesign of piergorelli.com: motion on showcase pages, almost no JavaScript on reading pages.",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: "Work", item: `${SITE}/#work` },
+      { "@type": "ListItem", position: 3, name: "piergorelli.com", item: PAGE },
+    ],
+  },
+];
+---
+
+<Base
+  title="piergorelli.com Redesign: Case Study | Pier Gorelli"
+  description="How I rebuilt my own site: GSAP, WebGL and View Transitions on showcase pages, about 8 KB of JavaScript on reading pages. Measured, accessible, open to inspection."
+  motion="showcase"
+  schema={schema}
+>
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero wrap" data-hero>
+    <nav class="note crumbs" aria-label="Breadcrumb">
+      <a href="/" class="link">Home</a> / <a href="/#work" class="link">Work</a> / <span class="note--ink">piergorelli.com</span>
+    </nav>
+    <p class="note">[Work / 01.1 · Case study · 2026]</p>
+    <h1 class="hero__title">
+      <span class="display hero__human" data-hero-human data-bp="h1.human">My own site, redesigned.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Motion where it shows the work. About 8&nbsp;KB of JavaScript where you read.</span>
+    </h1>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>17</span> tokens · <span data-gen-ms>1320</span> ms</p>
+
+    <div class="hero__foot" data-hero-fade>
+      <p class="lead">
+        You're using it right now, so every number on this page can be checked.
+      </p>
+      <dl class="spec" data-bp="dl.tolerances">
+        <div><dt class="note">Stack</dt><dd>Astro 7</dd></div>
+        <div><dt class="note">Motion</dt><dd>GSAP · WebGL</dd></div>
+        <div><dt class="note">Access</dt><dd>WCAG 2.1 AA</dd></div>
+        <div><dt class="note">Reading JS</dt><dd>≈ 8 KB</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ── 01 Context ───────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[01] Context</span>
+      <span class="note">2024 → 2026 · Updated <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
+    </header>
+    <div class="story grid-12">
+      <h2 class="h2 story__title" data-reveal="lines">It worked. It didn't feel like mine.</h2>
+      <p class="lead story__text" data-reveal="up">
+        I built the previous version in 2024. It worked, but it didn't feel like mine: no motion design, an interface that didn't represent me, and little to read beyond the pages that sell. It also said nothing about the AI work I do with agencies now.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── 02 The hard part ─────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[02] The hard part</span>
+      <span class="note">Constraint</span>
+    </header>
+    <div class="story grid-12">
+      <h2 class="h2 story__title" data-reveal="lines">Ambitious motion is a cost every page pays.</h2>
+      <p class="lead story__text" data-reveal="up">
+        I wanted a compile intro, WebGL contour lines and page transitions through the monogram, without someone reading an article downloading any of it.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── 03 The decision ──────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[03] The decision</span>
+      <span class="note">2 page types</span>
+    </header>
+    <div class="story grid-12">
+      <h2 class="h2 story__title" data-reveal="lines">Two kinds of page.</h2>
+      <div class="story__text">
+        <p class="lead" data-reveal="up">
+          Showcase pages load GSAP, Lenis and the WebGL hero. Reading pages load only what every page needs: theme, ⌘K and View Transitions. The alternative was one animated site, end to end.
+        </p>
+        <p class="lead" data-reveal="up">
+          I also tried complex, illustration-style animations for the About page, and dropped them: they risked eating resources without adding anything.
+        </p>
+      </div>
+    </div>
+    <div class="types grid-12">
+      {pageTypes.map((t, i) => (
+        <article class:list={["type", `type--${i}`]} data-reveal="up">
+          <p class="note note--ink">{t.name}</p>
+          <p class="h3">{t.pages}</p>
+          <p class="type__loads">{t.loads}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── 04 Build ─────────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[04] Build</span>
+      <span class="note">{build.length} parts</span>
+    </header>
+    <div class="build-line" data-draw></div>
+    <ol class="build-list">
+      {build.map((b) => (
+        <li class="build grid-12" data-reveal="up">
+          <span class="note note--accent build__n">{b.n}</span>
+          <h3 class="h3 build__title">{b.title}</h3>
+          <p class="build__body">{b.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 05 Proof ─────────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[05] Proof</span>
+      <span class="note">Measured · {measured.date} · {measured.where}</span>
+    </header>
+    <div class="proof">
+      <table class="proof__table" data-reveal="up">
+        <caption class="note">JavaScript (gzip, as the browser loads it) and Lighthouse mobile: performance · accessibility · best practices · SEO</caption>
+        <thead>
+          <tr><th scope="col" class="note">Page type</th><th scope="col" class="note">JavaScript</th><th scope="col" class="note">Lighthouse</th></tr>
+        </thead>
+        <tbody>
+          {pageTypes.map((t) => (
+            <tr>
+              <th scope="row" class="h3">{t.name}</th>
+              <td>
+                <span class="proof__kb">≈ {t.js} KB</span>
+                <span class="proof__bar" style={`--w: ${(t.js / maxJs) * 100}%`} aria-hidden="true"></span>
+              </td>
+              <td class="proof__lh">{t.lighthouse.join(" · ")}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <dl class="spec proof__checks" data-reveal="up">
+        {checks.map((c) => <div><dt class="note">{c.k}</dt><dd>{c.v}</dd></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <!-- ── 06 CTA ───────────────────────────────────────────── -->
+  <section class="section wrap cta">
+    <header class="section-head">
+      <span class="note note--ink">[06] Next</span>
+      <span class="note">30 minutes</span>
+    </header>
+    <h2 class="display cta__title" data-reveal="lines">Want this for a client's site?</h2>
+    <div class="cta__actions" data-reveal="up">
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
+      <a href={`mailto:${EMAIL}`} class="btn btn--ghost">{EMAIL}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero (same frame as the service pages) */
+  .hero {
+    min-height: 92svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1.25rem;
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+  }
+  .crumbs { margin-bottom: auto; }
+  .hero__title { display: flex; flex-direction: column; gap: 0.35em; font-weight: 500; }
+  .hero__human { display: block; margin-left: -0.05em; }
+  .hero__machine { display: block; max-width: 24ch; }
+  .hero__foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem 3rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .hero__foot .lead { max-width: 40ch; color: var(--muted); }
+  .spec { display: grid; grid-template-columns: repeat(2, minmax(9rem, 1fr)); min-width: min(100%, 22rem); border-top: 1px solid var(--line); }
+  .spec div { display: flex; justify-content: space-between; gap: 1rem; padding-block: 0.7rem; border-bottom: 1px solid var(--line); }
+  .spec div:nth-child(odd) { padding-right: 1rem; box-shadow: inset -1px 0 var(--line); }
+  .spec div:nth-child(even) { padding-left: 1rem; }
+
+  /* Story sections: claim left, text right */
+  .story { row-gap: 1.5rem; align-items: start; }
+  .story__title { grid-column: 1 / span 6; max-width: 16ch; }
+  .story__text { grid-column: 8 / -1; display: flex; flex-direction: column; gap: 1.25rem; }
+  .story__text, .story__text .lead { color: var(--muted); max-width: 44ch; }
+  @media (max-width: 899px) { .story__title, .story__text { grid-column: 1 / -1; } }
+
+  /* Page types */
+  .types { row-gap: 1.5rem; margin-top: clamp(2.5rem, 5vw, 4rem); }
+  .type { grid-column: span 6; display: flex; flex-direction: column; gap: 0.75rem; padding: 1.5rem; box-shadow: inset 0 0 0 1px var(--line-strong); }
+  .type--0 { box-shadow: inset 0 0 0 1px var(--ink); }
+  .type__loads { color: var(--muted); }
+  @media (max-width: 767px) { .type { grid-column: 1 / -1; } }
+
+  /* Build */
+  .build-line { height: 1px; background: var(--ink); transform-origin: left; }
+  .build { align-items: baseline; row-gap: 0.75rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
+  .build__n { grid-column: 1; }
+  .build__title { grid-column: 2 / span 5; }
+  .build__body { grid-column: 8 / -1; color: var(--muted); max-width: 48ch; }
+  @media (max-width: 767px) { .build__n, .build__title, .build__body { grid-column: 1 / -1; } }
+
+  /* Proof */
+  .proof { display: grid; grid-template-columns: 8fr 4fr; gap: 2rem 3rem; align-items: start; }
+  @media (max-width: 1099px) { .proof { grid-template-columns: 1fr; } }
+  .proof__table { width: 100%; border-collapse: collapse; }
+  .proof__table caption { caption-side: bottom; text-align: left; padding-top: 1rem; }
+  .proof__table th, .proof__table td { text-align: left; padding: 1.1rem 1rem 1.1rem 0; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .proof__table thead th { border-bottom-color: var(--line-strong); font-weight: 400; }
+  .proof__table th[scope="row"] { font-weight: 500; }
+  .proof__kb { display: block; font-family: var(--font-mono); margin-bottom: 0.5rem; }
+  .proof__bar { display: block; width: var(--w); min-width: 4px; height: 0.5rem; background: var(--accent); }
+  .proof__lh { font-family: var(--font-mono); white-space: nowrap; }
+  .proof__checks { grid-template-columns: 1fr; }
+  .proof__checks div:nth-child(n) { padding-inline: 0; box-shadow: none; }
+  @media (max-width: 599px) {
+    .proof__table thead { display: none; }
+    .proof__table tr { display: grid; grid-template-columns: 1fr; border-bottom: 1px solid var(--line); padding-block: 1rem; }
+    .proof__table th, .proof__table td { border: 0; padding: 0.25rem 0; }
+  }
+
+  /* CTA */
+  .cta__title { max-width: 14ch; }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: clamp(2rem, 4vw, 3.5rem); }
+</style>

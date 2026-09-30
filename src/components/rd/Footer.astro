@@ -1,0 +1,207 @@
+---
+import { CAL_URL } from "../../data/site";
+
+const year = new Date().getFullYear();
+const stamp = [["Cookies", 0], ["Banners", 0], ["Ads", 0]] as const;
+const cols = [
+  {
+    title: "Site",
+    links: [
+      { href: "/#work", label: "Work" },
+      { href: "/services/", label: "Services" },
+      { href: "/about/", label: "About" },
+      { href: "/blog/", label: "Blog" },
+    ],
+  },
+  {
+    title: "Elsewhere",
+    links: [
+      { href: "https://www.linkedin.com/in/piergorelli/", label: "LinkedIn" },
+      { href: "https://github.com/lupin72", label: "GitHub" },
+      { href: "/rss.xml", label: "RSS" },
+    ],
+  },
+  {
+    title: "Contact",
+    links: [
+      { href: "/contact/", label: "Send a brief" },
+      { href: CAL_URL, label: "Book a call" },
+    ],
+  },
+];
+---
+
+<footer class="site-footer wrap">
+  <div class="grid-12 footer-top">
+    <p class="footer-claim h3">Got a brief that needs to move? <a href="/contact/" class="link link--inline accent">Let's talk.</a></p>
+    {cols.map((col) => (
+      <div class="footer-col">
+        <p class="note">{col.title}</p>
+        <ul>
+          {col.links.map((l) => (
+            <li>
+              {l.href.startsWith("http")
+                ? <a href={l.href} class="link" target="_blank" rel="noopener">{l.label} <span class="arrow" aria-hidden="true">↗</span></a>
+                : <a href={l.href} class="link">{l.label}</a>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <div class="footer-sign">
+    <p class="footer-mark" aria-hidden="true">I do dev.</p>
+
+    <!-- Drawing title block: the "no cookie banner" statement. Keep in sync with /cookie-policy/. -->
+    <div class="tb note">
+      <dl class="tb__cells">
+        {stamp.map(([label, n], i) => (
+          <div style={`--i: ${i}`}>
+            <dt>{label}</dt>
+            <dd class="tb__val"><span>{n}</span></dd>
+          </div>
+        ))}
+      </dl>
+      <p class="tb__cap">
+        <span>Privacy spec · rev. {year}</span>
+        <a href="/cookie-policy/" class="tb__link">Read<span class="sr-only"> the cookie policy</span> →</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="footer-bottom note">
+    <p class="copy"><span>© {year} Pier Gorelli</span><span>Designed and built in Valencia</span></p>
+    <span class="hint">Press <kbd>⌥G</kbd> for the grid · <kbd>⌘K</kbd> for everything else</span>
+    <nav class="legal-links" aria-label="Legal">
+      <a href="/privacy-policy/" class="link">Privacy</a>
+      <a href="/cookie-policy/" class="link">Cookies</a>
+      <a href="/accessibility/" class="link">Accessibility</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    padding-top: var(--section);
+    padding-bottom: 1.25rem;
+    /* clip, not hidden: hidden would make the footer the scroller of the title block's view() timeline. */
+    overflow: clip;
+  }
+  .footer-top { row-gap: 2.5rem; padding-bottom: clamp(48px, 8vw, 120px); }
+  .footer-claim { grid-column: 1 / span 6; max-width: 16ch; }
+  .footer-claim .accent { color: var(--accent-text); }
+  .footer-col { grid-column: span 2; display: flex; flex-direction: column; gap: 0.9rem; }
+  .footer-col ul { display: flex; flex-direction: column; gap: 0.35rem; }
+  @media (max-width: 767px) {
+    .footer-claim { grid-column: 1 / -1; }
+    .footer-col { grid-column: span 2; }
+  }
+
+  .footer-mark {
+    font-size: clamp(4rem, 21vw, 26rem);
+    font-weight: 500;
+    letter-spacing: -0.065em;
+    line-height: 0.78;
+    margin-inline: -0.04em;
+    white-space: nowrap;
+  }
+
+  /* Title block: bottom right of the mark on wide screens, under it otherwise. */
+  .footer-sign { position: relative; }
+  .tb {
+    position: relative;
+    width: max-content;
+    max-width: 100%;
+    margin-top: 2rem;
+    border: 1px solid var(--line-strong);
+    background: var(--bg);
+    transition: border-color var(--dur-1) var(--ease-out);
+  }
+  @media (min-width: 1100px) {
+    .tb { position: absolute; right: 0; bottom: 0; margin: 0; }
+  }
+  .tb::before, .tb::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border: solid var(--accent);
+    pointer-events: none;
+  }
+  .tb::before { left: -5px; top: -5px; border-width: 1px 0 0 1px; }
+  .tb::after { right: -5px; bottom: -5px; border-width: 0 1px 1px 0; }
+  .tb:hover { border-color: var(--ink); }
+
+  .tb__cells { display: grid; grid-template-columns: repeat(3, auto); }
+  .tb__cells > div { display: flex; flex-direction: column; gap: 0.35rem; padding: 0.7rem 1rem 0.8rem; }
+  .tb__cells > div + div { border-left: 1px solid var(--line-strong); }
+  .tb dt { color: var(--muted); }
+  .tb__val {
+    font-size: 1.9rem;
+    line-height: 1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tb__cap {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--line-strong);
+    color: var(--muted);
+  }
+  .tb__link { color: var(--accent-text); }
+  /* The whole block is the click target. */
+  .tb__link::after { content: ""; position: absolute; inset: 0; }
+
+  /* The zeros count down 9 → 0 while the footer scrolls in. CSS only (the blog ships no animation JS). */
+  @property --tb-n { syntax: "<integer>"; inherits: false; initial-value: 0; }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .tb__val { counter-reset: tb var(--tb-n); }
+      .tb__val span { display: none; }
+      .tb__val::before { content: counter(tb); }
+      /* Longhands on purpose: the minifier folds a shorthand + timeline into `animation: … view()`, which Chrome drops. */
+      .tb__val {
+        animation-name: tb-count;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        /* Within the block's own entry: it is fully in view at the end of the page, so every count lands on 0. */
+        animation-timeline: view();
+        animation-range: entry calc(var(--i) * 15%) entry calc(70% + var(--i) * 15%);
+      }
+    }
+  }
+  @keyframes tb-count { from { --tb-n: 9; } to { --tb-n: 0; } }
+
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .copy { display: flex; flex-wrap: wrap; column-gap: 0.5em; }
+  .copy span + span::before { content: "· "; }
+  .legal-links { display: flex; gap: 1.25rem; }
+  @media (max-width: 767px) {
+    /* Stacked: legal links first as one row, then the signature on two clean lines. */
+    .footer-bottom { flex-direction: column; gap: 1rem; padding-bottom: env(safe-area-inset-bottom); }
+    .legal-links { order: -1; flex-wrap: wrap; column-gap: 1.5rem; row-gap: 0.5rem; }
+    .copy { flex-direction: column; color: var(--muted); }
+    .copy span + span::before { content: none; }
+  }
+  kbd {
+    font-family: inherit;
+    padding: 0.05em 0.4em;
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    color: var(--ink);
+  }
+  @media (hover: none) { .hint { display: none; } }
+</style>

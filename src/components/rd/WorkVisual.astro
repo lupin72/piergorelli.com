@@ -1,0 +1,231 @@
+---
+/** Generative blueprint visuals standing in for project imagery in the prototype. */
+interface Props { kind: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" | "diagonals" | "captions" | "catalogue" }
+const { kind } = Astro.props;
+const bars = [62, 88, 40, 74, 96, 52, 80, 34, 68, 90, 46, 76];
+const audit = [
+  { label: "Performance", value: 97 },
+  { label: "Accessibility", value: 92 },
+  { label: "SEO", value: 88 },
+  { label: "AI visibility", value: 61 },
+];
+// Ceramics: 5×3 tiles with majolica-like motifs.
+const T = 56, G = 4, TX = 52, TY = 34;
+const motifs = ["arc", "plain", "ring", "diag", "arc", "diag", "accent", "arc", "plain", "ring", "ring", "arc", "diag", "arc", "plain"];
+const tiles = motifs.map((m, i) => ({ m, x: TX + (i % 5) * (T + G), y: TY + Math.floor(i / 5) * (T + G) }));
+// Migraine PSP: one month of the patient diary, 0 = none … 3 = attack.
+const days = [0,0,1,0,0,0,0, 0,3,2,0,0,0,1, 0,0,0,0,1,0,0, 0,2,3,1,0,0,0, 0,0,0,0,1,0,0];
+const queue = [1, 0, 0, 1, 0];
+// Retail: slides of uneven width; the last twelfth of each one previews the next slide's colour.
+const slides = [{ x: 20, w: 132 }, { x: 160, w: 96 }, { x: 264, w: 156 }];
+// Image SEO: camera file names turned into names chosen from page context and keyword niche.
+const shots = [0, 1, 2];
+// Catalogue RAG pilot: PDF pages, one retrieved passage, an answer that cites its page.
+const rows = [0, 1, 2, 3, 4, 5, 6, 7];
+---
+
+<div class:list={["visual", `visual--${kind}`]} aria-hidden="true">
+  <svg class="visual__grid" viewBox="0 0 400 300" preserveAspectRatio="none">
+    <defs>
+      <pattern id={`g-${kind}`} width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M20 0H0V20" fill="none" stroke="currentColor" stroke-opacity="0.12" stroke-width="1" />
+      </pattern>
+    </defs>
+    <rect width="400" height="300" fill={`url(#g-${kind})`} />
+  </svg>
+
+  {kind === "orbit" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+      {[110, 86, 62, 38].map((r, i) => (
+        <circle cx="200" cy="150" r={r} fill="none" stroke="currentColor" stroke-opacity={0.25 + i * 0.15} stroke-dasharray={i % 2 ? "3 6" : "none"} />
+      ))}
+      <circle cx="286" cy="80" r="10" class="accent-fill" />
+      <circle cx="200" cy="150" r="22" class="accent-fill" />
+      <path d="M40 250H360M200 20V280" stroke="currentColor" stroke-opacity="0.3" stroke-dasharray="2 4" />
+    </svg>
+  )}
+
+  {kind === "bars" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+      {bars.map((h, i) => (
+        <rect x={34 + i * 28} y={250 - h * 2} width="16" height={h * 2} fill={i === 4 ? "var(--accent)" : "currentColor"} fill-opacity={i === 4 ? 1 : 0.18 + (i % 3) * 0.12} />
+      ))}
+      <path d="M24 250H376" stroke="currentColor" stroke-opacity="0.5" />
+    </svg>
+  )}
+
+  {kind === "blueprint" && (
+    <svg class="visual__art visual__bp" viewBox="0 0 400 300" data-parallax="8" data-plot>
+      <path d="M95 0V300M305 0V300M0 80H400M0 220H400" class="accent-stroke" stroke-dasharray="2 4" />
+      <rect x="95" y="80" width="210" height="140" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-dasharray="4 4" />
+      <g transform="translate(115 100) scale(2.5)" class="bp__mark">
+        <path d="M6 37V3h12a9.5 9.5 0 0 1 0 19H6" pathLength="1" />
+        <path d="M57.3 8.7A16 16 0 1 0 62 20H48" pathLength="1" />
+        <circle cx="64" cy="36" r="2.6" class="accent-fill" data-plot-dot />
+      </g>
+      <text x="95" y="70" class="bp__label">PG · 68×40</text>
+      <text x="305" y="240" text-anchor="end" class="bp__label">rev. 2026</text>
+    </svg>
+  )}
+
+  {kind === "audit" && (
+    <div class="visual__audit" data-parallax="6">
+      <p class="note">$ audit https://your-client.com</p>
+      {audit.map((row) => (
+        <div class="audit-row">
+          <span class="note">{row.label}</span>
+          <span class="audit-bar"><span style={`--v:${row.value}%`} class:list={[{ low: row.value < 70 }]}></span></span>
+          <span class="note note--ink">{row.value}</span>
+        </div>
+      ))}
+      <p class="note">→ 3 fixes suggested · generated in 41s</p>
+    </div>
+  )}
+  {kind === "tiles" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
+      {tiles.map(({ m, x, y }) => (
+        <g>
+          <rect x={x} y={y} width={T} height={T} class:list={["tile", { "accent-fill": m === "accent" }]} {...(m === "accent" ? { "data-plot-dot": "" } : { pathLength: 1 })} />
+          {m === "arc" && <path d={`M${x} ${y + 28}A28 28 0 0 0 ${x + 28} ${y}M${x + T} ${y + T - 28}A28 28 0 0 0 ${x + T - 28} ${y + T}`} class="motif" pathLength="1" />}
+          {m === "ring" && <><circle cx={x + 28} cy={y + 28} r="18" class="motif" pathLength="1" /><circle cx={x + 28} cy={y + 28} r="7" class="motif" pathLength="1" /></>}
+          {m === "diag" && <path d={`M${x} ${y + T}L${x + T} ${y}V${y + T}Z`} class="motif motif--fill" data-plot-dot />}
+          {m === "accent" && <circle cx={x + 28} cy={y + 28} r="16" class="motif motif--on-accent" pathLength="1" />}
+        </g>
+      ))}
+      <text x={TX} y="248" class="bp__label">$ import catalogue.xlsx --map config.json</text>
+      <text x={TX} y="266" class="bp__label">→ taxonomies · CPT · ACF · galleries</text>
+    </svg>
+  )}
+
+  {kind === "diary" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
+      <rect x="56" y="28" width="132" height="244" rx="18" class="frame" pathLength="1" data-plot-solid />
+      <text x="74" y="66" class="bp__label">May · diary</text>
+      {days.map((d, i) => (
+        <rect x={74 + (i % 7) * 14.5} y={78 + Math.floor(i / 7) * 14.5} width="11" height="11" rx="2" class:list={["day", `day--${d}`]} data-plot-dot />
+      ))}
+      <rect x="74" y="164" width="96" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="74" y="176" width="66" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="74" y="222" width="96" height="24" rx="12" class="accent-fill" data-plot-dot />
+      <path d="M188 150H236" class="accent-stroke" stroke-dasharray="3 4" />
+      <text x="212" y="142" text-anchor="middle" class="bp__label">API</text>
+      <rect x="236" y="70" width="132" height="160" rx="4" class="frame" pathLength="1" data-plot-solid />
+      <path d="M236 94H368" class="rule" pathLength="1" />
+      <text x="248" y="87" class="bp__label">Care team</text>
+      {queue.map((flag, i) => (
+        <g>
+          <circle cx="252" cy={116 + i * 24} r="4" class:list={[flag ? "accent-fill" : "dot"]} data-plot-dot />
+          <rect x="264" y={114 + i * 24} width={i % 2 ? 60 : 84} height="4" rx="2" class="line" data-plot-fill />
+        </g>
+      ))}
+      <text x="56" y="292" class="bp__label">patient app ⇄ back office</text>
+    </svg>
+  )}
+
+  {kind === "diagonals" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
+      <path d="M10 260L270 0M102 0L339 300" class="accent-stroke" stroke-dasharray="3 5" />
+      <path d="M150 30V170M158 112L224 46M176 94L236 170" class="k" pathLength="1" />
+      <text x="240" y="58" class="bp__label">45°</text>
+      <text x="170" y="24" class="bp__label">K · construction</text>
+      {slides.map(({ x, w }, i) => (
+        <g>
+          <rect x={x} y="192" width={w} height="40" class="frame" pathLength="1" data-plot-solid />
+          <rect x={x + w - w / 12} y="192" width={w / 12} height="40" class:list={[i === 1 ? "accent-fill" : "slide-hint"]} data-plot-fill />
+        </g>
+      ))}
+      <text x="20" y="256" class="bp__label">last 1/12 = colour of the next slide</text>
+    </svg>
+  )}
+
+  {kind === "captions" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
+      {shots.map((i) => (
+        <g>
+          <rect x={30 + i * 120} y="36" width="100" height="74" class="frame" pathLength="1" data-plot-solid />
+          <path d={`M${40 + i * 120} 98L${64 + i * 120} 70L${82 + i * 120} 88L${94 + i * 120} 78L${120 + i * 120} 98`} class="motif" pathLength="1" />
+          <circle cx={108 + i * 120} cy="54" r="6" class:list={[i === 1 ? "accent-fill" : "dot"]} data-plot-dot />
+          <text x={30 + i * 120} y="128" class="bp__label strike">IMG_04{12 + i}.jpg</text>
+          <rect x={30 + i * 120} y="140" width={i === 1 ? 92 : 78} height="4" rx="2" class:list={[i === 1 ? "accent-fill" : "line"]} data-plot-fill />
+          <rect x={30 + i * 120} y="152" width={i === 2 ? 56 : 70} height="4" rx="2" class="line" data-plot-fill />
+        </g>
+      ))}
+      <path d="M30 186H370" class="rule" pathLength="1" />
+      <text x="30" y="212" class="bp__label">search console · keyword niche · page context</text>
+      <text x="30" y="232" class="bp__label">→ file name · alt · caption</text>
+      <text x="30" y="266" class="bp__label">$ claude › seo-images</text>
+    </svg>
+  )}
+  {kind === "catalogue" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8" data-plot>
+      <rect x="56" y="48" width="130" height="176" class="frame" pathLength="1" data-plot-solid />
+      <rect x="48" y="40" width="130" height="176" class="frame" pathLength="1" data-plot-solid />
+      <rect x="40" y="32" width="130" height="176" class="frame" pathLength="1" data-plot-solid />
+      <text x="52" y="50" class="bp__label">catalogue.pdf</text>
+      {rows.map((i) => (
+        <rect x="52" y={64 + i * 16} width={i % 3 === 2 ? 72 : 106} height="4" rx="2" class:list={[i === 4 || i === 5 ? "accent-fill" : "line"]} data-plot-fill />
+      ))}
+      <rect x="46" y="124" width="118" height="32" class="accent-stroke" fill="none" stroke-dasharray="3 3" />
+      <text x="170" y="200" text-anchor="end" class="bp__label">p. 42</text>
+      <path d="M164 140H226" class="accent-stroke" stroke-dasharray="3 4" />
+      <rect x="226" y="92" width="144" height="104" rx="4" class="frame" pathLength="1" data-plot-solid />
+      <rect x="240" y="110" width="116" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="240" y="122" width="100" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="240" y="134" width="84" height="4" rx="2" class="line" data-plot-fill />
+      <rect x="240" y="160" width="58" height="20" rx="10" class="accent-fill" data-plot-dot />
+      <text x="269" y="174" text-anchor="middle" class="bp__label on-accent">p. 42</text>
+      <text x="40" y="252" class="bp__label">hundreds of PDF pages → embeddings</text>
+      <text x="40" y="272" class="bp__label">$ ask › answer + source page</text>
+    </svg>
+  )}
+</div>
+
+<style>
+  .visual {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--bg-raised);
+    color: var(--ink);
+    border-radius: 4px;
+  }
+  .visual__grid, .visual__art { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .visual__art, .visual__audit { will-change: transform; }
+  /* Plotted on scroll by motion.ts ([data-plot]); the 1 2 pattern keeps square caps from leaving dots. */
+  .visual__art [pathLength="1"] { stroke-dasharray: 1 2; }
+  .accent-fill { fill: var(--accent); }
+  .accent-stroke { stroke: var(--accent); stroke-opacity: 0.7; }
+  .bp__mark path { fill: none; stroke: currentColor; stroke-width: 4.2; stroke-linecap: square; stroke-linejoin: miter; }
+  .tile { fill: currentColor; fill-opacity: 0.05; stroke: currentColor; stroke-opacity: 0.45; }
+  .tile.accent-fill { fill: var(--accent); fill-opacity: 1; stroke: none; }
+  .motif { fill: none; stroke: currentColor; stroke-opacity: 0.55; }
+  .motif--fill { fill: currentColor; fill-opacity: 0.14; stroke: none; }
+  .motif--on-accent { stroke: var(--bg-raised); stroke-opacity: 1; stroke-width: 2; }
+  .frame { fill: var(--bg-raised); stroke: currentColor; stroke-opacity: 0.5; }
+  .rule { stroke: currentColor; stroke-opacity: 0.3; }
+  .line { fill: currentColor; fill-opacity: 0.2; }
+  .dot { fill: currentColor; fill-opacity: 0.35; }
+  .day { fill: none; stroke: currentColor; stroke-opacity: 0.25; }
+  .day--1 { fill: currentColor; fill-opacity: 0.18; stroke: none; }
+  .day--2 { fill: currentColor; fill-opacity: 0.45; stroke: none; }
+  .day--3 { fill: var(--accent); stroke: none; }
+  .k { fill: none; stroke: currentColor; stroke-width: 16; stroke-linecap: square; }
+  .slide-hint { fill: currentColor; fill-opacity: 0.3; }
+  .bp__label.on-accent { fill: var(--accent-ink); fill-opacity: 1; }
+  .strike { text-decoration: line-through; }
+  .bp__label { fill: currentColor; fill-opacity: 0.6; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; }
+
+  .visual__audit {
+    position: absolute;
+    inset: 12% 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.9rem;
+  }
+  .audit-row { display: grid; grid-template-columns: 8.5rem 1fr 2rem; align-items: center; gap: 0.75rem; }
+  .audit-bar { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; }
+  .audit-bar span { display: block; height: 100%; width: var(--v); background: var(--ink); border-radius: inherit; }
+  .audit-bar span.low { background: var(--accent); }
+  @media (max-width: 520px) { .audit-row { grid-template-columns: 6.5rem 1fr 2rem; } }
+</style>

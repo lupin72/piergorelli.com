@@ -1,0 +1,206 @@
+---
+import Monogram from "./Monogram.astro";
+
+const nav = [
+  { href: "/#work", label: "Work", index: "01" },
+  { href: "/services/", label: "Services", index: "02" },
+  { href: "/about/", label: "About", index: "03" },
+  { href: "/blog/", label: "Blog", index: "04" },
+];
+const path = Astro.url.pathname;
+---
+
+<header class="site-header wrap">
+  <a href="/" class="brand" aria-label="Pier Gorelli, home">
+    <Monogram class="brand__mark" />
+    <span class="brand__name note note--ink">Pier Gorelli<span class="brand__role"> / web &amp; AI dev</span></span>
+  </a>
+
+  <nav class="nav" aria-label="Main">
+    <ul>
+      {nav.map((item) => (
+        <li>
+          <a href={item.href} class="nav__link" aria-current={path.startsWith(item.href) && item.href !== "/#work" ? "page" : undefined}>
+            <span class="note" aria-hidden="true">{item.index}</span>
+            <span class="nav__label" data-label={item.label}>{item.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="tools">
+    <button class="tool" type="button" data-action="theme" aria-label="Toggle light / dark theme">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" /><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" /></svg>
+    </button>
+    <button class="tool" type="button" data-action="accent" aria-label="Change accent colour">
+      <span class="swatch" aria-hidden="true"></span>
+    </button>
+    <button class="tool tool--kbd note" type="button" data-action="palette" aria-label="Open command palette (⌘K)">⌘K</button>
+    <button class="tool tool--menu note" type="button" data-action="palette" aria-label="Open menu">Menu</button>
+    <a href="/contact/" class="btn header-cta">Let's talk</a>
+  </div>
+
+  <div class="hd-rule" aria-hidden="true">
+    <span class="hd-rule__fill"><span class="hd-rule__tag note"></span></span>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    height: 4.5rem;
+    color: var(--ink);
+    view-transition-name: site-header;
+  }
+  /* Scrolled state: solid paper band with a crisp edge (no fade: big headings ghosted through it). Driven by scroll-timeline, zero JS
+     (also on the blog). Without scroll-timeline support the band is always on and static. */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--bg);
+  }
+  /* Bottom edge = blueprint ruler: hairline, minor ticks every 8px, major every 80px.
+     It draws itself in from the left, then an accent fill tracks reading progress. */
+  .hd-rule {
+    position: absolute;
+    grid-area: 1 / 1 / -1 / -1; /* abspos grid child: span the whole header */
+    inset: auto 0 0 0;
+    height: 7px;
+    pointer-events: none;
+    background:
+      linear-gradient(var(--line-strong), var(--line-strong)) bottom / 100% 1px no-repeat,
+      repeating-linear-gradient(90deg, var(--line-strong) 0 1px, transparent 1px 80px) bottom / 100% 7px no-repeat,
+      repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 8px) bottom / 100% 3px no-repeat;
+    clip-path: inset(0 0 -1.5rem 0);
+  }
+  .hd-rule__fill {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 1px;
+    background: var(--accent);
+    transform: translateX(-100%);
+  }
+  /* progress readout riding the head of the fill */
+  .hd-rule__tag {
+    position: absolute;
+    right: 0;
+    top: 0.45rem;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.625rem;
+    line-height: 1;
+    color: var(--accent-ink);
+    background: var(--accent);
+    counter-reset: pct var(--pct);
+    opacity: 0;
+  }
+  .hd-rule__tag::before { content: counter(pct, decimal-leading-zero) "%"; }
+  .hd-rule__tag::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    width: 1px;
+    height: 0.45rem;
+    background: var(--accent);
+  }
+
+  @property --pct { syntax: "<integer>"; inherits: true; initial-value: 0; }
+
+  @supports (animation-timeline: scroll()) {
+    .site-header, .site-header::before, .hd-rule, .hd-rule__fill, .hd-rule__tag {
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: scroll(root);
+    }
+    .site-header { animation-name: hd-compact; animation-range: 0 160px; }
+    .site-header::before { animation-name: hd-band; animation-range: 0 80px; }
+    .hd-rule { animation-name: hd-draw; animation-range: 40px 280px; }
+    .hd-rule__fill { animation-name: hd-progress; }
+    .hd-rule__tag { animation-name: hd-tag; animation-range: 200px 100%; }
+  }
+  @supports not (animation-timeline: scroll()) {
+    .hd-rule__fill { display: none; }
+  }
+  @keyframes hd-compact { to { height: 3.75rem; } }
+  @keyframes hd-band { from { opacity: 0; } }
+  @keyframes hd-draw { from { clip-path: inset(0 100% -1.5rem 0); } }
+  @keyframes hd-progress { to { transform: translateX(0); --pct: 100; } }
+  @keyframes hd-tag { 0% { opacity: 0; } 4%, 100% { opacity: 1; } }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-self: start;
+    padding-left: 0.75rem;
+  }
+  .brand :global(.brand__mark) { font-size: 1.6rem; }
+  .brand__role { color: var(--muted); }
+
+  .nav ul { display: flex; gap: clamp(1rem, 2.4vw, 2.5rem); }
+  .nav__link { display: inline-flex; align-items: baseline; gap: 0.4rem; font-size: 0.95rem; }
+  .nav__label {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    line-height: 1.2;
+    vertical-align: bottom;
+  }
+  .nav__label::after {
+    content: attr(data-label);
+    content: attr(data-label) / ""; /* hover copy of the label: not read twice */
+    position: absolute;
+    left: 0;
+    top: 100%;
+    color: var(--accent-text);
+  }
+  .nav__label, .nav__label::after { transition: transform var(--dur-1) var(--ease-in-out); }
+  .nav__link:hover .nav__label { transform: translateY(-100%); }
+  .nav__link:hover .nav__label::after { transform: translateY(0); }
+  .nav__link[aria-current="page"] .note { color: var(--accent-text); }
+
+  .tools { justify-self: end; display: flex; align-items: center; gap: 0.5rem; padding-right: 0.75rem; }
+
+  .tool {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: box-shadow var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+    cursor: pointer;
+  }
+  .tool:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+  .tool:active { transform: scale(0.92); }
+  .tool svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .tool svg path { fill: currentColor; stroke: none; }
+  .tool--kbd { width: auto; padding-inline: 0.7rem; color: var(--ink); }
+  .swatch {
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 999px;
+    background: var(--accent);
+    transition: background var(--dur-1) var(--ease-out);
+  }
+  .tool--menu { display: none; width: auto; padding-inline: 0.9rem; color: var(--ink); }
+  .header-cta { height: 2.25rem; padding-inline: 1rem; font-size: 0.85rem; margin-left: 0.25rem; }
+
+  @media (max-width: 960px) {
+    .site-header { grid-template-columns: 1fr auto; }
+    .nav { display: none; }
+    .brand__role, .tool--kbd { display: none; }
+    .tool--menu { display: grid; }
+  }
+  @media (max-width: 480px) {
+    .header-cta { display: none; }
+  }
+</style>

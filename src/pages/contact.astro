@@ -1,31 +1,422 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import ContactForm from '../components/ContactForm.astro';
-import TextWithImage from '../components/TextWithImage.astro';
-import Title from '../components/Title.astro';
-import assaut from '../assets/images/assaut-2.jpg';
-import SiteData from "../constants/siteData.json";
+import Base from "../layouts/Base.astro";
+import BriefForm from "../components/rd/BriefForm.astro";
+import { CAL_URL, EMAIL } from "../data/site";
 
+const updated = new Date("2026-09-30");
+
+const agenda = [
+  "Your brief, the constraints and the date that can't move",
+  "Whether I'm the right fit, and who to call if I'm not",
+  "Next steps: scope, timing, NDA if you need one",
+];
+
+const steps = [
+  { n: "01", title: "Reply", when: "< 24h · Mon–Fri", body: "A human answer, usually with a couple of questions and a slot for a call." },
+  { n: "02", title: "Call", when: "30 min", body: "We go through the brief. NDA first, if you prefer." },
+  { n: "03", title: "Proposal", when: "≈ 2 weeks", body: "Scope, milestones, stack and a quote, in writing so your team can pass it on." },
+  { n: "04", title: "Kick-off", when: "Day 1", body: "Access to your tools, a repo and staging from the first commit." },
+];
+
+const channels = [
+  { label: "Email", handle: EMAIL, href: `mailto:${EMAIL}`, body: "Briefs, questions, NDAs. The fastest way to reach me." },
+  { label: "LinkedIn", handle: "in/piergorelli", href: "https://www.linkedin.com/in/piergorelli/", body: "Where I share new posts and work.", ext: true },
+  { label: "GitHub", handle: "lupin72", href: "https://github.com/lupin72", body: "Open-source bits and experiments.", ext: true },
+  { label: "RSS", handle: "rss.xml", href: "/rss.xml", body: "New posts on dev, AI in practice and agency work." },
+];
+
+const faqs = [
+  { q: "Can you sign an NDA before we talk?", a: "Yes. Tick the box in the form or just ask by email: I'll sign yours or send mine before you share anything confidential." },
+  { q: "Do you work with companies too, or only with agencies?", a: "Agencies are most of my work, but I also work directly with companies, mostly on maintenance and AI in products." },
+  { q: "Can I get a quote without a call?", a: "If the brief is clear, yes: I can send a written estimate by email. For anything with open questions, a 30-minute call saves both of us a round of guesses." },
+  { q: "What makes a good brief?", a: "What you're building and for whom, the deadline and why it exists, what's already decided (design, CMS, hosting) and what worries you. A deck or a Figma link beats a long email." },
+  { q: "Which time zone are you in?", a: "Valencia, Spain (CET/CEST). That means full overlap with the rest of Europe and the UK, and mornings in New York." },
+  { q: "What happens to the data I send?", a: "The form is handled by Netlify Forms and used only to reply to you. No newsletter, no tracking cookies. Details in the privacy policy." },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    url: "https://piergorelli.com/contact/",
+    name: "Contact Pier Gorelli",
+    dateModified: updated.toISOString().slice(0, 10),
+    mainEntity: {
+      "@type": "Person",
+      "@id": "https://piergorelli.com/#person",
+      name: "Pier Gorelli",
+      email: `mailto:${EMAIL}`,
+      address: { "@type": "PostalAddress", addressLocality: "Valencia", addressCountry: "ES" },
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: EMAIL,
+        availableLanguage: ["English", "Spanish", "Italian"],
+        areaServed: ["ES", "IT", "EU"],
+      },
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://piergorelli.com/" },
+      { "@type": "ListItem", position: 2, name: "Contact", item: "https://piergorelli.com/contact/" },
+    ],
+  },
+];
 ---
 
-
-<Layout
-	seo={{
-		title: SiteData.pages.contact.title,
-		description: SiteData.default.description
-	}}
+<Base
+  title="Hire a Freelance Web & AI Developer | Pier Gorelli"
+  description="Send a brief or book a 30-minute call with Pier Gorelli, freelance web & AI developer in Valencia, Spain. Replies within 24 hours, Monday to Friday."
+  motion="showcase"
+  schema={schema}
 >
-	<Header textColor="black" headerClasses="" menuColor="#000000"/>
-	<main>
-		<Title title="Let's talk" />
-		<TextWithImage
-			image={assaut.src}
-		/>
-		<ContactForm subtitle="02" />
-	</main>
-  <Footer />
-</Layout>
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero wrap" data-hero>
+    <nav class="note crumbs" aria-label="Breadcrumb">
+      <a href="/" class="link">Home</a> / <span class="note--ink">Contact</span>
+    </nav>
+    <p class="note">[Contact / 05]</p>
+    <h1 class="hero__title">
+      <span class="display hero__human" data-hero-human data-bp="h1.human">Let's talk.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">A brief, a call or a plain email. I reply within 24 hours, Monday to Friday.</span>
+    </h1>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>17</span> tokens · <span data-gen-ms>1480</span> ms</p>
 
+    <dl class="spec" data-hero-fade data-bp="dl.spec">
+      <div class="spec__row">
+        <dt class="note">Email</dt>
+        <dd>
+          <a href={`mailto:${EMAIL}`} class="link">{EMAIL}</a>
+          <button type="button" class="copy note" data-copy={EMAIL} aria-label="Copy email address">Copy</button>
+          <span class="sr-only" role="status" data-copy-status></span>
+        </dd>
+      </div>
+      <div class="spec__row">
+        <dt class="note">Reply</dt>
+        <dd>Within 24h · Mon–Fri</dd>
+      </div>
+      <div class="spec__row">
+        <dt class="note">Local time</dt>
+        <dd><span class="spec__live" data-desk aria-hidden="true"></span><span data-clock>Valencia · CET</span></dd>
+      </div>
+      <div class="spec__row">
+        <dt class="note">Status</dt>
+        <dd><span class="spec__live" aria-hidden="true"></span>Taking on new projects</dd>
+      </div>
+    </dl>
 
+    <div class="hero__ctas" data-hero-fade>
+      <a href="#brief" class="btn">Write a brief <span class="arrow">↓</span></a>
+      <a href="#call" class="btn btn--ghost">Book a 30-min call</a>
+    </div>
+  </section>
+
+  <!-- ── 01 Brief ─────────────────────────────────────────── -->
+  <section class="section wrap" id="brief">
+    <header class="section-head">
+      <span class="note note--ink">[01] The brief</span>
+      <span class="note">≈ 2 min · 6 fields</span>
+    </header>
+    <h2 class="h2 brief__claim" data-reveal="lines">Tell me what you're building. I'll tell you what it takes.</h2>
+    <BriefForm />
+  </section>
+
+  <!-- ── 02 Call ──────────────────────────────────────────── -->
+  <section class="section wrap" id="call">
+    <header class="section-head">
+      <span class="note note--ink">[02] Prefer to talk?</span>
+      <span class="note">Video call · 30 min</span>
+    </header>
+    <div class="call grid-12">
+      <div class="call__intro">
+        <h2 class="h1 call__title" data-reveal="lines">Thirty minutes. No slides.</h2>
+        <p class="lead call__lead" data-reveal="up">
+          Bring the brief, or just the problem. By the end of the call you'll know whether I'm the right person for it, and when I could start.
+        </p>
+      </div>
+      <div class="ticket" data-reveal="up">
+        <div class="ticket__head">
+          <span class="note note--ink">Call · 30 min</span>
+          <span class="note">Google Meet or Zoom</span>
+        </div>
+        <ol class="ticket__agenda">
+          {agenda.map((a, i) => (
+            <li><span class="note">{String(i + 1).padStart(2, "0")}</span><span>{a}</span></li>
+          ))}
+        </ol>
+        <div class="ticket__foot">
+          <a href={CAL_URL} class="btn" target="_blank" rel="noopener">
+            Pick a slot <span class="arrow">↗</span>
+          </a>
+          <span class="note">CET/CEST</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 What happens next ─────────────────────────────── -->
+  <section class="section wrap" id="next">
+    <header class="section-head">
+      <span class="note note--ink">[03] What happens next</span>
+      <span class="note">{steps.length} steps</span>
+    </header>
+    <div class="next__line" data-draw></div>
+    <ol class="next grid-12">
+      {steps.map((s) => (
+        <li class="step" data-reveal="up">
+          <span class="step__dot" aria-hidden="true"></span>
+          <span class="step__meta note"><span>{s.n}</span><span class="note--accent">{s.when}</span></span>
+          <h3 class="step__title">{s.title}</h3>
+          <p class="step__body">{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 04 Elsewhere ─────────────────────────────────────── -->
+  <section class="section wrap" id="elsewhere">
+    <header class="section-head">
+      <span class="note note--ink">[04] Elsewhere</span>
+      <span class="note">{channels.length} channels</span>
+    </header>
+    <ul class="channels">
+      {channels.map((c) => (
+        <li class="channel" data-reveal="up">
+          <a href={c.href} class="channel__link grid-12" data-fill {...(c.ext ? { target: "_blank", rel: "noopener me" } : {})}>
+            <span class="channel__label note">{c.label}</span>
+            <span class="channel__handle h3">{c.handle}</span>
+            <span class="channel__body">{c.body}</span>
+            <span class:list={["channel__arrow", { "channel__arrow--ext": c.ext }]} aria-hidden="true">{c.ext ? "↗" : "→"}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ── 05 FAQ ───────────────────────────────────────────── -->
+  <section class="section wrap" id="faq">
+    <header class="section-head">
+      <span class="note note--ink">[05] Before you write</span>
+      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
+    </header>
+    <div class="faqs">
+      {faqs.map((f) => (
+        <details class="faq" data-reveal="up">
+          <summary><span class="h3">{f.q}</span><span class="faq__icon" aria-hidden="true"></span></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<script>
+  let timer: number | undefined;
+
+  function setupContact() {
+    // Live clock in Valencia, and whether I'm likely at the desk (Mon–Fri, 9–19).
+    const clock = document.querySelector<HTMLElement>("[data-clock]");
+    const desk = document.querySelector<HTMLElement>("[data-desk]");
+    window.clearInterval(timer);
+    if (clock) {
+      const time = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
+      const parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Madrid", weekday: "short", hour: "numeric", hourCycle: "h23" });
+      const tick = () => {
+        const now = new Date();
+        const p = Object.fromEntries(parts.formatToParts(now).map((x) => [x.type, x.value]));
+        const hour = Number(p.hour);
+        const open = !["Sat", "Sun"].includes(p.weekday) && hour >= 9 && hour < 19;
+        clock.textContent = `${time.format(now)} · ${open ? "at the desk" : "off · reply tomorrow"}`;
+        desk?.classList.toggle("is-off", !open);
+      };
+      tick();
+      timer = window.setInterval(tick, 20_000);
+    }
+
+    document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const status = btn.parentElement?.querySelector<HTMLElement>("[data-copy-status]");
+        try {
+          await navigator.clipboard.writeText(btn.dataset.copy ?? "");
+          btn.textContent = "Copied ✓";
+          if (status) status.textContent = "Email address copied";
+        } catch {
+          btn.textContent = "Select & copy";
+          if (status) status.textContent = "Copy failed: select the address to copy it";
+        }
+        window.setTimeout(() => {
+          btn.textContent = "Copy";
+          if (status) status.textContent = "";
+        }, 1800);
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupContact);
+  document.addEventListener("astro:before-swap", () => window.clearInterval(timer));
+</script>
+
+<style>
+  /* Hero */
+  .hero {
+    min-height: 92svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1.25rem;
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+  }
+  .crumbs { margin-bottom: auto; }
+  .hero__title { display: flex; flex-direction: column; gap: 0.3em; font-weight: 500; }
+  .hero__human { display: block; margin-left: -0.05em; }
+  .hero__machine { display: block; max-width: 24ch; }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.75rem; }
+
+  .spec {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.5fr 1fr 1fr;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .spec__row { padding: 1rem 1rem 0 0; display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+  .spec__row + .spec__row { padding-left: 1rem; border-left: 1px solid var(--line); }
+  .spec__row:first-child dd { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; }
+  /* Inline, so the dot stays on the first line when the value wraps. */
+  .spec__live {
+    display: inline-block;
+    vertical-align: 0.12em;
+    margin-right: 0.6em;
+    width: 7px;
+    height: 7px;
+    border-radius: 99px;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 var(--accent);
+    animation: live 2.4s var(--ease-out) 2; /* stops within 5 s (WCAG 2.2.2) */
+  }
+  .spec__live.is-off { background: var(--muted); animation: none; }
+  @keyframes live { 70%, 100% { box-shadow: 0 0 0 7px transparent; } }
+  .copy {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    cursor: pointer;
+    transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  .copy:hover { background: var(--ink); color: var(--bg); }
+  @media (max-width: 1099px) {
+    .spec { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1rem; }
+    .spec__row, .spec__row + .spec__row { padding: 0.9rem 0; border-left: 0; border-bottom: 1px solid var(--line); }
+    .spec__row:first-child { grid-column: 1 / -1; }
+  }
+  /* Phones: one key/value line per row, like a spec sheet, instead of a ragged 2-column grid. */
+  @media (max-width: 767px) {
+    .spec { grid-template-columns: 1fr; }
+    .spec__row, .spec__row + .spec__row { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); align-items: baseline; gap: 0.75rem; padding: 0.8rem 0; }
+    .spec__row:first-child dd { gap: 0.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .spec__live { animation: none; } }
+
+  /* Brief */
+  .brief__claim { max-width: 16ch; margin-bottom: clamp(3rem, 6vw, 5rem); }
+
+  /* Call */
+  .call { row-gap: 3rem; align-items: end; }
+  .call__intro { grid-column: 1 / span 7; }
+  .call__title { max-width: 9ch; }
+  .call__lead { max-width: 36ch; margin-top: clamp(1.5rem, 3vw, 2.5rem); color: var(--muted); }
+  .ticket {
+    grid-column: 8 / -1;
+    display: flex;
+    flex-direction: column;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 14px;
+  }
+  .ticket .note { color: color-mix(in oklab, var(--bg) 60%, transparent); }
+  .ticket .note--ink { color: var(--bg); }
+  .ticket__head, .ticket__foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.25rem; }
+  .ticket__head { border-bottom: 1px dashed color-mix(in oklab, var(--bg) 25%, transparent); }
+  .ticket__foot { border-top: 1px dashed color-mix(in oklab, var(--bg) 25%, transparent); padding-block: 1.25rem; }
+  .ticket__foot .btn { --btn-bg: var(--bg); --btn-fg: var(--ink); }
+  .ticket__agenda { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem 1.25rem; }
+  .ticket__agenda li { display: grid; grid-template-columns: 2.25rem 1fr; gap: 0.5rem; align-items: baseline; font-size: var(--step-1); letter-spacing: -0.015em; line-height: 1.3; }
+  @media (max-width: 899px) {
+    .call__intro, .ticket { grid-column: 1 / -1; }
+  }
+
+  /* Next */
+  .next__line { height: 1px; background: var(--ink); transform-origin: left; }
+  .next { row-gap: 2.5rem; }
+  .step { grid-column: span 3; position: relative; padding-top: 1.5rem; }
+  .step__dot {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 99px;
+    background: var(--accent);
+  }
+  .step__meta { display: flex; justify-content: space-between; gap: 1rem; max-width: 30ch; }
+  .step__title { font-size: var(--step-1); margin: 0.6rem 0 0.5rem; }
+  .step__body { color: var(--muted); max-width: 30ch; }
+  /* Mobile: vertical timeline, one rail through every dot (same as the home process). */
+  @media (max-width: 767px) {
+    .next__line { display: none; }
+    .next { row-gap: 0; }
+    .step { grid-column: 1 / -1; padding: 0 0 2.25rem 1.75rem; }
+    .step::before { content: ""; position: absolute; left: 4px; top: 0.45rem; bottom: -0.45rem; width: 1px; background: var(--ink); }
+    .step:last-child { padding-bottom: 0; }
+    .step:last-child::before { bottom: auto; height: 0; }
+    .step__dot { top: 0.45rem; transform: translateY(-50%); }
+  }
+
+  /* Elsewhere */
+  .channels { position: relative; isolation: isolate; border-bottom: 1px solid var(--line); }
+  .channel { border-top: 1px solid var(--line); }
+  .channel__link {
+    position: relative;
+    align-items: baseline;
+    row-gap: 0.5rem;
+    padding-block: clamp(1.25rem, 2.5vw, 2rem);
+    transition: color var(--dur-1) var(--ease-out);
+  }
+  .channel__link::before {
+    content: "";
+    position: absolute;
+    inset: 0 calc(-1 * var(--gutter));
+    background: var(--ink);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform var(--dur-2) var(--ease-in-out);
+    z-index: -1;
+  }
+  :global(html:not(.fill-js)) .channel__link:hover, .channel__link[data-hot] { color: var(--bg); }
+  :global(html:not(.fill-js)) .channel__link:hover::before, .channel__link[data-hot]::before { transform: scaleY(1); transform-origin: top; }
+  :global(html:not(.fill-js)) .channel__link:hover .note, .channel__link[data-hot] .note { color: color-mix(in oklab, var(--bg) 65%, transparent); }
+  .channel__label { grid-column: 1 / span 2; }
+  .channel__handle { grid-column: 3 / span 5; overflow-wrap: anywhere; }
+  .channel__body { grid-column: 8 / span 4; opacity: 0.8; }
+  .channel__arrow {
+    grid-column: 12;
+    grid-row: 1;
+    justify-self: end;
+    font-size: var(--step-2);
+    transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1);
+  }
+  :global(html:not(.fill-js)) .channel__link:hover .channel__arrow, .channel__link[data-hot] .channel__arrow { transform: rotate(-45deg); color: var(--accent); }
+  :global(html:not(.fill-js)) .channel__link:hover .channel__arrow--ext, .channel__link[data-hot] .channel__arrow--ext { transform: translate(0.15em, -0.15em); }
+  @media (max-width: 767px) {
+    .channel__label, .channel__handle, .channel__body { grid-column: 1 / -1; }
+    .channel__arrow { display: none; }
+  }
+</style>

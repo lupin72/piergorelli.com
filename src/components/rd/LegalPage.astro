@@ -1,0 +1,247 @@
+---
+// Shared shell for /privacy-policy/ and /cookie-policy/: "read" page, zero animation JS.
+// Body sections come through the slot as <section id> + <h2>; numbers and the index are generated here.
+import Base from "../../layouts/Base.astro";
+
+interface Props {
+  seoTitle: string;
+  description: string;
+  title: string;
+  lead: string;
+  /** ISO date (YYYY-MM-DD) of the last revision. */
+  updated: string;
+  meta: [string, string][];
+  glance: { label: string; value: string; caption: string }[];
+  sections: { id: string; title: string }[];
+  other: { href: string; label: string; teaser: string };
+}
+
+const { seoTitle, description, title, lead, updated, meta, glance, sections, other } = Astro.props;
+const site = Astro.site ?? new URL("https://piergorelli.com");
+const url = new URL(Astro.url.pathname, site).href;
+const updatedLabel = new Date(updated).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+const pad = (i: number) => String(i + 1).padStart(2, "0");
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url,
+    dateModified: updated,
+    inLanguage: "en",
+    publisher: { "@type": "Person", "@id": "https://piergorelli.com/#person", name: "Pier Gorelli" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://piergorelli.com/" },
+      { "@type": "ListItem", position: 2, name: title, item: url },
+    ],
+  },
+];
+---
+
+<Base title={seoTitle} description={description} motion="read" schema={schema}>
+  <article class="legal wrap">
+    <header class="legal__head">
+      <nav class="note crumbs" aria-label="Breadcrumb">
+        <a href="/" class="link">Home</a> / <span>Legal</span> / <span class="note--ink">{title}</span>
+      </nav>
+      <h1 class="h1 legal__title">{title}<span class="legal__dot">.</span></h1>
+      <p class="lead legal__lead">{lead}</p>
+      <dl class="legal__meta grid-12">
+        <div><dt class="note">Last updated</dt><dd><time datetime={updated}>{updatedLabel}</time></dd></div>
+        {meta.map(([k, v]) => (
+          <div><dt class="note">{k}</dt><dd>{v}</dd></div>
+        ))}
+      </dl>
+    </header>
+
+    <section class="glance" aria-labelledby="glance-title">
+      <p class="note" id="glance-title">fig. 00 · at a glance</p>
+      <ul class="glance__grid">
+        {glance.map((g) => (
+          <li class="glance__cell">
+            <span class="note">{g.label}</span>
+            <strong class="glance__value">{g.value}</strong>
+            <span class="glance__caption">{g.caption}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="legal__body grid-12">
+      <nav class="toc" aria-label="Contents">
+        <p class="note note--ink">Contents</p>
+        <ol>
+          {sections.map((s, i) => (
+            <li><a href={`#${s.id}`} class="link"><span class="note">{pad(i)}</span> {s.title}</a></li>
+          ))}
+        </ol>
+      </nav>
+      <div class="legal__prose">
+        <slot />
+      </div>
+    </div>
+
+    <footer class="legal__foot grid-12">
+      <div class="ask">
+        <p class="note">Questions about your data?</p>
+        <p class="h3">Write to me, a human replies.</p>
+        <a href="mailto:me@piergorelli.com" class="btn">me@piergorelli.com <span class="arrow">→</span></a>
+      </div>
+      <a href={other.href} class="next">
+        <span class="note">Also read · {other.teaser}</span>
+        <span class="h2 next__title">{other.label} <span class="arrow">→</span></span>
+      </a>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .legal { padding-top: 7rem; }
+  .legal__head { display: flex; flex-direction: column; gap: 1.5rem; }
+  .legal__title { font-size: clamp(2.8rem, 1.2rem + 6vw, 8rem); max-width: 14ch; }
+  .legal__dot { color: var(--accent-text); }
+  .legal__lead { max-width: 52ch; color: var(--muted); }
+  .legal__meta {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line-strong);
+    row-gap: 1rem;
+  }
+  .legal__meta > div { grid-column: span 3; display: flex; flex-direction: column; gap: 0.25rem; }
+  @media (max-width: 767px) { .legal__meta > div { grid-column: span 2; } }
+
+  /* At a glance: spec-sheet cells with blueprint corner ticks */
+  .glance { margin-top: clamp(3rem, 6vw, 5.5rem); display: flex; flex-direction: column; gap: 0.9rem; }
+  .glance__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line);
+  }
+  .glance__cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .glance__cell::before {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--accent);
+    background: var(--bg);
+  }
+  .glance__value {
+    font-size: var(--step-3);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
+  .glance__caption { font-size: 0.92rem; line-height: 1.45; color: var(--muted); max-width: 30ch; }
+  @media (max-width: 1023px) { .glance__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  /* Body: sticky index + numbered sections */
+  .legal__body { margin-top: clamp(3.5rem, 8vw, 8rem); align-items: start; }
+  .toc { grid-column: 1 / span 3; position: sticky; top: 6rem; display: flex; flex-direction: column; gap: 1rem; }
+  .toc ol { display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.92rem; }
+  .toc a { color: var(--muted); }
+  .toc a:hover { color: var(--ink); }
+  .legal__prose { grid-column: 5 / span 7; min-width: 0; counter-reset: sec; }
+  @media (max-width: 1023px) {
+    .toc { grid-column: 1 / -1; position: static; padding-bottom: 2.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--line); }
+    .legal__prose { grid-column: 1 / -1; max-width: 70ch; }
+  }
+
+  .legal__prose { font-size: 1.075rem; line-height: 1.7; }
+  .legal__prose :global(section) { counter-increment: sec; scroll-margin-top: 6rem; }
+  .legal__prose :global(section + section) { margin-top: clamp(3.5rem, 6vw, 5.5rem); }
+  .legal__prose :global(section > * + *) { margin-top: 1.1em; }
+  .legal__prose :global(h2) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line-strong);
+    font-size: var(--step-2);
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+  .legal__prose :global(h2::before) {
+    content: "[" counter(sec, decimal-leading-zero) "]";
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    color: var(--accent-text);
+  }
+  .legal__prose :global(h3) { font-size: var(--step-1); letter-spacing: -0.02em; line-height: 1.2; margin-top: 2em; }
+  .legal__prose :global(.short) {
+    font-size: var(--step-1);
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+  }
+  .legal__prose :global(a) { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent-text); text-underline-offset: 0.2em; text-decoration-thickness: 2px; }
+  .legal__prose :global(a:hover) { color: var(--accent-text); }
+  .legal__prose :global(strong) { font-weight: 600; }
+  .legal__prose :global(ul) { padding-left: 1.25em; list-style: square; }
+  .legal__prose :global(li + li) { margin-top: 0.4em; }
+  .legal__prose :global(li::marker) { color: var(--accent-text); }
+  .legal__prose :global(address) { font-style: normal; }
+  .legal__prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    background: var(--bg-raised);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  /* Data tables: stacked rows on narrow screens */
+  .legal__prose :global(.table) { width: 100%; border-collapse: collapse; font-size: 0.95rem; line-height: 1.5; }
+  .legal__prose :global(.table th) {
+    text-align: left;
+    padding: 0 0.75rem 0.6rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .legal__prose :global(.table td) { padding: 0.85rem 0.75rem 0.85rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  @media (max-width: 639px) {
+    .legal__prose :global(.table thead) { display: none; }
+    .legal__prose :global(.table tr) { display: block; padding-block: 0.9rem; border-bottom: 1px solid var(--line); }
+    .legal__prose :global(.table td) { display: grid; grid-template-columns: 7.5rem 1fr; justify-items: start; gap: 0.75rem; padding: 0.2rem 0; border: 0; }
+    .legal__prose :global(.table td::before) {
+      content: attr(data-label);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-top: 0.2em;
+    }
+  }
+
+  .legal__foot { margin-top: var(--section); padding-top: 2rem; border-top: 1px solid var(--line-strong); row-gap: 3rem; }
+  .ask { grid-column: 1 / span 5; display: flex; flex-direction: column; gap: 0.75rem; align-items: start; }
+  .ask .h3 { max-width: 14ch; margin-bottom: 0.75rem; }
+  .next { grid-column: 7 / -1; display: flex; flex-direction: column; gap: 1rem; }
+  .next__title { transition: color var(--dur-1) var(--ease-out); }
+  .next__title .arrow { display: inline-block; transition: transform var(--dur-1) var(--ease-out); }
+  .next:hover .next__title { color: var(--accent-text); }
+  .next:hover .next__title .arrow { transform: translateX(0.2em); }
+  @media (max-width: 767px) { .ask, .next { grid-column: 1 / -1; } }
+</style>

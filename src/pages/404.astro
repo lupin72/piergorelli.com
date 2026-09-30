@@ -1,0 +1,469 @@
+---
+// 404: the sheet that never compiled. Blueprint left half-drawn + a harness-style error block
+// that reads the broken URL, suggests the closest route and prefills the site search with it.
+// "read" page: no animation JS; the route index is inlined at build time (no fetch).
+import Base from "../layouts/Base.astro";
+import { getPosts, pillarOf, postUrl } from "../lib/blog";
+
+const pages = [
+  { title: "Home", url: "/", group: "Page" },
+  { title: "Services", url: "/services/", group: "Page" },
+  { title: "AI for agencies", url: "/services/ai-for-agencies/", group: "Service" },
+  { title: "Web development for agencies", url: "/services/web-development-for-agencies/", group: "Service" },
+  { title: "AI in products", url: "/services/ai-product-integration/", group: "Service" },
+  { title: "About", url: "/about/", group: "Page" },
+  { title: "Blog", url: "/blog/", group: "Page" },
+  { title: "Contact", url: "/contact/", group: "Page" },
+  { title: "Privacy policy", url: "/privacy-policy/", group: "Legal" },
+  { title: "Cookie policy", url: "/cookie-policy/", group: "Legal" },
+  { title: "Accessibility statement", url: "/accessibility/", group: "Legal" },
+];
+const posts = (await getPosts()).map((p) => ({ title: p.data.title, url: postUrl(p), group: pillarOf(p) }));
+const routes = [...pages, ...posts];
+
+const options = [
+  { key: "1", label: "Search the site", hint: "", href: "" },
+  { key: "2", label: "Read the blog", hint: "/blog/", href: "/blog/" },
+  { key: "3", label: "Write to Pier", hint: "/contact/", href: "/contact/" },
+  { key: "4", label: "Go home", hint: "/", href: "/" },
+];
+---
+
+<Base title="Page not found | Pier Gorelli" description="This page does not exist. Search the site or pick a way back." noindex>
+  <section class="nf wrap" data-nf data-anim>
+    <div class="nf__top grid-12">
+      <p class="note nf__status">
+        <span class="nf__run a-until">compiling sheet 404<span class="nf__blink">_</span></span>
+        <span class="nf__fail a-after"><span class="nf__x">✗</span> build failed · sheet 404 · exit 404</span>
+      </p>
+
+      <figure class="nf__fig" aria-hidden="true">
+        <span class="nf__guide nf__guide--h a-grow" style="top: 0; --d: 0.05s"></span>
+        <span class="nf__guide nf__guide--h a-grow" style="bottom: 0; --d: 0.15s"></span>
+        <span class="nf__guide nf__guide--v a-grow" style="left: 0; --d: 0.12s"></span>
+        <span class="nf__guide nf__guide--v a-grow" style="right: 0; --d: 0.22s"></span>
+        <div class="nf__box">
+          <span class="note nf__label a-type" style="--d: 0.55s; --n: 30">sheet 404 · 404×404 · missing</span>
+          <span class="nf__num a-op" style="--d: 0.6s">404</span>
+          <span class="nf__num nf__ink">404</span>
+          <span class="nf__cross"></span>
+        </div>
+        <span class="note nf__dim nf__dim--w a-op" style="--d: 0.8s">404</span>
+        <span class="note nf__dim nf__dim--h a-op" style="--d: 0.85s">404</span>
+      </figure>
+
+      <div class="nf__copy">
+        <h1 class="h2 nf__title a-fade" style="--d: 0.7s">This sheet was <span class="nf__wire">never drawn.</span></h1>
+        <p class="lead nf__lead a-fade" style="--d: 0.9s">The link is broken or the page moved during the redesign. The router has a few guesses.</p>
+      </div>
+
+      <div class="term a-fade" style="--d: 0.9s" data-term>
+        <div class="term__bar note">
+          <span>~/piergorelli.com · router</span>
+          <span class="term__exit a-after">exit 404</span>
+        </div>
+        <div class="term__body">
+          <p class="term__line a-type" style="--d: 1.15s; --n: 32"><span class="term__muted">$</span> GET <span data-path>/this-page/</span></p>
+          <p class="term__line a-type" style="--d: 2.2s; --n: 36"><span class="term__err">✗ 404</span> route not found <span class="term__muted">· {routes.length} routes checked</span></p>
+
+          <div class="term__block a-fade" style="--d: 2.65s" data-guess hidden>
+            <p class="term__muted">did you mean?</p>
+            <a class="term__guess" data-guess-link href="/">
+              <span class="term__caret">›</span>
+              <span class="term__stack">
+                <span data-guess-title></span>
+                <span class="term__muted term__url" data-guess-url>/</span>
+              </span>
+              <span class="term__score" data-guess-score></span>
+            </a>
+          </div>
+
+          <div class="term__block">
+            <p class="term__muted a-fade" style="--d: 2.95s">what next?</p>
+            <ol class="term__opts" data-opts>
+              {options.map((o, i) => (
+                <li class="a-fade" style={`--d: ${3.05 + i * 0.07}s`}>
+                  <a href={o.href || "#nf-q"} class="term__opt" data-opt={o.key} aria-current={i === 0 ? "true" : undefined}>
+                    <span class="term__key">{o.key}</span>
+                    <span>{o.label}{o.key === "1" && <span class="term__muted" data-opt-query></span>}</span>
+                    <span class="term__muted term__hint">{o.hint}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <form class="term__prompt a-fade" style="--d: 3.4s" role="search" data-prompt>
+            <label for="nf-q" class="term__caret">›</label>
+            <span class="term__field">
+              <input id="nf-q" type="search" aria-label="Search pages and posts" placeholder="search pages and posts" autocomplete="off" spellcheck="false" aria-controls="nf-results" />
+              <span class="term__cursor" aria-hidden="true" data-cursor></span>
+            </span>
+            <span class="note term__kbd" aria-hidden="true">↵</span>
+          </form>
+          <ul class="term__results" id="nf-results" data-results aria-live="polite"></ul>
+        </div>
+      </div>
+    </div>
+
+    <script is:inline type="application/json" id="nf-routes" set:html={JSON.stringify(routes)} />
+  </section>
+</Base>
+
+<script>
+  type Route = { title: string; url: string; group: string };
+
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+
+  function lev(a: string, b: string) {
+    const row = Array.from({ length: b.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= a.length; i++) {
+      let prev = row[0];
+      row[0] = i;
+      for (let j = 1; j <= b.length; j++) {
+        const tmp = row[j];
+        row[j] = Math.min(row[j] + 1, row[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+        prev = tmp;
+      }
+    }
+    return row[b.length];
+  }
+
+  const similarity = (a: string, b: string) => 1 - lev(a, b) / Math.max(a.length, b.length, 1);
+
+  // A query word matches a route word when it is contained in it or, from 5 letters up, within a couple of typos
+  // (short words would fuzzy-match anything: "nope" → "node").
+  function score(query: string, route: Route) {
+    const words = norm(`${route.title} ${route.url}`).split(" ").filter((w) => w.length > 1);
+    const terms = norm(query).split(" ").filter((t) => t.length > 1);
+    if (!terms.length) return 0;
+    let hit = 0;
+    for (const t of terms) {
+      const best = Math.max(...words.map((w) => (w.includes(t) ? 1 : t.length >= 5 ? similarity(t, w) : 0)));
+      if (best >= 0.6) hit += best;
+    }
+    return hit / terms.length;
+  }
+
+  const escape = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+
+  // Coming from a client-side navigation the monogram sheet still covers the page for ~0.9 s.
+  let navigated = false;
+  document.addEventListener("astro:before-swap", () => (navigated = true));
+
+  const TYPE_AT = 3.55; // s, when the prompt starts typing the query (keep in sync with the CSS delays)
+
+  function setup404() {
+    const root = document.querySelector<HTMLElement>("[data-nf]");
+    const data = document.getElementById("nf-routes");
+    if (!root || !data) return;
+    const routes: Route[] = JSON.parse(data.textContent ?? "[]");
+
+    const path = decodeURIComponent(location.pathname);
+    root.querySelector("[data-path]")!.textContent = path;
+
+    // "did you mean": words of the broken URL against each route, URL edit distance as tiebreak
+    const clean = (u: string) => u.replace(/^\/|\/$/g, "").toLowerCase();
+    const words = norm(path);
+    const top = routes
+      .map((r) => ({ r, s: 0.7 * score(words, r) + 0.3 * similarity(clean(path), clean(r.url)) }))
+      .sort((a, b) => b.s - a.s || a.r.url.localeCompare(b.r.url))[0];
+    if (top && top.s >= 0.5 && clean(path)) {
+      const guess = root.querySelector<HTMLElement>("[data-guess]")!;
+      guess.hidden = false;
+      guess.querySelector<HTMLAnchorElement>("[data-guess-link]")!.href = top.r.url;
+      guess.querySelector("[data-guess-url]")!.textContent = top.r.url;
+      guess.querySelector("[data-guess-title]")!.textContent = top.r.title;
+      guess.querySelector("[data-guess-score]")!.textContent = `match ${Math.round(top.s * 100)}%`;
+    }
+
+    // Search prefilled with the words of the broken URL
+    const query = words.split(" ").filter((w) => w !== "blog").slice(-5).join(" ");
+    const input = root.querySelector<HTMLInputElement>("#nf-q")!;
+    const list = root.querySelector<HTMLElement>("[data-results]")!;
+    const optQuery = root.querySelector("[data-opt-query]");
+    if (optQuery && query) optQuery.textContent = ` for “${query}”`;
+
+    const render = () => {
+      const q = input.value;
+      const hits = q.trim()
+        ? routes.map((r) => ({ r, s: score(q, r) })).filter((h) => h.s > 0).sort((a, b) => b.s - a.s || a.r.url.localeCompare(b.r.url)).slice(0, 5)
+        : [];
+      list.innerHTML = q.trim()
+        ? hits.map(({ r }) => `<li><a href="${r.url}" class="term__hit"><span class="term__caret">›</span><span>${escape(r.title)}</span><span class="term__muted">${escape(r.group)}</span></a></li>`).join("") ||
+          `<li class="term__muted term__none">0 results. Try “ai”, “astro” or “kubernetes”.</li>`
+        : "";
+    };
+    // Fake block cursor at the end of the text while the field is not focused
+    const cursor = root.querySelector<HTMLElement>("[data-cursor]")!;
+    const ctx = document.createElement("canvas").getContext("2d")!;
+    const place = () => {
+      ctx.font = getComputedStyle(input).font;
+      cursor.style.left = `${Math.min(ctx.measureText(input.value).width, input.clientWidth)}px`;
+    };
+
+    input.addEventListener("input", () => { render(); place(); });
+    root.querySelector("[data-prompt]")!.addEventListener("submit", (e) => {
+      e.preventDefault();
+      list.querySelector<HTMLAnchorElement>("a")?.click();
+    });
+    const play = root.hasAttribute("data-anim") && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let typing: number | undefined;
+    const finish = () => { window.clearInterval(typing); input.value = query; render(); place(); };
+    if (!play) finish();
+    else {
+      input.value = "";
+      place();
+      const delay = navigated ? 900 : 0;
+      window.setTimeout(() => {
+        root.setAttribute("data-play", "");
+        window.setTimeout(() => {
+          let i = 0;
+          typing = window.setInterval(() => {
+            input.value = query.slice(0, ++i);
+            place();
+            if (i >= query.length) finish();
+          }, 45);
+        }, TYPE_AT * 1000);
+      }, delay);
+      // Typing yields to the visitor
+      input.addEventListener("focus", () => { if (!input.value) finish(); else window.clearInterval(typing); }, { once: true });
+    }
+
+    // Harness-style choices: 1–4 while focus is on the terminal's links (not the input).
+    // Scoped to the terminal, not the whole page: single-key shortcuts must not fire from anywhere (WCAG 2.1.4).
+    const opts = [...root.querySelectorAll<HTMLAnchorElement>("[data-opt]")];
+    const term = root.querySelector<HTMLElement>(".term")!;
+    opts[0].addEventListener("click", (e) => { e.preventDefault(); input.focus(); input.select(); });
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.target instanceof Element) || !term.contains(e.target)) return;
+      if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey || e.altKey) return;
+      const opt = opts.find((o) => o.dataset.opt === e.key);
+      if (opt) { e.preventDefault(); opt.click(); }
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("astro:before-swap", () => { document.removeEventListener("keydown", onKey); window.clearInterval(typing); }, { once: true });
+  }
+
+  document.addEventListener("astro:page-load", setup404);
+</script>
+
+<style>
+  .nf { padding-top: 7rem; padding-bottom: var(--section); display: flex; flex-direction: column; gap: clamp(2.5rem, 5vw, 4.5rem); }
+
+  .nf { overflow-x: clip; }
+  .nf__top { row-gap: clamp(2rem, 4vw, 3rem); align-items: start; }
+  .nf__status { grid-column: 1 / -1; display: grid; color: var(--ink); }
+  .nf__status > span { grid-area: 1 / 1; }
+  .nf__run { visibility: hidden; color: var(--muted); }
+  .nf__copy { grid-column: 1 / span 6; grid-row: 2; }
+  .nf__fig { grid-column: 1 / span 6; grid-row: 3; }
+  .term { grid-column: 8 / -1; grid-row: 2 / span 2; }
+  @media (max-width: 1023px) {
+    .nf__copy, .nf__fig, .term { grid-column: 1 / -1; grid-row: auto; }
+    .nf__fig { order: -1; }
+    .nf__status { order: -2; }
+  }
+  .nf__x { color: var(--accent-text); }
+
+  /* Blueprint left half-drawn: guides, dashed box, outlined number, crossed out */
+  .nf__fig { position: relative; margin: 0; padding: clamp(1.5rem, 3vw, 2.5rem); }
+  .nf__guide { position: absolute; background: color-mix(in oklab, var(--accent) 45%, transparent); }
+  .nf__guide--h { left: -100vw; right: -100vw; height: 1px; transform-origin: 100vw 0; }
+  .nf__guide--v { top: -2rem; bottom: -2rem; width: 1px; transform-origin: 0 0; }
+  .nf__box {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 2 / 1;
+    outline: 1px dashed color-mix(in oklab, var(--accent) 70%, transparent);
+    outline-offset: 4px;
+    background: color-mix(in oklab, var(--accent) 4%, transparent);
+  }
+  .nf__box::before, .nf__box::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border: solid var(--accent-text);
+  }
+  .nf__box::before { top: -8px; left: -8px; border-width: 1px 0 0 1px; }
+  .nf__box::after { bottom: -8px; right: -8px; border-width: 0 1px 1px 0; }
+  .nf__label { position: absolute; left: -4px; bottom: calc(100% + 10px); color: var(--accent-text); font-size: 0.65rem; white-space: nowrap; }
+  .nf__num {
+    font-size: clamp(5rem, 2rem + 10vw, 12rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.8;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--ink);
+  }
+  .nf__box > .nf__num { grid-area: 1 / 1; }
+  /* solid copy that starts inking the number and drains when the build fails; at rest: empty */
+  .nf__ink { color: var(--ink); -webkit-text-stroke: 0; clip-path: inset(-10% 100% -10% 0); }
+  /* the "missing sheet" diagonals */
+  .nf__cross {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top right, transparent calc(50% - 0.5px), var(--line-strong) 50%, transparent calc(50% + 0.5px)),
+      linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--line-strong) 50%, transparent calc(50% + 0.5px));
+  }
+  .nf__dim { position: absolute; color: var(--accent-text); font-size: 0.65rem; }
+  .nf__dim--w { left: 50%; bottom: 0.3rem; transform: translateX(-50%); }
+  .nf__dim--h { right: 0.1rem; top: 50%; transform: translateY(-50%) rotate(90deg); }
+
+  .nf__copy { display: flex; flex-direction: column; gap: 1.25rem; }
+  .nf__title { max-width: 14ch; }
+  .nf__wire { color: transparent; -webkit-text-stroke: 1.2px var(--ink); }
+  .nf__lead { color: var(--muted); max-width: 34ch; }
+
+  /* Harness-style error block */
+  .term {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    border: 1px solid var(--line-strong);
+    background: var(--bg-raised);
+  }
+  .term__bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .term__exit { color: var(--accent-text); }
+  .term__body { padding: clamp(1rem, 2.5vw, 1.75rem); display: flex; flex-direction: column; gap: 1.25rem; }
+  .term__line { overflow-wrap: anywhere; }
+  .term__muted { color: var(--muted); }
+  .term__err { color: var(--accent-text); font-weight: 600; }
+  .term__block { display: flex; flex-direction: column; gap: 0.25rem; }
+  .term__caret, .term__results :global(.term__caret) { color: var(--accent-text); }
+  .term__results :global(.term__muted) { color: var(--muted); }
+
+  .term__guess, .term__opt, .term__results :global(.term__hit) {
+    display: grid;
+    align-items: baseline;
+    column-gap: 1rem;
+    padding: 0.2rem 0.6rem;
+    margin-inline: -0.6rem;
+  }
+  .term__guess { grid-template-columns: 1.75rem 1fr auto; }
+  .term__stack { display: flex; flex-direction: column; min-width: 0; }
+  .term__url { font-size: 0.75rem; overflow-wrap: anywhere; }
+  .term__score { color: var(--accent-text); }
+  .term__opts { display: flex; flex-direction: column; }
+  .term__opt { grid-template-columns: 1.75rem 1fr auto; }
+  .term__key {
+    display: inline-grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    font-size: 0.72rem;
+    border: 1px solid var(--line-strong);
+  }
+  .term__opt[aria-current="true"] .term__key { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  :is(.term__guess, .term__opt, .term__results :global(.term__hit)):is(:hover, :focus-visible) { background: color-mix(in oklab, var(--accent) 12%, transparent); }
+
+  .term__prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed var(--line-strong);
+  }
+  .term__field { position: relative; flex: 1; min-width: 0; display: flex; }
+  .term__prompt input {
+    flex: 1;
+    min-width: 0;
+    background: none;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    caret-color: var(--accent);
+  }
+  .term__prompt input::-webkit-search-cancel-button { display: none; }
+  .term__kbd { border: 1px solid var(--line-strong); padding: 0 0.4rem; }
+  .term__prompt:focus-within { border-top: 1px solid var(--accent-text); box-shadow: 0 -1px 0 var(--accent-text); }
+
+  .term__results:empty { display: none; }
+  .term__results { margin-top: -0.5rem; }
+  .term__results :global(.term__hit) { grid-template-columns: 1.75rem 1fr auto; }
+  .term__results :global(.term__hit .term__muted) { font-size: 0.75rem; white-space: nowrap; }
+  .term__results :global(.term__none) { padding-block: 0.2rem; }
+  @media (max-width: 767px) {
+    .term { font-size: 0.8rem; }
+    .term__hint { display: none; }
+    .term__opt { grid-template-columns: 1.75rem 1fr; }
+    .term__results :global(.term__hit) { grid-template-columns: 1.75rem 1fr; }
+    .term__results :global(.term__hit .term__muted) { grid-column: 2; }
+  }
+  .term__cursor {
+    position: absolute;
+    top: 50%;
+    width: 0.6em;
+    height: 1.15em;
+    translate: 2px -50%;
+    background: var(--accent);
+    animation: nf-blink 1s steps(1) 5; /* stops within 5 s (WCAG 2.2.2) */
+    pointer-events: none;
+  }
+  .term__field:focus-within .term__cursor { display: none; }
+
+  /* ── Intro: the sheet starts compiling, stalls, fails; then the router answers.
+     The markup above is the final state; everything here only runs when JS adds [data-play].
+     Without JS or with reduced motion the page is simply the final state. */
+  @keyframes nf-blink { 50% { opacity: 0; } }
+  @keyframes nf-fade { from { opacity: 0; transform: translateY(14px); } }
+  @keyframes nf-op { from { opacity: 0; } }
+  @keyframes nf-grow { from { transform: scale(0); } }
+  @keyframes nf-type { from { clip-path: inset(-20% 100% -20% 0); } to { clip-path: inset(-20% 0 -20% 0); } }
+  @keyframes nf-show { from { visibility: visible; } to { visibility: hidden; } }
+  @keyframes nf-hide { from { visibility: hidden; } to { visibility: visible; } }
+  @keyframes nf-ink {
+    0% { clip-path: inset(-10% 100% -10% 0); }
+    18% { clip-path: inset(-10% 82% -10% 0); }
+    30% { clip-path: inset(-10% 80% -10% 0); }
+    48% { clip-path: inset(-10% 58% -10% 0); }
+    60% { clip-path: inset(-10% 55% -10% 0); }
+    72% { clip-path: inset(-10% 44% -10% 0); }
+    /* stall… then the build fails and the ink drains, with a flicker */
+    80% { clip-path: inset(-10% 44% -10% 0); opacity: 1; }
+    83% { opacity: 0.2; }
+    86% { opacity: 1; }
+    89% { opacity: 0.35; }
+    100% { clip-path: inset(-10% 100% -10% 0); opacity: 1; }
+  }
+  @keyframes nf-fail-box {
+    0%, 100% { background: color-mix(in oklab, var(--accent) 4%, transparent); }
+    20% { background: color-mix(in oklab, var(--accent) 22%, transparent); }
+  }
+  @keyframes nf-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .nf[data-anim] {
+      --fail: 2.05s;
+      & .a-fade { animation: nf-fade 0.7s var(--ease-out) var(--d, 0s) both; }
+      & .a-op { animation: nf-op 0.5s var(--ease-out) var(--d, 0s) both; }
+      & .a-grow { animation: nf-grow 0.9s cubic-bezier(0.87, 0, 0.13, 1) var(--d, 0s) both; }
+      & .a-type { animation: nf-type calc(var(--n, 24) * 0.022s) steps(var(--n, 24)) var(--d, 0s) both; }
+      & .a-until { animation: nf-show var(--fail) steps(1, end) both; }
+      & .a-after { animation: nf-hide var(--fail) steps(1, end) both; }
+      & .nf__ink { animation: nf-ink 1.45s linear 0.95s both; }
+      & .nf__box { animation: nf-op 0.4s var(--ease-out) 0.45s both, nf-fail-box 0.9s var(--ease-out) var(--fail) both; }
+      & .nf__cross { animation: nf-wipe 0.6s var(--ease-in-out) calc(var(--fail) + 0.1s) both; }
+      & .nf__blink { animation: nf-blink 0.5s steps(1) 8; }
+      & .term__results :global(li) { animation: nf-fade 0.35s var(--ease-out) both; }
+      & .term__results :global(li:nth-child(2)) { animation-delay: 0.05s; }
+      & .term__results :global(li:nth-child(3)) { animation-delay: 0.1s; }
+      & .term__results :global(li:nth-child(4)) { animation-delay: 0.15s; }
+      & .term__results :global(li:nth-child(5)) { animation-delay: 0.2s; }
+    }
+    :global(html.js) .nf[data-anim]:not([data-play]) :is(*, *::before, *::after) { animation-play-state: paused; }
+  }
+</style>

@@ -9,7 +9,7 @@ tags: ["frelancing"]
 ---
 Working from home, managing your own schedule, and choosing the most stimulating projects: the dream of remote freelancing. But behind this apparent perfection lie unique challenges: boundaryless days, isolation, and difficulty managing stress. Yet, with the right strategies, it’s possible not only to survive but to thrive in this work model.
 
-In the [**first part**](/blog/freelance-and-full-remote-a-guide-to-surviving-part-1/) of this article, I shared lessons learned from almost 15 years of full-remote work, focusing on how to maintain balance and well-being. Now, I want to focus on something equally crucial: how to stay competitive, motivated, and—why not—have fun. In a world that’s constantly accelerating, professional growth comes through upskilling, the ability to choose projects that bring real value to us, and exchanging information with a network of people.
+In the [**first part**](/blog/freelance-and-full-remote-a-guide-to-surviving-part-1/) of this article, I shared lessons learned from almost 15 years of full-remote work, focusing on how to maintain balance and well-being. Now, I want to focus on something equally crucial: how to stay competitive, motivated, and, why not, have fun. In a world that’s constantly accelerating, professional growth comes through upskilling, the ability to choose projects that bring real value to us, and exchanging information with a network of people.
 
 Like a surfer riding the waves, the secret lies in finding the right balance between control and adaptability, between discipline and flexibility. Here’s how to do it.
 
@@ -17,7 +17,7 @@ Like a surfer riding the waves, the secret lies in finding the right balance bet
 
 ## Reskill / Upskill: keeping up in a fast-changing world
 
-In a market that’s constantly and rapidly evolving, keeping up with the times isn’t just a goal—it’s a necessity. In an ideal world, we imagine a linear progression where experience and knowledge grow hand in hand. In reality, however, we often find ourselves running on empty, chasing deadlines and fixing bugs, while technical debt and anxiety silently pile up.
+In a market that’s constantly and rapidly evolving, keeping up with the times isn’t just a goal, it’s a necessity. In an ideal world, we imagine a linear progression where experience and knowledge grow hand in hand. In reality, however, we often find ourselves running on empty, chasing deadlines and fixing bugs, while technical debt and anxiety silently pile up.
 
 Realizing the problem is the first step to solving it. Online, you’ll find many cases of people in your same situation, talking about imposter syndrome and that feeling of not being good enough. Acquiring new knowledge is an investment in the future: it keeps your mind motivated, opens up new job opportunities, and reduces feelings of anxiety.
 
@@ -66,7 +66,7 @@ Humans are social creatures. Even if we work alone, the need for connection and 
 - **Attend events and join communities:** Conferences, workshops, and meetups (virtual or in-person) are great opportunities to meet like-minded people.
 - **Collaborate with other professionals:** Working with other freelancers or companies can open doors to new opportunities and perspectives.
 - **Share knowledge:** Write articles, participate in webinars, or create useful content for your network. This positions you as an expert in your field and helps build meaningful relationships.
-- **Stay in touch:** Don’t just meet new people—nurture existing relationships. A call or message every now and then can make a big difference.
+- **Stay in touch:** Don’t just meet new people: nurture existing relationships. A call or message every now and then can make a big difference.
 - **Work in a co-working space a couple of days a week:** It helps create new connections and maintain a link to the real world, which never hurts.
 
 ---
@@ -84,17 +84,17 @@ The brain works best when it has a sense of control and direction. Being proacti
 - **Define a clear vision:** Where do you want to be in a year? In five years? Having a clear vision helps you make decisions aligned with your goals.
 - **Plan your time:** Dedicate time each week to activities that bring you closer to your long-term goals, like learning new skills or building your network.
 - **Anticipate problems:** Instead of waiting for problems to arise, try to predict them and prepare solutions. This reduces stress and increases efficiency.
-- **Be flexible:** Being proactive doesn’t mean having everything under control—it means being ready to adapt to changes and seize opportunities.
+- **Be flexible:** Being proactive doesn’t mean having everything under control, it means being ready to adapt to changes and seize opportunities.
 
 ---
 
 ## From “I have to” to “I want to”: rediscovering the meaning of your work
 
-How often have you found yourself doing something just because you “had to”? Deadlines to meet, requests to fulfill, repetitive tasks. It’s normal—it’s part of the job—but if everything you do is driven by extrinsic motivation (the need to “have to”), you risk losing the true meaning of your journey. To thrive as a freelancer, it’s essential to shift your perspective: turn that “have to” into a “want to.”
+How often have you found yourself doing something just because you “had to”? Deadlines to meet, requests to fulfill, repetitive tasks. It’s normal, it’s part of the job, but if everything you do is driven by extrinsic motivation (the need to “have to”), you risk losing the true meaning of your journey. To thrive as a freelancer, it’s essential to shift your perspective: turn that “have to” into a “want to.”
 
 ### Psychological insight
 
-Intrinsic motivation—the kind that comes from genuine interest or alignment with a personal purpose—is much more powerful and lasting than extrinsic motivation, which relies on external rewards like money or recognition. When you find meaning in what you do, your brain releases dopamine, improving your motivation, well-being, and even the quality of your work.
+Intrinsic motivation, the kind that comes from genuine interest or alignment with a personal purpose, is much more powerful and lasting than extrinsic motivation, which relies on external rewards like money or recognition. When you find meaning in what you do, your brain releases dopamine, improving your motivation, well-being, and even the quality of your work.
 
 ### Practical tips for cultivating “want to”
 
@@ -110,4 +110,4 @@ Intrinsic motivation—the kind that comes from genuine interest or alignment wi
 
 The full-remote freelance career is a journey that requires balance, adaptability, and a growth-oriented mindset. In the [**first part**](/blog/freelance-and-full-remote-a-guide-to-surviving-part-1/) of this article, we explored how to stay organized, take care of your body and mind, and manage the inevitable chaos. In this second part, we focused on how to stay competitive through upskilling, make choices that bring value, build a strong network, shift from a reactive to a proactive approach, and find intrinsic motivation.
 
-The secret to thriving as a freelancer isn’t just about technique—it’s about attitude: being curious, resilient, and, above all, capable of having fun along the way. Like a surfer riding the waves, it’s about finding the right balance between control and adaptability, between discipline and flexibility. And, in the end, remember that the journey is just as important as the destination.
+The secret to thriving as a freelancer isn’t just about technique. It’s about attitude: being curious, resilient, and, above all, capable of having fun along the way. Like a surfer riding the waves, it’s about finding the right balance between control and adaptability, between discipline and flexibility. And, in the end, remember that the journey is just as important as the destination.

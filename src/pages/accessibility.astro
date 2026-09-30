@@ -1,0 +1,107 @@
+---
+import LegalPage from "../components/rd/LegalPage.astro";
+
+const sections = [
+  { id: "short", title: "The short version" },
+  { id: "standard", title: "Standard and status" },
+  { id: "features", title: "What you can count on" },
+  { id: "motion", title: "Motion and animation" },
+  { id: "testing", title: "How it is tested" },
+  { id: "limits", title: "Known limitations" },
+  { id: "feedback", title: "Feedback and contact" },
+];
+
+// Keep in sync with tools/qa/a11y.mjs and tools/qa/a11y-keyboard.mjs.
+const checks = [
+  { what: "Automated audit", how: "axe-core on every page, light and dark theme, all three accent colours, desktop and mobile" },
+  { what: "Keyboard", how: "Every page tabbed through end to end: focus always visible, never hidden under the header, no traps" },
+  { what: "Reflow and zoom", how: "Every page at 320 px wide and with increased text spacing, without horizontal scrolling" },
+  { what: "Reduced motion", how: "Every effect checked with the system setting on: content is visible at once, nothing moves" },
+];
+---
+
+<LegalPage
+  seoTitle="Accessibility Statement | Pier Gorelli"
+  description="piergorelli.com aims to meet WCAG 2.1 level AA, the level required by EN 301 549 and the European Accessibility Act. What works, how it is tested and how to report a problem."
+  title="Accessibility"
+  lead="This site is built to be usable with a keyboard, a screen reader, zoom or the motion turned off. Here is what that means in practice, how it is checked, and how to tell me when something doesn't work."
+  updated="2026-09-29"
+  meta={[
+    ["Standard", "WCAG 2.1 AA"],
+    ["Reference", "EN 301 549 · EAA"],
+    ["Applies to", "piergorelli.com"],
+  ]}
+  glance={[
+    { label: "Target", value: "AA", caption: "WCAG 2.1 level AA on every page, in every theme and accent." },
+    { label: "Keyboard", value: "100%", caption: "Everything works without a mouse, with a visible focus ring." },
+    { label: "Motion", value: "Optional", caption: "Turn on reduced motion in your system and every effect stops." },
+    { label: "Reply", value: "≤ 5 days", caption: "Report a barrier and I answer within five working days." },
+  ]}
+  sections={sections}
+  other={{ href: "/privacy-policy/", label: "Privacy policy", teaser: "what happens to the data you send me" }}
+>
+  <section id="short">
+    <h2>The short version</h2>
+    <p class="short">Every page is designed and tested to meet WCAG 2.1 level AA.</p>
+    <p>That is the level the European standard EN 301 549 and the European Accessibility Act refer to. The blueprint look, the animations and the three accent colours were all tuned to stay within it, and the checks run again every time the site changes.</p>
+  </section>
+
+  <section id="standard">
+    <h2>Standard and status</h2>
+    <p class="short">Target: WCAG 2.1 AA. Status: conformant, with the limits listed below.</p>
+    <p>The Web Content Accessibility Guidelines (WCAG) are the international reference for accessible websites. Level AA is the one required across the European Union by EN 301 549. Where it was simple to go further (for example on contrast of focus rings, or on motion), the site does.</p>
+  </section>
+
+  <section id="features">
+    <h2>What you can count on</h2>
+    <ul>
+      <li><strong>Keyboard.</strong> Every link, button and form field is reachable with Tab, in reading order, with a clearly visible focus ring. A “Skip to content” link is the first stop on every page.</li>
+      <li><strong>Contrast.</strong> Text meets 4.5:1 (3:1 for large text) and controls and focus rings meet 3:1, in light and dark mode and with every accent colour.</li>
+      <li><strong>Screen readers.</strong> Pages use real headings, landmarks and lists. Decorative graphics are hidden from assistive technology; figures and images carry text alternatives.</li>
+      <li><strong>Zoom and reflow.</strong> Text can be enlarged to 200% and the layout works down to 320 px wide without scrolling sideways.</li>
+      <li><strong>Forms.</strong> Every field has a visible label. Errors are described in words next to the field and read out by screen readers, not shown by colour alone.</li>
+      <li><strong>Shortcuts.</strong> <kbd>⌘K</kbd> or <kbd>Ctrl K</kbd> opens a searchable menu. The grid overlay uses <kbd>⌥G</kbd> or <kbd>Alt G</kbd>. No shortcut is a single letter, so nothing fires by accident while dictating.</li>
+      <li><strong>Links.</strong> Links inside sentences are underlined, not only coloured.</li>
+    </ul>
+  </section>
+
+  <section id="motion">
+    <h2>Motion and animation</h2>
+    <p class="short">All motion is decoration, and all of it can be switched off.</p>
+    <p>If your system has “reduce motion” turned on (macOS, iOS, Windows and Android all have it), the site shows every page in its final state: no intro, no smooth scrolling, no page transitions, no animated background, no custom cursor.</p>
+    <p>With motion on, nothing moves on its own for more than five seconds: the animated contour lines behind the page titles settle after a few seconds and only react to your pointer, and blinking cursors stop. Nothing flashes more than three times per second.</p>
+  </section>
+
+  <section id="testing">
+    <h2>How it is tested</h2>
+    <p class="short">Automated checks on every page, plus manual keyboard and zoom testing.</p>
+    <table class="table">
+      <thead>
+        <tr><th scope="col">Check</th><th scope="col">How</th></tr>
+      </thead>
+      <tbody>
+        {checks.map((c) => (
+          <tr>
+            <td data-label="Check">{c.what}</td>
+            <td data-label="How">{c.how}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p>Automated tools find only part of the possible problems, which is why keyboard, zoom and motion are also checked by hand.</p>
+  </section>
+
+  <section id="limits">
+    <h2>Known limitations</h2>
+    <ul>
+      <li>Code samples in the blog scroll sideways on narrow screens instead of wrapping, so that commands stay copyable as written.</li>
+      <li>Some older blog posts use screenshots of interfaces; the text around them explains the steps, but the screenshots themselves may contain details that are only visual.</li>
+    </ul>
+  </section>
+
+  <section id="feedback">
+    <h2>Feedback and contact</h2>
+    <p class="short">Found a barrier? Tell me and I'll fix it.</p>
+    <p>Write to <a href="mailto:me@piergorelli.com?subject=Accessibility">me@piergorelli.com</a> with the page address and what went wrong (and, if you like, the browser and assistive technology you use). I reply within five working days and, if the problem is on my side, I send you the content in a format that works for you in the meantime.</p>
+  </section>
+</LegalPage>

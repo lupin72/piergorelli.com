@@ -119,7 +119,7 @@ curl -sfL https://get.k3s.io | sh -s - \
   --disable local-storage
 ```
 
-**Note**: Replace `myrandompassword` with a secure token and save it—you’ll need it to join other nodes.
+**Note**: Replace `myrandompassword` with a secure token and save it: you’ll need it to join other nodes.
 
 **Explanation of options**:
 * `--write-kubeconfig-mode 644`: makes the kubeconfig file readable by other users (e.g., Rancher)
@@ -127,7 +127,7 @@ curl -sfL https://get.k3s.io | sh -s - \
 * `--token`: custom token to allow other nodes to join the cluster
 * `--node-ip`: local IP of the node (adjust to your setup)
 * `--disable-cloud-controller`: disables the cloud controller, not needed in bare-metal setups
-* `--disable local-storage`: disables K3s local storage — we’ll use NFS instead
+* `--disable local-storage`: disables K3s local storage, since we’ll use NFS instead
 
 ### Verify
 

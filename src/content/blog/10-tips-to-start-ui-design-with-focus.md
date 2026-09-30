@@ -9,7 +9,7 @@ tags: ["design", "UI"]
 ---
 You've just finished your studies, you know design principles by heart, you've read tutorials on how to translate theory into practice, and now you're staring at a blank canvas. After spending an entire day designing the hero area, you've carefully chosen fonts, colors, images, and CTAs. You present the best version of your work, but the silence from your audience tells you something hasn't clicked.
 
-Don't worry, you're not alone—everyone has been through this. I call it **"the blank page syndrome"**, and the solution you presented is the **"Comic Sans effect"**.
+Don't worry, you're not alone: everyone has been through this. I call it **"the blank page syndrome"**, and the solution you presented is the **"Comic Sans effect"**.
 
 ## The blank page syndrome
 
@@ -76,7 +76,7 @@ Once you have a clear idea of **what**, you can move on to the **how**: choosing
 When faced with a blank page, the infinite range of options available might seem like an advantage. However, in practice, it’s one of the biggest obstacles.
 
 ### Practical tips:
-- **Fonts:** Use no more than 1–2 fonts—one for headings and one for body text.
+- **Fonts:** Use no more than 1–2 fonts: one for headings and one for body text.
 - **Typographic scale:** Define a scale based on 16px:
   - Small: 12px
   - Base: 16px
@@ -114,7 +114,7 @@ Limit the use of weights and styles in fonts. To distinguish between primary and
 
 ## 3. Copy, copy, copy
 
-In music, we draw inspiration. In writing, we draw inspiration. And in web design... we draw inspiration! Creativity isn’t about inventing from scratch but about combining existing elements in an original and functional way. Don’t be afraid to look around and study the work of the best—this is how you learn.
+In music, we draw inspiration. In writing, we draw inspiration. And in web design... we draw inspiration! Creativity isn’t about inventing from scratch but about combining existing elements in an original and functional way. Don’t be afraid to look around and study the work of the best. This is how you learn.
 
 Drawing inspiration doesn’t mean blindly copying; it means observing, analyzing, and understanding why a solution works.
 
@@ -135,7 +135,7 @@ Use a tool like **[Raindrop](https://raindrop.io/)** to organize your bookmarks 
 
 ## 4. Don’t fear the void: white space is your best ally
 
-Among the fundamental principles of design, white space—the empty space surrounding elements—is your greatest ally.
+Among the fundamental principles of design, white space, the empty space surrounding elements, is your greatest ally.
 
 ### Why it’s important:
 - **Reduces cognitive load**: It helps users process information more easily.
@@ -225,7 +225,7 @@ Use grids as a starting framework, but don’t let them limit your creativity. O
 
 ## 7. Typography: crafting rhythm and personality
 
-Typography is not just about readability—it defines the tone, rhythm, and personality of your design. It’s a fundamental element that goes beyond the words themselves, shaping the overall aesthetic and user experience.
+Typography is not just about readability: it defines the tone, rhythm, and personality of your design. It’s a fundamental element that goes beyond the words themselves, shaping the overall aesthetic and user experience.
 
 ### Why typography matters:
 1. **Visual hierarchy**: Good typography guides the user’s eye, making it easier to navigate content and understand priorities.  
@@ -261,7 +261,7 @@ Typography is not just about readability—it defines the tone, rhythm, and pers
    A free online guide that emphasizes clear, user-centered typography choices.
 
 ### Pro tip:
-Typography isn’t just about choosing a beautiful font—it’s about creating balance, establishing rhythm, highlighting your message, and, why not, adding a touch of decoration. Experiment with font pairings, line heights, and scales to find the perfect harmony that enhances both usability and aesthetics.
+Typography isn’t just about choosing a beautiful font. It’s about creating balance, establishing rhythm, highlighting your message, and, why not, adding a touch of decoration. Experiment with font pairings, line heights, and scales to find the perfect harmony that enhances both usability and aesthetics.
 
 ---
 
@@ -368,4 +368,4 @@ To help ease this journey, I’ll leave you with two resources that should be tr
 - **[Refactoring UI](https://refactoringui.com/)** by Adam Wathan and Steve Schoger: A practical guide to designing beautiful interfaces with actionable tips and real-world examples.  
 - **[Practical UI](https://adhamdannaway.com/)** by Adham Dannaway: A resource-packed book and website covering essential principles of user interface design with clarity and depth.
 
-Embrace the process, explore these resources, and keep refining your craft. Great design isn’t about perfection—it’s about progress.
+Embrace the process, explore these resources, and keep refining your craft. Great design isn’t about perfection, it’s about progress.

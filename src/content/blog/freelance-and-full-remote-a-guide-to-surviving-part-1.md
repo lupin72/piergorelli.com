@@ -37,7 +37,7 @@ The human brain works better with clear habits and predictable routines. Without
 The digital world is fascinating but full of surprises: sudden problems, challenging deadlines, Murphy's law always confirming itself. The first victim, in my experience, is always physical exercise. _"I'll do it when I have more time,"_ _"I'm too tired to go out right now."_ These excuses can easily become a constant until you realize that your body, deprived of movement, starts to feel the effects: back pain, chronic tiredness, lack of energy.
 
 ### Psychological insight:
-Regular physical activity is one of the most effective strategies for reducing stress. During exercise, the brain releases endorphins, dopamine, and serotonin—neurotransmitters that improve mood, increase motivation, and enhance concentration. Movement increases blood flow to the brain, stimulating creativity and decision-making skills.
+Regular physical activity is one of the most effective strategies for reducing stress. During exercise, the brain releases endorphins, dopamine, and serotonin, neurotransmitters that improve mood, increase motivation, and enhance concentration. Movement increases blood flow to the brain, stimulating creativity and decision-making skills.
 
 ### Practical tips:
 - **Find an activity you enjoy**  

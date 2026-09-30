@@ -1,0 +1,276 @@
+---
+import { CAL_URL } from "../../data/site";
+import Base from "../../layouts/Base.astro";
+import ServiceFigure from "../../components/rd/ServiceFigure.astro";
+import WorkVisual from "../../components/rd/WorkVisual.astro";
+
+const updated = new Date("2026-09-30");
+
+const services = [
+  { n: "01", title: "Training", body: "Hands-on sessions on the tools your team already has, starting with Claude Code. Your projects, your files, not a slide deck about the future." },
+  { n: "02", title: "Custom workflows", body: "Skills, agents and MCP connections built around how your team works: your templates, your tone, your data." },
+  { n: "03", title: "Consulting", body: "Where AI is worth it in your agency, where it isn't, and which tools to trust with client work." },
+];
+
+// Real, anonymous field report (docs/content-facts.md): no client name, no numbers beyond what Pier confirmed.
+const report = [
+  { k: "Before", v: "Every image on a manufacturer's WordPress site needed research, a new file name, alt text and a caption. By hand, one at a time." },
+  { k: "Workflow", v: "A framework I built on Claude Code, with skills, agents and subagents. It reads Search Console through MCP, checks the keyword niche, looks at the image and at the page it sits on, then writes the name, the alt text and the caption. A person reviews and confirms before anything goes live." },
+  { k: "After", v: "Hundreds of images a day. Nobody renames them by hand any more." },
+];
+
+const offer = [
+  { n: "A", title: "Start with a session", body: "A hands-on workshop on your team's own projects. We find the jobs worth handing to AI, and the ones that aren't." },
+  { n: "B", title: "Build what's missing", body: "Skills, prompts and tool connections for the jobs that came up in the session." },
+  { n: "C", title: "Leave it owned", body: "Written guides and a named person inside the agency who looks after it." },
+];
+
+const stack = ["Claude Code", "Codex", "Skills & subagents", "MCP", "Search Console", "WordPress"];
+
+const faqs = [
+  { q: "Do we need a technical team?", a: "No. One curious person is enough to start, and training begins with the tools you already pay for." },
+  { q: "What happens in the first week?", a: "Once people see how the harness, skills and MCP fit together, they want to do everything with AI, and forget permissions, tokens and where the model stops being smart. A good part of the first week is learning where to stop." },
+  { q: "Do you still build n8n automations?", a: "When monitoring matters, yes: n8n still gives you a place to watch every run, which a CLI agent doesn't. Most agency teams are better served by skills inside the tools they already use." },
+  { q: "What about client data?", a: "Where the models run is decided with you, based on the data involved. Every workflow keeps a person in the loop for reviews and confirmations." },
+  { q: "Can you work white-label for our clients?", a: "When the project needs it, yes. I also build AI features that agencies offer their own clients: chatbots and semantic search grounded in the client's content." },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "AI for creative agencies",
+    serviceType: "AI training and consulting",
+    provider: { "@type": "Person", "@id": "https://piergorelli.com/#person", name: "Pier Gorelli" },
+    areaServed: ["ES", "IT", "EU"],
+    url: "https://piergorelli.com/services/ai-for-agencies/",
+    dateModified: updated.toISOString().slice(0, 10),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://piergorelli.com/" },
+      { "@type": "ListItem", position: 2, name: "Services", item: "https://piergorelli.com/services/" },
+      { "@type": "ListItem", position: 3, name: "AI for agencies", item: "https://piergorelli.com/services/ai-for-agencies/" },
+    ],
+  },
+];
+---
+
+<Base
+  title="AI Training & Consulting for Creative Agencies | Pier Gorelli"
+  description="Hands-on AI training for creative agencies: Claude Code, custom skills and MCP workflows built on your own projects, plus honest advice on what not to automate."
+  motion="showcase"
+  schema={schema}
+>
+  <section class="hero wrap" data-hero>
+    <nav class="note crumbs" aria-label="Breadcrumb">
+      <a href="/" class="link">Home</a> / <a href="/services/" class="link">Services</a> / <span class="note--ink">AI for agencies</span>
+    </nav>
+    <p class="note">[Services / 02.2]</p>
+    <h1 class="hero__title">
+      <span class="display hero__human" data-hero-human data-bp="h1.human">Put it to work.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">AI training and custom workflows for creative agencies, on the tools your team already pays for.</span>
+    </h1>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>17</span> tokens · <span data-gen-ms>1380</span> ms</p>
+
+    <div class="hero__foot" data-hero-fade>
+      <p class="lead">
+        I train agency teams on tools like Claude Code, then build the custom skills and workflows that make those tools fit how the agency actually works. The first example is always your own material.
+      </p>
+      <dl class="spec" data-bp="dl.tolerances">
+        <div><dt class="note">Sessions</dt><dd>Hands-on</dd></div>
+        <div><dt class="note">Material</dt><dd>Your own</dd></div>
+        <div><dt class="note">Review</dt><dd>Human in the loop</dd></div>
+        <div><dt class="note">Handover</dt><dd>Guides + owner</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[01] What I do</span>
+      <span class="note">Training · workflows · consulting</span>
+    </header>
+    <div class="cases grid-12">
+      <div class="cases__figure">
+        <ServiceFigure kind="automation" caption="fig. 02 · an image SEO skill with a human in the loop" />
+      </div>
+      <ol class="cases__list">
+        {services.map((c) => (
+          <li class="case" data-reveal="up">
+            <span class="note note--accent">{c.n}</span>
+            <h2 class="h3">{c.title}</h2>
+            <p>{c.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[02] Field report</span>
+      <span class="note">In use every day · client name under NDA</span>
+    </header>
+    <div class="report grid-12">
+      <div class="report__visual" data-reveal="up"><WorkVisual kind="captions" /></div>
+      <div class="report__text">
+        <h2 class="h2 report__title" data-reveal="lines">Image SEO that runs every day</h2>
+        <dl class="report__steps">
+          {report.map((r) => (
+            <div class="report__step" data-reveal="up">
+              <dt class="note note--ink">{r.k}</dt>
+              <dd>{r.v}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[03] What you get</span>
+      <span class="note">No fixed prices · scoped on your processes</span>
+    </header>
+    <h2 class="h2 offer__claim" data-reveal="lines">Start small, prove it on real work, then scale what pays back.</h2>
+    <div class="seq__line" data-draw></div>
+    <ol class="offer grid-12 seq">
+      {offer.map((o) => (
+        <li class="offer__item" data-reveal="up">
+          <span class="offer__n seq__n">{o.n}</span>
+          <h3 class="h3">{o.title}</h3>
+          <p>{o.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[04] Stack</span>
+      <span class="note">Chosen per task, swapped when something better proves itself</span>
+    </header>
+    <ul class="stack" data-reveal="up">
+      {stack.map((s) => <li>{s}</li>)}
+    </ul>
+  </section>
+
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[05] FAQ</span>
+      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
+    </header>
+    <div class="faqs">
+      {faqs.map((f) => (
+        <details class="faq" data-reveal="up">
+          <summary><span class="h3">{f.q}</span><span class="faq__icon" aria-hidden="true"></span></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section class="section wrap cta">
+    <header class="section-head">
+      <span class="note note--ink">[06] Next</span>
+      <span class="note">30 minutes · no slides</span>
+    </header>
+    <h2 class="display cta__title" data-reveal="lines">Which task would you automate first?</h2>
+    <div class="cta__actions" data-reveal="up">
+      <a href={CAL_URL} class="btn" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
+      <a href="/services/ai-product-integration/" class="btn btn--ghost">See AI in products</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    min-height: 92svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    gap: 1.25rem;
+    padding-top: 7rem;
+    padding-bottom: 2rem;
+  }
+  .crumbs { margin-bottom: auto; }
+  .hero__title { display: flex; flex-direction: column; gap: 0.35em; font-weight: 500; }
+  .hero__human { display: block; margin-left: -0.05em; }
+  .hero__machine { display: block; max-width: 24ch; }
+  .hero__foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem 3rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .hero__foot .lead { max-width: 40ch; color: var(--muted); }
+  .spec { display: grid; grid-template-columns: repeat(2, minmax(9rem, 1fr)); min-width: min(100%, 22rem); border-top: 1px solid var(--line); }
+  .spec div { display: flex; justify-content: space-between; gap: 1rem; padding-block: 0.7rem; border-bottom: 1px solid var(--line); }
+  .spec div:nth-child(odd) { padding-right: 1rem; box-shadow: inset -1px 0 var(--line); }
+  .spec div:nth-child(even) { padding-left: 1rem; }
+
+  /* Same layout as the builds list on Web development: sticky figure, numbered list. */
+  .cases { row-gap: 2.5rem; }
+  .cases__figure { grid-column: 1 / span 5; }
+  .cases__figure > :global(.sfig) { position: sticky; top: 6rem; }
+  .cases__list { grid-column: 7 / -1; border-top: 1px solid var(--line); }
+  .case { display: grid; grid-template-columns: 3.5rem 1fr; column-gap: 1rem; row-gap: 0.6rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
+  .case .note { grid-row: span 2; padding-top: 0.5em; }
+  .case p { color: var(--muted); max-width: 48ch; }
+  @media (max-width: 899px) {
+    .cases__figure, .cases__list { grid-column: 1 / -1; }
+    .cases__figure > :global(.sfig) { position: static; max-width: 32rem; }
+  }
+
+  .report { row-gap: 2.5rem; align-items: start; }
+  .report__visual { grid-column: 1 / span 6; }
+  .report__text { grid-column: 8 / -1; }
+  .report__title { max-width: 16ch; margin-bottom: 2rem; }
+  .report__steps { border-top: 1px solid var(--line); }
+  .report__step { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--line); }
+  .report__step dd { color: var(--muted); max-width: 46ch; }
+  @media (max-width: 899px) { .report__visual, .report__text { grid-column: 1 / -1; } }
+  @media (max-width: 480px) { .report__step { grid-template-columns: 1fr; gap: 0.4rem; } }
+
+  .offer__claim { max-width: 20ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .offer__item { grid-column: span 4; display: flex; flex-direction: column; gap: 0.75rem; }
+  .offer__item p { color: var(--muted); max-width: 34ch; }
+  .offer__n {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+  @media (max-width: 1099px) { .offer__item { grid-column: 1 / -1; } }
+
+  .stack { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .stack li {
+    font-size: var(--step-1);
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: background var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  .stack li:hover { background: var(--ink); color: var(--bg); }
+
+
+  .cta__title { max-width: 14ch; }
+  .cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: clamp(2rem, 4vw, 3.5rem); }
+</style>
