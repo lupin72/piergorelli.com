@@ -67,7 +67,7 @@ const cols = [
   </div>
 
   <div class="footer-bottom note">
-    <span>© {year} Pier Gorelli · Designed and built in Valencia</span>
+    <p class="copy"><span>© {year} Pier Gorelli</span><span>Designed and built in Valencia</span></p>
     <span class="hint">Press <kbd>⌥G</kbd> for the grid · <kbd>⌘K</kbd> for everything else</span>
     <nav class="legal-links" aria-label="Legal">
       <a href="/privacy-policy/" class="link">Privacy</a>
@@ -182,7 +182,16 @@ const cols = [
     margin-top: 1.25rem;
     border-top: 1px solid var(--line);
   }
+  .copy { display: flex; flex-wrap: wrap; column-gap: 0.5em; }
+  .copy span + span::before { content: "· "; }
   .legal-links { display: flex; gap: 1.25rem; }
+  @media (max-width: 767px) {
+    /* Stacked: legal links first as one row, then the signature on two clean lines. */
+    .footer-bottom { flex-direction: column; gap: 1rem; padding-bottom: env(safe-area-inset-bottom); }
+    .legal-links { order: -1; flex-wrap: wrap; column-gap: 1.5rem; row-gap: 0.5rem; }
+    .copy { flex-direction: column; color: var(--muted); }
+    .copy span + span::before { content: none; }
+  }
   kbd {
     font-family: inherit;
     padding: 0.05em 0.4em;

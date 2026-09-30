@@ -416,8 +416,15 @@ html.js[data-motion="showcase"]:not(.motion-ready) :is([data-hero-generate], [da
   border-radius: 10px;
   cursor: pointer;
 }
-.palette__list [role="option"] > .note { white-space: nowrap; }
-.palette__list [role="option"] > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The label wins: the hint (paths can be long) gets at most 45% and is the one that truncates. */
+.palette__list [role="option"] > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.palette__list [role="option"] > span:first-child { flex: 1 1 auto; }
+.palette__list [role="option"] > .note { flex: 0 1 auto; max-width: 45%; }
+@media (max-width: 560px) {
+  /* Too narrow for label and path side by side: path goes under the label. */
+  .palette__list [role="option"] { flex-direction: column; gap: 0.15rem; }
+  .palette__list [role="option"] > .note { max-width: 100%; }
+}
 .palette__list [aria-selected="true"] { background: var(--ink); color: var(--bg); }
 .palette__list [aria-selected="true"] .note { color: inherit; opacity: 0.7; }
 .palette__group { padding: 0.9rem 0.75rem 0.35rem; }
