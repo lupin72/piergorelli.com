@@ -1,0 +1,332 @@
+---
+/**
+ * Home [02] Work: every project told as a drawing that becomes the working piece.
+ * Three layers per drawing, driven by scroll in scripts/rd/work-stage.ts:
+ *   plot  — the blueprint traces itself ([data-p-draw] strokes, [data-p-in] labels)
+ *   build — measures turn into material ([data-b-wipe], [data-b-clip], [data-b-type], [data-b-in], [data-b-dim], [data-b-move])
+ *   live  — [data-live] wipes in over both and can be played with (buttons in the text column).
+ * Without JS, with reduced motion and before the script runs, only the live layer shows (it covers the others).
+ * Desktop: the stage pins and shows one project at a time. Below 1024 px: cards that build as they scroll in.
+ */
+import type { Work } from "../../data/work";
+import { kPath, contours } from "../../lib/work-stage";
+
+interface Props { items: Work[] }
+const { items } = Astro.props;
+
+const grid = (id: string) => (
+  `<defs><pattern id="${id}" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="currentColor" stroke-opacity=".09"/></pattern></defs><rect width="800" height="500" fill="url(#${id})"/>`
+);
+
+// Retail: three slides of uneven width; the last twelfth of each previews the next slide's colour.
+const frames = [{ x: 40, w: 290, pct: 38 }, { x: 350, w: 180, pct: 24 }, { x: 550, w: 200, pct: 26 }];
+const slides = [
+  { bg: "#c65a3a", shade: "#b24e31", next: "#8fa58a", k: 480 },
+  { bg: "#8fa58a", shade: "#7d9378", next: "#d8c7a8", k: 430 },
+  { bg: "#d8c7a8", shade: "#c9b692", next: "#c65a3a", k: 500 },
+];
+
+// Image SEO: generic product shots; the names show the formula (keyword niche + product + view), not a client.
+const shots = [
+  { bg: "#d9d4c7", obj: "#2b2b28", view: "front", alt: ["Product from the front,", "on a light backdrop"] },
+  { bg: "#2f4a57", obj: "#e7e2d6", view: "detail", alt: ["Close-up of the finish,", "as the page describes it"] },
+  { bg: "#b6c2a5", obj: "#6b3f2c", view: "in-use", alt: ["The product in use,", "in its real context"] },
+];
+const cam = (i: number) => `IMG_04${12 + i}.jpg`;
+const seoName = (view: string) => `niche-keyword-product-${view}.jpg`;
+
+const hills = contours();
+const lighthouse = [98, 100, 100, 100];
+---
+
+<div class="ws" data-work-stage>
+  <div class="ws__count" aria-hidden="true">
+    <span class="ws__n" data-ws-n style="display:inline-block">01</span><span class="ws__of">/{String(items.length).padStart(2, "0")}</span>
+  </div>
+  <div class="ws__stages note" aria-hidden="true">
+    <ol>
+      {["Plot", "Build", "Live"].map((s, i) => (
+        <li data-ws-stage><span>0{i + 1}</span><b>{s}</b><i data-ws-bar></i></li>
+      ))}
+    </ol>
+    <div class="ws__rail">{items.map(() => <i data-ws-dot></i>)}</div>
+  </div>
+
+  {items.map((w, i) => (
+    <div class="ws__item" data-ws-item={w.slug}>
+      <div class="ws__text">
+        <div class="ws__meta">
+          <span class="note">{String(i + 1).padStart(2, "0")}{w.year && ` / ${w.year}`}</span>
+          <span class="note">{w.stack.join(" · ")}</span>
+        </div>
+        <h2 class="h3 ws__title">{w.href ? <a href={w.href} class="ws__link">{w.title}</a> : w.title}</h2>
+        <p class="ws__client note">{w.client}</p>
+        <p class="ws__summary">{w.summary}</p>
+        <div class="ws__actions">
+          {w.slug === "retail-k" && <button type="button" class="btn btn--ghost" data-ws-try hidden>Next slide <span class="arrow" aria-hidden="true">→</span></button>}
+          {w.slug === "seo-images" && <button type="button" class="btn btn--ghost" data-ws-try hidden>Rename another <span aria-hidden="true">↻</span></button>}
+          {w.href && <a href={w.href} class="btn">Read the case study <span class="arrow" aria-hidden="true">→</span></a>}
+        </div>
+      </div>
+
+      <div class="ws__art" aria-hidden="true">
+        <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet">
+          <Fragment set:html={grid(`wsg-${w.slug}`)} />
+
+          {w.slug === "retail-k" && (
+            <>
+              <g class="plot">
+                <path d="M60 470L480 50M290 20L760 490" class="guide" data-p-in />
+                <path d={kPath(300, 70, 240)} class="ghost" stroke-width="38.4" data-p-in />
+                <path d={kPath(300, 70, 240)} class="wire" pathLength="1" data-p-draw />
+                <text x="300" y="56" class="lbl lbl--a" data-p-in>K · construction</text>
+                <text x="520" y="120" class="lbl lbl--a" data-p-in>45°</text>
+                <text x="300" y="352" class="lbl lbl--a" data-p-in>stem = 1u</text>
+                {frames.map(({ x, w: fw, pct }) => (
+                  <>
+                    <rect x={x} y="390" width={fw} height="70" class="wire" pathLength="1" data-p-draw />
+                    <rect x={x + fw - fw / 12} y="390" width={fw / 12} height="70" class="guide" data-p-in />
+                    <text x={x} y="380" class="lbl" data-p-in data-b-dim>w {pct}%</text>
+                  </>
+                ))}
+                <text x="40" y="486" class="lbl lbl--a" data-p-in data-b-dim>last 1/12 = colour of the next slide</text>
+              </g>
+              <g class="build">
+                <clipPath id="ws-kclip"><rect x="300" y="70" width="187.2" height="240" data-b-clip /></clipPath>
+                <path d={kPath(300, 70, 240)} class="ink" stroke-width="38.4" clip-path="url(#ws-kclip)" />
+                {frames.map(({ x, w: fw }, i) => (
+                  <>
+                    <rect x={x} y="390" width={fw} height="70" fill={slides[i].bg} data-b-wipe />
+                    <rect x={x + fw - fw / 12} y="390" width={fw / 12} height="70" fill={slides[i].next} data-b-wipe />
+                    <text x={x} y="380" class="lbl" data-b-in>{slides[i].bg}</text>
+                  </>
+                ))}
+              </g>
+              <g class="live" data-live>
+                <clipPath id="ws-live-retail-k"><rect width="800" height="500" data-live-clip /></clipPath>
+                <g clip-path="url(#ws-live-retail-k)">
+                  <g data-ws-track>
+                    {slides.map((s, i) => (
+                      <g transform={`translate(${i * 800} 0)`}>
+                        <rect width="800" height="500" fill={s.bg} />
+                        <path d={`M${s.k - 60} 0L800 ${860 - s.k}V0Z`} fill={s.shade} />
+                        <path d={kPath(s.k, 120, 260)} stroke="#f4f4f0" stroke-opacity=".92" stroke-width="41.6" fill="none" clip-path={`url(#ws-kslide-${i})`} />
+                        <clipPath id={`ws-kslide-${i}`}><rect x={s.k} y="120" width="202.8" height="260" /></clipPath>
+                        <rect x={800 - 800 / 12} width={800 / 12} height="500" fill={s.next} />
+                      </g>
+                    ))}
+                  </g>
+                  <rect x="48" y="440" width="220" height="3" fill="#f4f4f0" fill-opacity=".35" />
+                  <rect x="48" y="440" width="73.3" height="3" fill="#f4f4f0" data-ws-progress />
+                  <text x="290" y="447" class="lbl lbl--light" data-ws-counter>01 / 03</text>
+                </g>
+                <path d="M0 0V500" class="scan" data-live-scan />
+              </g>
+            </>
+          )}
+
+          {w.slug === "seo-images" && (
+            <>
+              <defs>
+                {shots.map((s, i) => (
+                  <symbol id={`ws-shot-${i}`} viewBox="0 0 225 160" preserveAspectRatio="xMidYMid slice">
+                    <rect width="225" height="160" fill={s.bg} />
+                    <ellipse cx="112" cy="132" rx="62" ry="9" fill="#000" fill-opacity=".14" />
+                    {i === 0 && <><rect x="80" y="44" width="64" height="88" rx="6" fill={s.obj} /><ellipse cx="112" cy="44" rx="32" ry="8" fill={s.obj} fill-opacity=".8" /></>}
+                    {i === 1 && <><circle cx="112" cy="82" r="48" fill={s.obj} /><circle cx="96" cy="66" r="14" fill="#fff" fill-opacity=".35" /></>}
+                    {i === 2 && <><path d="M62 132L112 40L162 132Z" fill={s.obj} /><rect x="54" y="126" width="116" height="8" fill={s.obj} fill-opacity=".7" /></>}
+                  </symbol>
+                ))}
+              </defs>
+              <g class="plot">
+                {shots.map((_, i) => (
+                  <>
+                    <rect x={40 + i * 245} y="60" width="225" height="160" class="wire" pathLength="1" data-p-draw />
+                    <path d={`M${60 + i * 245} 200l60-70 40 40 30-22 75 52`} class="wire" pathLength="1" data-p-draw />
+                    <circle cx={230 + i * 245} cy="95" r="12" class={i === 1 ? "acc" : "dot"} data-p-in />
+                    <text x={40 + i * 245} y="248" class="lbl lbl--a" data-p-in data-b-dim>{cam(i)}</text>
+                    <rect x={40 + i * 245} y="290" width={[170, 200, 150][i]} height="6" rx="3" class="bar" data-p-in />
+                  </>
+                ))}
+                <path d="M40 340H760" class="wire" pathLength="1" data-p-draw />
+                <text x="40" y="380" class="lbl lbl--a" data-p-in>search console · keyword niche · page context</text>
+                <text x="40" y="408" class="lbl lbl--a" data-p-in>→ file name · alt · caption</text>
+                <text x="40" y="460" class="lbl lbl--a" data-p-in>$ claude › seo-images</text>
+              </g>
+              <g class="build">
+                {shots.map((s, i) => (
+                  <>
+                    <use href={`#ws-shot-${i}`} x={40 + i * 245} y="60" width="225" height="160" data-b-wipe />
+                    <path d={`M${40 + i * 245} 244H${148 + i * 245}`} class="strike" data-b-wipe />
+                    <text x={40 + i * 245} y="268" class="lbl lbl--ink lbl--sm" data-b-type={seoName(s.view)}></text>
+                    <rect x={40 + i * 245} y="290" width="200" height="6" rx="3" class="acc" data-b-wipe />
+                    <text x={40 + i * 245} y="318" class="lbl" data-b-in>alt ✓ · caption ✓</text>
+                  </>
+                ))}
+              </g>
+              <g class="live" data-live>
+                <clipPath id="ws-live-seo-images"><rect width="800" height="500" data-live-clip /></clipPath>
+                <g clip-path="url(#ws-live-seo-images)">
+                  <rect width="800" height="500" class="paper" />
+                  <Fragment set:html={grid("wsg-seo-live")} />
+                  <use href="#ws-shot-0" x="40" y="50" width="330" height="400" data-ws-photo />
+                  <text x="410" y="70" class="lbl">file name</text>
+                  <text x="410" y="96" class="lbl lbl--ink lbl--lg" data-ws-f="name">{seoName(shots[0].view)}</text>
+                  <text x="410" y="140" class="lbl">alt</text>
+                  <text x="410" y="166" class="txt" data-ws-f="alt0">{shots[0].alt[0]}</text>
+                  <text x="410" y="190" class="txt" data-ws-f="alt1">{shots[0].alt[1]}</text>
+                  <text x="410" y="234" class="lbl">caption</text>
+                  <text x="410" y="260" class="txt txt--muted">Written from the page context.</text>
+                  <text x="410" y="304" class="lbl">from</text>
+                  <rect x="410" y="316" width="220" height="30" rx="15" class="acc" />
+                  <text x="520" y="336" text-anchor="middle" class="lbl lbl--on-acc" data-ws-f="was">{cam(0)}</text>
+                  <path d="M410 384H760" class="wire" />
+                  <text x="410" y="414" class="lbl lbl--a">$ claude › seo-images ✓ · human review ✓</text>
+                  <text x="410" y="440" class="lbl">hundreds of images a day</text>
+                </g>
+                <path d="M0 0V500" class="scan" data-live-scan />
+              </g>
+            </>
+          )}
+
+          {w.slug === "piergorelli-com" && (
+            <>
+              <g class="plot">
+                <path d="M230 0V500M570 0V500M0 130H800M0 330H800" class="guide" data-p-in data-b-dim />
+                <rect x="230" y="130" width="340" height="200" class="wire" pathLength="1" data-p-draw data-b-dim />
+                <text x="230" y="118" class="lbl lbl--a" data-p-in data-b-dim>PG · 68×40</text>
+                <text x="570" y="354" text-anchor="end" class="lbl lbl--a" data-p-in data-b-dim>rev. 2026</text>
+              </g>
+              <g class="build">
+                <rect x="30" y="30" width="740" height="440" class="wire" pathLength="1" data-b-draw />
+                <text x="30" y="22" class="lbl lbl--a" data-b-in>viewport · 1440×900</text>
+                <path d="M30 80H770" class="wire" pathLength="1" data-b-draw />
+                {[0, 1, 2, 3].map((i) => <rect x={300 + i * 80} y="48" width="56" height="14" class="guide" data-b-in />)}
+                <rect x="60" y="120" width="420" height="120" class="guide" data-b-in />
+                <text x="60" y="112" class="lbl lbl--a" data-b-in>h1.human · 720×196</text>
+                <text x="60" y="222" class="hed hed--outline" data-b-in>I do dev.</text>
+                <clipPath id="ws-h1clip"><rect x="40" y="110" width="460" height="140" data-b-clip /></clipPath>
+                <text x="60" y="222" class="hed" clip-path="url(#ws-h1clip)">I do dev.</text>
+                {hills.map((d, i) => <path d={d} class={i === 4 ? "hill hill--a" : "hill"} data-b-in />)}
+                <rect x="60" y="270" width="300" height="10" rx="5" class="bar" data-b-wipe />
+                <rect x="60" y="290" width="220" height="10" rx="5" class="bar" data-b-wipe />
+              </g>
+              <g class="live" data-live>
+                <clipPath id="ws-live-pg"><rect width="800" height="500" data-live-clip /></clipPath>
+                <g clip-path="url(#ws-live-pg)">
+                  <rect width="800" height="500" class="paper" />
+                  {hills.map((d, i) => <path d={d} class={i === 4 ? "hill hill--a hill--live" : "hill hill--live"} data-ws-hill />)}
+                  {["Work", "Services", "About", "Blog"].map((t, i) => <text x={300 + i * 80} y="61" class="txt txt--sm">{t}</text>)}
+                  <rect x="660" y="40" width="100" height="32" rx="16" class="ink-fill" />
+                  <text x="710" y="61" text-anchor="middle" class="txt txt--sm txt--inv">Let's talk</text>
+                  <text x="40" y="215" class="hed hed--lg">I do dev.</text>
+                  <text x="42" y="264" class="txt txt--lead">Web &amp; AI development for creative agencies,</text>
+                  <text x="42" y="296" class="txt txt--lead">when the idea is hard to build.</text>
+                  <text x="40" y="468" class="lbl">Lighthouse mobile · home</text>
+                  {lighthouse.map((v, i) => (
+                    <g transform={`translate(${250 + i * 44} 446)`}>
+                      <circle cx="16" cy="16" r="15" class="score" />
+                      <text x="16" y="20" text-anchor="middle" class="lbl lbl--ink lbl--xs">{v}</text>
+                    </g>
+                  ))}
+                </g>
+                <path d="M0 0V500" class="scan" data-live-scan />
+              </g>
+              {/* The mark travels: big in the plot frame, then the logo of the finished page. */}
+              <g transform="translate(40 30) scale(.62)" class="mark" data-b-move="210 120 4.4">
+                <path d="M6 37V3h12a9.5 9.5 0 0 1 0 19H6" pathLength="1" data-p-draw />
+                <path d="M57.3 8.7A16 16 0 1 0 62 20H48" pathLength="1" data-p-draw />
+                <circle cx="64" cy="36" r="2.6" class="acc" data-p-in />
+              </g>
+            </>
+          )}
+          {w.slug !== "retail-k" && w.slug !== "seo-images" && w.slug !== "piergorelli-com" && (
+            <text x="40" y="60" class="lbl">{w.title}</text>
+          )}
+        </svg>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  /* ── Stacked cards: mobile, no JS, reduced motion ───────── */
+  .ws { display: grid; gap: clamp(3rem, 8vw, 5rem); }
+  .ws__count, .ws__stages { display: none; }
+  .ws__item { display: flex; flex-direction: column-reverse; gap: 1.25rem; }
+  .ws__art { position: relative; aspect-ratio: 8 / 5; background: var(--bg-raised); color: var(--ink); border-radius: 4px; overflow: hidden; }
+  .ws__art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ws__meta { display: flex; justify-content: space-between; gap: 1rem; }
+  .ws__title { margin-top: 0.9rem; }
+  .ws__link { text-decoration: none; }
+  .ws__link:hover { color: var(--accent-text); }
+  .ws__client { margin-top: 0.5rem; }
+  .ws__summary { margin-top: 0.75rem; max-width: 42ch; color: var(--muted); }
+  .ws__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+  .ws__actions:not(:has(> :not([hidden]))) { display: none; }
+
+  /* ── Pinned stage (desktop, set by work-stage.ts) ──────── */
+  :global(.ws.is-pinned) {
+    height: calc(100svh - 5.5rem);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto 1fr auto;
+    column-gap: var(--col-gap);
+    row-gap: 1.5rem;
+    padding-block: 1.5rem;
+  }
+  :global(.ws.is-pinned) .ws__count { display: block; grid-column: 1 / span 4; grid-row: 1; }
+  :global(.ws.is-pinned) .ws__stages { display: block; grid-column: 1 / span 4; grid-row: 3; }
+  :global(.ws.is-pinned) .ws__item { display: contents; }
+  :global(.ws.is-pinned) .ws__text { grid-column: 1 / span 4; grid-row: 2; align-self: center; }
+  :global(.ws.is-pinned) .ws__art { grid-column: 5 / span 8; grid-row: 1 / span 3; align-self: center; }
+  :global(.ws.is-pinned) :is(.ws__text, .ws__art) { will-change: opacity, transform; }
+  :global(.ws.is-pinned) .ws__item:not([data-current]) :is(.ws__text, .ws__art) { pointer-events: none; }
+
+  .ws__count { font-size: var(--step-4); font-weight: 500; letter-spacing: -0.06em; line-height: 0.85; }
+  .ws__of { color: transparent; -webkit-text-stroke: 1px var(--ink); }
+  .ws__stages ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .ws__stages li { position: relative; padding-top: 10px; border-top: 2px solid var(--line); }
+  .ws__stages li i { position: absolute; left: 0; top: -2px; height: 2px; width: 100%; background: var(--ink); transform: scaleX(var(--p, 0)); transform-origin: left; }
+  .ws__stages li[data-on] span { color: var(--accent-text); }
+  .ws__stages li[data-on] i { background: var(--accent); }
+  .ws__stages b { display: block; margin-top: 4px; font-family: var(--font-sans); font-size: var(--step-0); font-weight: 500; letter-spacing: -0.01em; text-transform: none; color: var(--ink); }
+  .ws__rail { display: flex; gap: 8px; margin-top: 1.25rem; }
+  .ws__rail i { flex: 1; height: 4px; background: var(--line); transition: background-color var(--dur-1); }
+  .ws__rail i[data-on] { background: var(--ink); }
+
+  /* ── Drawing ─────────────────────────────────────────────── */
+  svg :global([pathLength="1"]) { stroke-dasharray: 1 2; }
+  .guide { fill: none; stroke: var(--accent); stroke-opacity: 0.7; stroke-dasharray: 3 5; }
+  .wire { fill: none; stroke: currentColor; stroke-opacity: 0.55; }
+  .ghost { fill: none; stroke: currentColor; stroke-opacity: 0.08; }
+  .ink { fill: none; stroke: currentColor; }
+  .ink-fill { fill: currentColor; }
+  .strike { stroke: currentColor; stroke-opacity: 0.6; }
+  .acc { fill: var(--accent); }
+  .dot { fill: currentColor; fill-opacity: 0.3; }
+  .bar { fill: currentColor; fill-opacity: 0.15; }
+  .paper { fill: var(--bg-raised); }
+  .scan { stroke: var(--accent); stroke-width: 2; opacity: 0; }
+  .score { fill: none; stroke: var(--accent); stroke-width: 2; }
+  .hill { fill: none; stroke: currentColor; stroke-opacity: 0.14; }
+  .hill--a { stroke: var(--accent); stroke-opacity: 0.45; }
+  .hill--live.hill--a { stroke-opacity: 1; }
+  .hill--live:not(.hill--a) { stroke-opacity: 0.3; }
+  .mark path { fill: none; stroke: currentColor; stroke-width: 4.2; stroke-linecap: square; }
+  .lbl { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; fill: currentColor; fill-opacity: 0.6; }
+  .lbl--a { fill: var(--accent); fill-opacity: 1; }
+  .lbl--ink { fill-opacity: 1; }
+  .lbl--sm { font-size: 11.5px; }
+  .lbl--xs { font-size: 11px; }
+  .lbl--lg { font-size: 15px; }
+  .lbl--light { fill: #f4f4f0; fill-opacity: 1; }
+  .lbl--on-acc { fill: var(--accent-ink); fill-opacity: 1; }
+  .txt { font-family: var(--font-sans); font-size: 18px; fill: currentColor; }
+  .txt--muted { fill: var(--muted); }
+  .txt--sm { font-size: 15px; }
+  .txt--inv { fill: var(--bg); }
+  .txt--lead { font-size: 26px; font-weight: 500; letter-spacing: -1px; }
+  .hed { font-family: var(--font-sans); font-size: 112px; font-weight: 500; letter-spacing: -6px; fill: currentColor; }
+  .hed--outline { fill: none; stroke: currentColor; stroke-width: 1; }
+  .hed--lg { font-size: 120px; letter-spacing: -6.5px; }
+</style>
