@@ -7,7 +7,7 @@ import { postUrl } from "../lib/blog";
 const posts = Object.fromEntries((await getCollection("blog")).map((p) => [p.id, postUrl(p)]));
 const post = (id: string) => posts[id] ?? "/blog/";
 
-const updated = new Date("2026-09-28");
+const updated = new Date("2026-09-30");
 
 const spec = [
   { k: "Based", v: "Valencia, Spain" },
@@ -16,7 +16,7 @@ const spec = [
   { k: "Status", v: "Taking on new projects", live: true },
 ];
 
-// TODO(Pier): confirm the years (see "Da decidere" in docs/redesign-status.md) before launch.
+// Years confirmed by Pier on 30/09/2026 (docs/content-facts.md).
 const log = [
   {
     v: "v0.1", year: "1999", title: "Hello, World",
@@ -34,13 +34,13 @@ const log = [
     tags: ["WordPress", "Drupal", "AngularJS", "Liferay"],
   },
   {
-    v: "v3.0", year: "2012", title: "Freelance in Milan, then Valencia",
+    v: "v3.0", year: "2012", title: "Valencia, then freelance",
     body: "Platforms and apps end to end: a patient support program for healthcare professionals, hybrid apps for osteopaths, a video platform on AWS, an ERP sync for 20,000+ WooCommerce products.",
     tags: ["Angular", "Laravel", "Ionic", "AWS"],
   },
   {
     v: "v4.0", year: "2024", title: "Site 2.0 and a blog",
-    body: "A quarter of a century after the first one, a site that finally looks like what I had in mind, and a commitment to write in public, every week.",
+    body: "A quarter of a century after the first one, a site that finally looks like what I had in mind, and a blog where I write down what holds up on real projects.",
     tags: ["Astro", "Writing"],
   },
   {
@@ -51,25 +51,25 @@ const log = [
   },
   {
     v: "v6.0", year: "2026", title: "Tech & AI partner for creative agencies",
-    body: "Everything above, pointed at one job: award-level development and applied AI for agencies and their clients, often under their name.",
-    tags: ["Web", "AI", "White-label"],
+    body: "Everything above, pointed at one job: development and AI for agencies and their clients. Claude Code training, custom skills, an image SEO framework that runs every day. Always under the agency's name.",
+    tags: ["Web", "AI", "Claude Code", "White-label"],
     head: true,
   },
 ];
 
 const principles = [
-  { line: "Accessible.", dim: "WCAG 2.2 AA · a11y 100" },
-  { line: "Superfast.", dim: "LCP < 2 s · 60 fps" },
+  { line: "Accessible.", dim: "WCAG 2.1 AA" },
+  { line: "Superfast.", dim: "LCP < 2 s target · motion profiled" },
   { line: "Just cool.", dim: "…when it serves the idea" },
 ];
 
 const toolbox = [
-  { k: "Front-end & motion", v: ["Astro", "TypeScript", "GSAP", "WebGL", "Angular", "React", "Tailwind"] },
-  { k: "CMS", v: ["WordPress", "Headless WordPress", "Drupal", "WooCommerce"] },
+  { k: "Front-end & motion", v: ["Astro", "TypeScript", "GSAP", "Lenis", "Swiper", "WebGL", "Angular", "React", "Tailwind"] },
+  { k: "CMS", v: ["WordPress", "Sage", "Headless WordPress", "Drupal", "WooCommerce"] },
   { k: "Back-end", v: ["PHP", "Laravel", "Filament", "Node.js", "REST APIs"] },
   { k: "Apps", v: ["Ionic", "Angular", "PWA"] },
-  { k: "AI & automation", v: ["n8n", "Claude", "OpenAI", "RAG", "pgvector"] },
-  { k: "Infra", v: ["Netlify", "AWS", "Docker", "Kubernetes"] },
+  { k: "AI", v: ["Claude Code", "Codex", "Vercel AI SDK", "MCP", "RAG"] },
+  { k: "Infra & testing", v: ["Netlify", "AWS", "Docker", "Kubernetes", "k6"] },
 ];
 
 const offClock = [
@@ -80,8 +80,8 @@ const offClock = [
 
 const faqs = [
   { q: "Where are you based? Do you work remotely?", a: "I live and work in Valencia, Spain. Most projects run remotely with agencies in Spain, Italy and the rest of Europe; I travel for kick-offs or workshops when a project needs it." },
-  { q: "Do you work white-label for agencies?", a: "Yes, it's most of what I do. I work under NDA, inside your tools and processes, and your client only ever sees your agency." },
-  { q: "What kind of projects do you take on?", a: "Animated marketing and campaign sites, headless and classic CMS builds, web apps and platforms, AI automations for agency teams, and LLM features inside your clients' products." },
+  { q: "Do you work white-label for agencies?", a: "Yes, all of it. Everything I build for agencies ships under their name. I work under NDA, inside your tools and processes, and your client only ever sees your agency." },
+  { q: "What kind of projects do you take on?", a: "Animated marketing and campaign sites, headless and classic CMS builds, web apps and platforms, AI training and custom workflows for agency teams, and chatbots and semantic search inside your clients' products." },
   { q: "Are you available for new projects?", a: "Yes, I'm taking on new projects. A 30-minute call is enough to tell you whether I'm the right fit and when I could start." },
 ];
 
@@ -103,7 +103,7 @@ const schema = [
       nationality: { "@type": "Country", name: "Italy" },
       address: { "@type": "PostalAddress", addressLocality: "Valencia", addressCountry: "ES" },
       knowsLanguage: ["it", "es", "en"],
-      knowsAbout: ["Web development", "Front-end animation", "GSAP", "Astro", "WordPress", "Drupal", "Laravel", "Angular", "n8n", "AI automation", "LLM integration", "Retrieval-augmented generation"],
+      knowsAbout: ["Web development", "Front-end animation", "GSAP", "Astro", "WordPress", "Drupal", "Laravel", "Angular", "Claude Code", "AI training", "LLM integration", "Retrieval-augmented generation"],
       sameAs: ["https://www.linkedin.com/in/piergorelli/", "https://github.com/lupin72"],
     },
   },
@@ -125,7 +125,7 @@ const schema = [
 
 <Base
   title="Pier Gorelli | Freelance Web & AI Developer in Valencia"
-  description="Italian freelance web & AI developer based in Valencia, Spain. 25 years building sites, apps and AI workflows for creative agencies."
+  description="Italian freelance web & AI developer based in Valencia, Spain. Building for the web since 1999, for creative agencies since 2004: sites, apps and AI."
   motion="showcase"
   type="profile"
   schema={schema}
@@ -156,7 +156,7 @@ const schema = [
   <section class="section wrap" id="story">
     <header class="section-head">
       <span class="note note--ink">[01] Long story short</span>
-      <span class="note">Last updated · <time datetime={updated.toISOString().slice(0, 10)}>28 Sep 2026</time></span>
+      <span class="note">Last updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
     </header>
     <div class="story grid-12">
       <figure class="portrait" data-reveal="up">
@@ -169,26 +169,27 @@ const schema = [
 
       <div class="story__text">
         <p class="h3 story__lead" data-reveal="lines">
-          I've spent 25 years on the thin line between design and code, making sure what agencies imagine survives production.
+          I built my first website with tables. Twenty-seven years later, I still care where every cell ends up.
         </p>
         <div class="story__body">
           <p data-reveal="up">
             <span class="note story__note">1999 · &lt;table&gt;</span>
-            I'm Pier (Pierpaolo) Gorelli, an Italian developer living in Valencia. My journey on the web began when HTML tables were the only way to build a layout and Flash was the future. I saw floats free us from tables, cursed Internet Explorer, built corporate sites in ASP on MS Access and raised a glass at Flash's funeral.
+            I'm Pier (Pierpaolo) Gorelli, an Italian developer living in Valencia. I found my first hosting on a CD-ROM inside <em>Io Programmo</em>, back when HTML tables were the only way to build a layout and Flash was the future. Later came the nights making our first CMS and FCKeditor behave on both Netscape and Internet Explorer: two dialects of JavaScript, no mercy. I saw floats free us from tables, built corporate sites in ASP on MS Access and raised a glass at Flash's funeral.
           </p>
           <p data-reveal="up">
             <span class="note story__note">2004 → Milan</span>
-            For more than a decade I led development in Milan, as technical director first at Siris and then at Insana: enterprise sites in Java and Oracle, medical information portals for healthcare and pharma brands, e-commerce, search engines. Always next to creatives, strategists and account managers, which is where I learned to speak agency.
+            For more than a decade I led development in Milan, as technical director first at Siris and then at Insana: enterprise sites in Java and Oracle, medical information portals for healthcare and pharma brands, e-commerce, search engines. Always next to creatives, strategists and account managers, which is where I learned to speak agency. Patient projects also taught me to anonymise data by default. I still do, on every project, because it protects people.
           </p>
           <p data-reveal="up">
             <span class="note story__note">2012 → freelance</span>
-            Since 2012 I work as a freelance senior developer, now from Spain: websites with demanding motion, headless and classic CMS builds, web apps and hybrid mobile apps, often delivered white-label for agencies in Italy and Spain.
+            At the end of 2011 I moved to Valencia, and in 2012 I went freelance from here: websites with demanding motion, headless and classic CMS builds, web apps and hybrid mobile apps, always white-label for agencies in Italy and Spain.
           </p>
           <p data-reveal="up">
             <span class="note story__note">2025 → AI</span>
-            Today I also bring AI into agencies (n8n automations and LLM workflows that take the busywork off their teams) and into their clients' products. I test every tool on real work first, and I write about what holds up on the <a href="/blog/" class="link link--inline">blog</a>.
+            Today AI is part of the job. I train agency teams on tools like Claude Code, build the custom skills they're missing, and put chatbots and semantic search into their clients' products. I also say no a lot, especially when the hype is high. If a tool hasn't proved its value on real work, I don't adopt it, and I don't recommend it. What holds up ends up on the <a href="/blog/" class="link link--inline">blog</a>.
           </p>
-          <p class="story__quote" data-reveal="up"><em>Creativity lies in making geometry feel like art.</em></p>
+          <p data-reveal="up">One rule above everything: I tell clients the truth, including when it's inconvenient. Trust lasts longer than any excuse.</p>
+          <p class="story__quote" data-reveal="up"><em>I like it best when geometry turns into art. Once, a whole site grew out of the diagonals of a single letter.</em></p>
         </div>
       </div>
     </div>
@@ -233,7 +234,7 @@ const schema = [
     ))}
     <div class="principles__body grid-12">
       <p class="lead" data-reveal="up">
-        Beautiful and functional can go hand in hand, and accessible can be seriously cool. My job is to take an idea and turn it into something fast, intuitive and stylish, design and code working as one.
+        When a design file opens, the first thing I notice is how it makes me feel. The second is the modules I can already see in it. The rest of the job is keeping both alive in a browser: on a phone, with a keyboard, with motion turned off.
       </p>
     </div>
   </section>
@@ -242,7 +243,7 @@ const schema = [
   <section class="section wrap" id="toolbox">
     <header class="section-head">
       <span class="note note--ink">[04] Toolbox</span>
-      <span class="note">Right tool for the brief, not the other way round</span>
+      <span class="note">Every tool here earned its place on a real project</span>
     </header>
     <dl class="tools">
       {toolbox.map((g) => (
@@ -252,7 +253,7 @@ const schema = [
         </div>
       ))}
     </dl>
-    <p class="note tools__foot" data-reveal="up">Industries so far: healthcare &amp; pharma · e-commerce · e-learning · sport media · corporate</p>
+    <p class="note tools__foot" data-reveal="up">Industries so far: healthcare &amp; pharma · retail · manufacturing · e-commerce · e-learning · sport media · corporate</p>
   </section>
 
   <!-- ── 05 Off the clock ─────────────────────────────────── -->
@@ -299,7 +300,7 @@ const schema = [
     </header>
     <h2 class="display cta__title" data-reveal="lines">Now you know me. Your turn.</h2>
     <div class="cta__actions" data-reveal="up">
-      <a href="/contact/" class="btn">Book a 30-min call <span class="arrow">→</span></a>
+      <a href="/contact/" class="btn">Ask for a 30-min call <span class="arrow">→</span></a>
       <a href="/cv.pdf" class="btn btn--ghost" download>Download CV (PDF)</a>
     </div>
   </section>
