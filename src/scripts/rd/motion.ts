@@ -56,12 +56,6 @@ export function initMotion(): () => void {
 
   // First visit: start compiling while the preloader sheet lifts.
   const heroDelay = root.dataset.preloaded ? 0.1 : 1.45;
-  // The full blueprint compile plays once per session; later heroes get the short version (~1.2 s).
-  let full = true;
-  try {
-    full = !sessionStorage.getItem("pg-compiled");
-    sessionStorage.setItem("pg-compiled", "1");
-  } catch { /* ignore */ }
 
   const ctx = gsap.context(() => {});
   let cancelled = false;
@@ -69,7 +63,7 @@ export function initMotion(): () => void {
   document.fonts.ready.then(() => {
     if (cancelled) return;
     let intro: gsap.core.Timeline | undefined;
-    ctx.add(() => { intro = hero(heroDelay, full); });
+    ctx.add(() => { intro = hero(heroDelay); });
     root.classList.add("motion-ready");
 
     // Below-the-fold work waits for an idle moment so the first paint stays responsive.
@@ -275,8 +269,8 @@ function blueprint(host: HTMLElement) {
   return { layer, boxes, labels, guidesH, guidesV };
 }
 
-function hero(delay: number, full: boolean) {
-  const host = full ? document.querySelector<HTMLElement>("[data-hero]") : null;
+function hero(delay: number) {
+  const host = document.querySelector<HTMLElement>("[data-hero]");
   const human = document.querySelector<HTMLElement>("[data-hero-human]");
   const machine = document.querySelector<HTMLElement>("[data-hero-generate]");
   const tl = gsap.timeline({ delay });
@@ -298,8 +292,8 @@ function hero(delay: number, full: boolean) {
     const split = SplitText.create(human, { type: "lines", mask: "lines", aria: "none" });
     roomForDescenders(split);
     gsap.set(human, { "--fill": 0 });
-    tl.from(split.lines, { yPercent: 110, duration: full ? 1.1 : 0.8, ease: EASE_OUT, stagger: full ? 0.08 : 0.05 }, bp ? 0.55 : 0)
-      .to(human, { "--fill": 1, duration: full ? 0.7 : 0.45, ease: "power2.inOut" }, bp ? 1.35 : full ? 0.8 : 0.3);
+    tl.from(split.lines, { yPercent: 110, duration: 1.1, ease: EASE_OUT, stagger: 0.08 }, bp ? 0.55 : 0)
+      .to(human, { "--fill": 1, duration: 0.7, ease: "power2.inOut" }, bp ? 1.35 : 0.8);
   }
 
   // 3 — the machine line generates token by token
@@ -315,8 +309,7 @@ function hero(delay: number, full: boolean) {
     const msEl = document.querySelector<HTMLElement>("[data-gen-ms]");
     gsap.set(words, { opacity: 0, filter: "blur(8px)", yPercent: 20 });
 
-    // Irregular, LLM-like cadence: short bursts and small hesitations (faster after the first compile).
-    const pace = full ? 1 : 0.4;
+    // Irregular, LLM-like cadence: short bursts and small hesitations.
     let t = 0;
     const gen = gsap.timeline();
     words.forEach((word, i) => {
@@ -324,14 +317,14 @@ function hero(delay: number, full: boolean) {
         opacity: 1,
         filter: "blur(0px)",
         yPercent: 0,
-        duration: full ? 0.5 : 0.3,
+        duration: 0.5,
         ease: EASE_OUT,
         onStart: () => {
           word.after(caret);
           if (tokensEl) tokensEl.textContent = String(Math.round((i + 1) * 1.33));
         },
       }, t);
-      t += (gsap.utils.random(0.03, 0.12) + (/[.,:]$/.test(word.textContent ?? "") ? 0.22 : 0)) * pace;
+      t += gsap.utils.random(0.03, 0.12) + (/[.,:]$/.test(word.textContent ?? "") ? 0.22 : 0);
     });
     const counter = { ms: 0 };
     gen.to(counter, {
@@ -342,10 +335,10 @@ function hero(delay: number, full: boolean) {
     }, 0);
     gen.add(() => caret.classList.add("is-idle"));
 
-    tl.add(gen, bp ? 1.6 : full ? "-=0.7" : 0.4);
+    tl.add(gen, bp ? 1.6 : "-=0.7");
   }
 
-  tl.from("[data-hero-fade]", { opacity: 0, y: 16, duration: full ? 1 : 0.7, ease: EASE_OUT, stagger: full ? 0.08 : 0.05 }, full ? "-=0.6" : "-=0.5");
+  tl.from("[data-hero-fade]", { opacity: 0, y: 16, duration: 1, ease: EASE_OUT, stagger: 0.08 }, "-=0.6");
 
   // 4 — the scaffolding goes away, the page is "compiled"
   if (bp) {
