@@ -10,7 +10,7 @@ export type Work = {
   year: string;
   stack: string[];
   summary: string;
-  visual: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" | "diagonals" | "captions";
+  visual: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" | "diagonals" | "captions" | "catalogue";
 };
 
 export const work: Work[] = [

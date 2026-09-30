@@ -2,28 +2,24 @@
 import Base from "../../layouts/Base.astro";
 import ServiceFigure from "../../components/rd/ServiceFigure.astro";
 import WorkVisual from "../../components/rd/WorkVisual.astro";
-import { getCollection } from "astro:content";
-import { postUrl, pillarOf } from "../../lib/blog";
-import { work } from "../../data/work";
 
 const SITE = "https://piergorelli.com";
 const PAGE = `${SITE}/services/ai-product-integration/`;
-const updated = new Date("2026-09-29");
+const updated = new Date("2026-09-30");
 
 const pains = [
   { pain: "The demo chatbot invented a discount code.", fix: "Answers are grounded on the client's own content, cite their sources, and say “I don't know” when nothing fits." },
   { pain: "Nobody can tell if it's getting better or worse.", fix: "An eval set of real customer questions from day one, re-run on every change, with scores in a written report." },
-  { pain: "The API bill tripled in a month.", fix: "A cost budget per conversation, caching, smaller models where they're enough, and alerts before the invoice does." },
-  { pain: "Legal blocked it a week before launch.", fix: "Data flows mapped at kick-off: what goes where, EU hosting options, no training on client data, notes for the DPO." },
+  { pain: "The API bill tripled in a month.", fix: "A monthly cost cap, cost per conversation in the eval report, and an alert before the budget runs out." },
+  { pain: "Legal blocked it a week before launch.", fix: "Data flows mapped at kick-off: what goes where, what never leaves the client's systems, where the models run. Written down, ready for the DPO." },
 ];
 
 const builds = [
-  { n: "01", title: "RAG assistants & chatbots", body: "Assistants that answer from the client's catalogue, policies and docs, cite the page they used and hand over to a human when they should." },
+  { n: "01", title: "A chatbot on your content", body: "Assistants that answer from the client's catalogue, policies and docs, cite the page they used and hand over to a human when they should." },
   { n: "02", title: "Semantic search", body: "Search that understands “waterproof jacket for the Pyrenees in March”: hybrid keyword and vector search across products, articles and knowledge bases." },
-  { n: "03", title: "Agents on real systems", body: "AI that does things, not just talks: checks an order, books a slot, updates the CRM, with permissions, confirmations and a log of every action." },
+  { n: "03", title: "Answers from PDFs and catalogues", body: "Technical sheets, price lists and manuals turned into answers that point to the document and page they came from." },
   { n: "04", title: "AI inside WordPress", body: "Tagging, translation, product descriptions, alt text and internal search in WordPress and WooCommerce, inside the editor the team already uses." },
-  { n: "05", title: "Evals, guardrails & monitoring", body: "Test sets, refusal rules, prompt-injection checks, cost and quality dashboards. Also as an audit of an AI feature someone else built." },
-  { n: "06", title: "Pilots on real content", body: "Two to four weeks on the client's actual data, ending with an eval report, so the decision to scale is made on numbers, not on a demo." },
+  { n: "05", title: "Evals & guardrails", body: "Test sets, refusal rules, prompt-injection checks, cost and quality dashboards. Also as an audit of an AI feature someone else built." },
 ];
 
 // Retrieval lab: CSS only. Demo data from a fictional outdoor shop; scores are an illustrative replay.
@@ -62,19 +58,19 @@ const answers: Record<Q, { text: string; trace: string }> = {
 };
 
 const steps = [
-  { n: "01", when: "Week 0", title: "Use case & data", body: "Which questions or tasks, which content answers them, where it lives and what must never leave the client's systems." },
-  { n: "02", when: "Weeks 1 to 3", title: "Pilot", body: "A working version on the real content, on a staging link, plus an eval set built from real customer questions." },
-  { n: "03", when: "Pilot end", title: "Eval report", body: "Accuracy, citations, refusals, latency and cost per conversation, in writing. Go, adjust or stop, with numbers." },
-  { n: "04", when: "Weeks 4 to n", title: "Integrate & launch", body: "Into the site, app or CMS: accessible UI, guardrails, analytics and a human handoff that actually reaches someone." },
-  { n: "05", when: "Launch +", title: "Monitor & improve", body: "Evals on every change, cost alerts, a monthly review of failed answers. Documentation and no lock-in to one model." },
+  { n: "01", when: "Before any code", title: "Use case & data", body: "Which questions or tasks, which content answers them, where it lives and what must never leave the client's systems." },
+  { n: "02", when: "Pilot", title: "Pilot", body: "A working version on the real content, on a staging link, plus an eval set built from real customer questions." },
+  { n: "03", when: "End of pilot", title: "Eval report", body: "Accuracy, citations, refusals, latency and cost per conversation, in writing. Go, adjust or stop, with numbers." },
+  { n: "04", when: "Integration", title: "Integrate & launch", body: "Into the site, app or CMS: accessible UI, guardrails, analytics and a human handoff that actually reaches someone." },
+  { n: "05", when: "After launch", title: "Monitor & improve", body: "Evals on every change, cost alerts, a monthly review of failed answers. Documentation and no lock-in to one model." },
 ];
 
 const stack = [
-  { k: "Models", v: ["Claude", "OpenAI", "Open models, self-hosted", "Swappable per task"] },
+  { k: "Models", v: ["Claude", "OpenAI", "Open models, on premise", "Swappable per task"] },
   { k: "Retrieval", v: ["Embeddings", "pgvector", "Supabase", "Hybrid search", "Reranking"] },
-  { k: "Orchestration", v: ["n8n", "TypeScript", "PHP / Laravel", "Tool calling"] },
+  { k: "Orchestration", v: ["Vercel AI SDK", "TypeScript", "PHP / Laravel", "Tool calling"] },
   { k: "Front-end", v: ["Astro", "WordPress", "WooCommerce", "Streaming chat UI"] },
-  { k: "Quality", v: ["Eval sets in Git", "Guardrails", "Cost alerts", "EU hosting options"] },
+  { k: "Quality", v: ["Eval sets in Git", "Guardrails", "Cost alerts"] },
 ];
 
 const report = [
@@ -85,18 +81,19 @@ const report = [
   { k: "Cost", v: "per 1,000 conversations, per model" },
 ];
 
-const cases = work.filter((w) => w.slug === "site-audit-ai");
-
-const all = await getCollection("blog");
-const reading = ["creating-a-custom-n8n-node-for-wordpress-managing-custom-post-types", "is-it-still-worth-developing-on-wordpress-in-2025"]
-  .map((id) => all.find((p) => p.id === id))
-  .filter((p) => p !== undefined);
+// The only AI product work so far is a pilot on staging (docs/content-facts.md): never present it as production.
+const pilot = {
+  title: "Answers from a manufacturer's catalogues",
+  client: "Manufacturer · pilot on staging",
+  stack: ["Vercel AI SDK", "Embeddings", "RAG"],
+  summary: "Hundreds of PDF pages turned into a chatbot that answers with the document and page it took the answer from. Built as a pilot: the numbers below decide whether it goes further.",
+};
 
 const faqs = [
   { q: "What is RAG, in plain words?", a: "Retrieval-augmented generation: before the model answers, the system looks up the most relevant passages in the client's own content and gives them to the model with the question. The answer is built from those passages and can cite them, instead of coming from the model's memory." },
   { q: "Will the chatbot make things up?", a: "It's the main risk, and it's managed, not wished away. Answers are grounded on retrieved sources, the assistant is told to decline when nothing relevant is found, and an eval set checks this on every change. Where a wrong answer is costly, it hands over to a human." },
-  { q: "Which AI model do you use?", a: "Whichever fits the task, the language and the budget: usually Claude or OpenAI models, sometimes open models hosted in the EU. The integration is built so the model can be swapped without rebuilding the product." },
-  { q: "Where does the client's data go?", a: "We map it at kick-off. Content can be indexed on the client's own infrastructure or EU-hosted services, API providers are set up not to train on it, and personal data is kept out of prompts unless it's needed and documented." },
+  { q: "Which AI model do you use?", a: "Whichever fits the task, the language and the budget: usually Claude or OpenAI models, sometimes open models running on premise. The integration is built so the model can be swapped without rebuilding the product." },
+  { q: "Where does the client's data go?", a: "We map it at kick-off. Where the models run is decided with you, project by project, based on the data involved. Personal data stays out of prompts unless it's needed and documented." },
   { q: "How much does it cost to run?", a: "There's no price list for the build: every project is scoped. Running costs depend on traffic and model, so the pilot measures the cost per conversation on real questions, and production gets a budget with alerts." },
   { q: "Can you add AI to an existing WordPress site?", a: "Yes. Search, an assistant or editorial tools can be added to a live WordPress or WooCommerce site as a plugin or a separate service, without rebuilding the theme." },
   { q: "Do you work white-label for agencies?", a: "Yes. I build AI features that agencies sell to their own clients, under the agency's name and contract. Companies with an in-house product or marketing team can also work with me directly." },
@@ -109,7 +106,7 @@ const schema = [
     "@id": `${PAGE}#service`,
     name: "LLM integration for websites and apps",
     serviceType: "AI product integration",
-    description: "RAG chatbots with citations, semantic search, AI agents and AI inside WordPress, integrated into websites and apps for agencies and companies.",
+    description: "RAG chatbots with citations, semantic search, answers from PDFs and catalogues and AI inside WordPress, integrated into websites and apps for agencies and companies.",
     provider: { "@type": "Person", "@id": `${SITE}/#person`, name: "Pier Gorelli" },
     audience: { "@type": "BusinessAudience", audienceType: "Creative and digital agencies, companies with product or marketing teams" },
     areaServed: ["ES", "IT", "EU"],
@@ -140,7 +137,7 @@ const schema = [
 
 <Base
   title="LLM Integration & RAG Chatbots for Websites | Pier Gorelli"
-  description="Freelance LLM integration developer: RAG chatbots that cite their sources, semantic search and AI agents for websites and apps. White-label for agencies."
+  description="Freelance LLM integration developer: RAG chatbots that cite their sources, semantic search and answers from PDFs and catalogues, for websites and apps. White-label for agencies."
   motion="showcase"
   schema={schema}
 >
@@ -152,18 +149,18 @@ const schema = [
     <p class="note">[Services / 03]</p>
     <h1 class="hero__title">
       <span class="display hero__human" data-hero-human data-bp="h1.human">Answers, with sources.</span>
-      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">LLM integration for websites and apps: RAG chatbots, semantic search and AI agents, grounded on your client's content.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">LLM integration for websites and apps: a chatbot on your client's content, semantic search, answers from PDFs and catalogues.</span>
     </h1>
     <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>24</span> tokens · <span data-gen-ms>1620</span> ms</p>
 
     <div class="hero__foot" data-hero-fade>
       <p class="lead">
-        Your client wants AI on their site. I build the version that knows their catalogue, admits what it doesn't know, and doesn't surprise anyone on the invoice.
+        Before choosing a model, I write down the questions it must answer, the actions it may take and the point where a person steps in. Then I build the smallest pilot that can fail honestly.
       </p>
       <dl class="spec" data-bp="dl.tolerances">
         <div><dt class="note">Answers</dt><dd>Cited</dd></div>
         <div><dt class="note">Evals</dt><dd>Before launch</dd></div>
-        <div><dt class="note">Data</dt><dd>EU option</dd></div>
+        <div><dt class="note">Hosting</dt><dd>Decided per project</dd></div>
         <div><dt class="note">Model</dt><dd>Swappable</dd></div>
       </dl>
     </div>
@@ -213,12 +210,15 @@ const schema = [
   <section class="section wrap" aria-labelledby="lab-title">
     <header class="section-head">
       <span class="note note--ink">[03] Grounding, spec'd</span>
-      <span class="note">Try it · 0 KB of JavaScript</span>
+      <span class="note">Simulation · 0 KB of JavaScript</span>
     </header>
     <div class="lab-intro grid-12">
       <h2 class="h2 lab-intro__title" id="lab-title" data-reveal="lines">Grounded, or it doesn't answer.</h2>
       <p class="lead lab-intro__text" data-reveal="up">
         Every question is matched against the client's own content first. Only passages above a similarity threshold reach the model, the answer cites them, and when nothing clears the bar the assistant says so and calls a person.
+      </p>
+      <p class="lead lab-intro__text lab-intro__point" data-reveal="up">
+        The third question is the one that matters. A useful assistant isn't the one that always answers. It's the one that knows when the sources aren't enough.
       </p>
     </div>
 
@@ -232,7 +232,7 @@ const schema = [
             <span class="note">{q.id === "everest" ? "Out of scope" : `${hits(q.id).length} sources match`}</span>
           </label>
         ))}
-        <p class="note rlab__demo">Demo data · a fictional outdoor shop · scores are an illustrative replay</p>
+        <p class="note rlab__demo">A teaching simulation with a fictional outdoor shop. The scores are illustrative; the logic is the one I build.</p>
       </fieldset>
 
       <div class="rlab__stage">
@@ -274,7 +274,7 @@ const schema = [
   <section class="section wrap">
     <header class="section-head">
       <span class="note note--ink">[04] How a project runs</span>
-      <a href="/agencies/" class="note link">Working with agencies →</a>
+      <span class="note">{steps.length} steps</span>
     </header>
     <h2 class="h2 claim" data-reveal="lines">A pilot on real content, then numbers.</h2>
     <div class="process__line" data-draw></div>
@@ -306,23 +306,21 @@ const schema = [
     </dl>
   </section>
 
-  <!-- ── 06 Proof ─────────────────────────────────────────── -->
+  <!-- ── 06 Pilot ─────────────────────────────────────────── -->
   <section class="section wrap">
     <header class="section-head">
-      <span class="note note--ink">[06] Proof</span>
-      <span class="note">Numbers, not demos</span>
+      <span class="note note--ink">[06] What the pilot has to prove</span>
+      <span class="note">Measured before anyone scales it</span>
     </header>
     <div class="cases grid-12">
-      {cases.map((w) => (
-        <article class="case case--0" data-reveal="up">
-          <WorkVisual kind={w.visual} />
-          <div class="case__meta note"><span>{w.year}</span><span>{w.stack.join(" · ")}</span></div>
-          <h3 class="h3">{w.title}</h3>
-          <p class="note">{w.client}</p>
-          <p class="case__summary">{w.summary}</p>
-        </article>
-      ))}
-      <div class:list={["report", { "report--solo": cases.length === 0 }]} data-reveal="up">
+      <article class="case case--0" data-reveal="up">
+        <WorkVisual kind="catalogue" />
+        <div class="case__meta note"><span>Pilot</span><span>{pilot.stack.join(" · ")}</span></div>
+        <h3 class="h3">{pilot.title}</h3>
+        <p class="note">{pilot.client}</p>
+        <p class="case__summary">{pilot.summary}</p>
+      </article>
+      <div class="report" data-reveal="up">
         <p class="note note--ink">Every pilot ends with this report</p>
         <dl class="report__rows">
           {report.map((r) => (
@@ -333,30 +331,11 @@ const schema = [
     </div>
   </section>
 
-  <!-- ── 07 Reading ───────────────────────────────────────── -->
-  <section class="section wrap">
-    <header class="section-head">
-      <span class="note note--ink">[07] Read before you call</span>
-      <a href="/blog/topic/ai-in-practice/" class="note link">All AI posts →</a>
-    </header>
-    <ul class="posts">
-      {reading.map((p) => (
-        <li data-reveal="up">
-          <a href={postUrl(p)} class="post grid-12">
-            <span class="post__pillar note">{pillarOf(p)}</span>
-            <span class="post__title h3">{p.data.title}</span>
-            <span class="post__arrow" aria-hidden="true">→</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
-
   <!-- ── 08 FAQ ───────────────────────────────────────────── -->
   <section class="section wrap">
     <header class="section-head">
-      <span class="note note--ink">[08] FAQ</span>
-      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>29 Sep 2026</time></span>
+      <span class="note note--ink">[07] FAQ</span>
+      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
     </header>
     <div class="faqs">
       {faqs.map((f) => (
@@ -371,7 +350,7 @@ const schema = [
   <!-- ── 09 CTA ───────────────────────────────────────────── -->
   <section class="section wrap cta">
     <header class="section-head">
-      <span class="note note--ink">[09] Next</span>
+      <span class="note note--ink">[08] Next</span>
       <span class="note">30 minutes</span>
     </header>
     <h2 class="display cta__title" data-reveal="lines">Bring ten real questions.</h2>
@@ -443,6 +422,7 @@ const schema = [
   .lab-intro { row-gap: 1.5rem; align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
   .lab-intro__title { grid-column: 1 / span 6; max-width: 14ch; }
   .lab-intro__text { grid-column: 8 / -1; color: var(--muted); max-width: 40ch; }
+  .lab-intro__point { grid-column: 8 / -1; color: var(--ink); }
   @media (max-width: 899px) { .lab-intro__title, .lab-intro__text { grid-column: 1 / -1; } }
 
   .rlab {
@@ -613,24 +593,10 @@ const schema = [
   .case__meta { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.5rem; }
   .case__summary { color: var(--muted); max-width: 44ch; }
   .report { grid-column: 9 / -1; align-self: end; display: flex; flex-direction: column; gap: 1rem; }
-  .report--solo { grid-column: 1 / span 7; }
   .report__rows { border-top: 1px solid var(--line); }
   .report__rows div { display: flex; flex-direction: column; gap: 0.3rem; padding-block: 1rem; border-bottom: 1px solid var(--line); }
   .report__rows dd { color: var(--muted); }
   @media (max-width: 899px) { .case--0, .report { grid-column: 1 / -1; } }
-
-  /* Reading */
-  .posts { border-bottom: 1px solid var(--line); }
-  .posts li { border-top: 1px solid var(--line); }
-  .post { align-items: baseline; padding-block: 1.6rem; row-gap: 0.4rem; }
-  .post__pillar { grid-column: 1 / span 2; }
-  .post__title { grid-column: 3 / span 8; transition: transform var(--dur-2) var(--ease-in-out), color var(--dur-1); }
-  .post__arrow { grid-column: 12; justify-self: end; font-size: var(--step-1); }
-  .post:hover .post__title { transform: translateX(1rem); color: var(--accent-text); }
-  @media (max-width: 767px) {
-    .post__pillar, .post__title { grid-column: 1 / -1; }
-    .post__arrow { display: none; }
-  }
 
   /* CTA */
   .cta__title { max-width: 12ch; }

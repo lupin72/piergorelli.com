@@ -1,6 +1,6 @@
 ---
 /** Generative blueprint visuals standing in for project imagery in the prototype. */
-interface Props { kind: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" | "diagonals" | "captions" }
+interface Props { kind: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" | "diagonals" | "captions" | "catalogue" }
 const { kind } = Astro.props;
 const bars = [62, 88, 40, 74, 96, 52, 80, 34, 68, 90, 46, 76];
 const audit = [
@@ -20,6 +20,8 @@ const queue = [1, 0, 0, 1, 0];
 const slides = [{ x: 20, w: 132 }, { x: 160, w: 96 }, { x: 264, w: 156 }];
 // Image SEO: camera file names turned into names chosen from page context and keyword niche.
 const shots = [0, 1, 2];
+// Catalogue RAG pilot: PDF pages, one retrieved passage, an answer that cites its page.
+const rows = [0, 1, 2, 3, 4, 5, 6, 7];
 ---
 
 <div class:list={["visual", `visual--${kind}`]} aria-hidden="true">
@@ -154,6 +156,28 @@ const shots = [0, 1, 2];
       <text x="30" y="266" class="bp__label">$ claude › seo-images</text>
     </svg>
   )}
+  {kind === "catalogue" && (
+    <svg class="visual__art" viewBox="0 0 400 300" data-parallax="8">
+      <rect x="56" y="48" width="130" height="176" class="frame" />
+      <rect x="48" y="40" width="130" height="176" class="frame" />
+      <rect x="40" y="32" width="130" height="176" class="frame" />
+      <text x="52" y="50" class="bp__label">catalogue.pdf</text>
+      {rows.map((i) => (
+        <rect x="52" y={64 + i * 16} width={i % 3 === 2 ? 72 : 106} height="4" rx="2" class:list={[i === 4 || i === 5 ? "accent-fill" : "line"]} />
+      ))}
+      <rect x="46" y="124" width="118" height="32" class="accent-stroke" fill="none" stroke-dasharray="3 3" />
+      <text x="170" y="200" text-anchor="end" class="bp__label">p. 42</text>
+      <path d="M164 140H226" class="accent-stroke" stroke-dasharray="3 4" />
+      <rect x="226" y="92" width="144" height="104" rx="4" class="frame" />
+      <rect x="240" y="110" width="116" height="4" rx="2" class="line" />
+      <rect x="240" y="122" width="100" height="4" rx="2" class="line" />
+      <rect x="240" y="134" width="84" height="4" rx="2" class="line" />
+      <rect x="240" y="160" width="58" height="20" rx="10" class="accent-fill" />
+      <text x="269" y="174" text-anchor="middle" class="bp__label on-accent">p. 42</text>
+      <text x="40" y="252" class="bp__label">hundreds of PDF pages → embeddings</text>
+      <text x="40" y="272" class="bp__label">$ ask › answer + source page</text>
+    </svg>
+  )}
 </div>
 
 <style>
@@ -185,6 +209,7 @@ const shots = [0, 1, 2];
   .day--3 { fill: var(--accent); stroke: none; }
   .k { fill: none; stroke: currentColor; stroke-width: 16; stroke-linecap: square; }
   .slide-hint { fill: currentColor; fill-opacity: 0.3; }
+  .bp__label.on-accent { fill: var(--accent-ink); fill-opacity: 1; }
   .strike { text-decoration: line-through; }
   .bp__label { fill: currentColor; fill-opacity: 0.6; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; }
 
