@@ -67,7 +67,7 @@ const reading = ["is-it-still-worth-developing-on-wordpress-in-2025", "10-tips-t
   .filter((p) => p !== undefined);
 
 const faqs = [
-  { q: "What does white-label web development mean?", a: "I build the site, your agency delivers it. I work under NDA and under your name: your client talks to you, sees your brand on the staging link and in the documentation, and never needs to know I exist." },
+  { q: "What does white-label web development mean?", a: "It's an option, when the project needs it: I build the site, your agency delivers it. I work under NDA and under your name: your client talks to you, sees your brand on the staging link and in the documentation, and never needs to know I exist." },
   { q: "Can you build exactly what our designers drew?", a: "That's the point. I build from your Figma files and bring the designers into the review of every page. When something would hurt performance or accessibility, I say so early and propose an alternative that keeps the idea." },
   { q: "Which animation tools do you use?", a: "GSAP with ScrollTrigger for most scroll and timeline work, native View Transitions for page changes, and light WebGL for backgrounds and hero moments. Everything respects reduced-motion settings and has a static fallback." },
   { q: "Astro, WordPress or Drupal?", a: "Astro, often with a headless CMS, for fast, motion-heavy marketing sites. WordPress when the client's editors know it or need its plugins. Drupal for complex, multi-site or enterprise setups. I'll recommend one in the first call and explain why." },
@@ -80,9 +80,9 @@ const schema = [
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": `${PAGE}#service`,
-    name: "White-label web development for creative agencies",
+    name: "Web development for creative agencies",
     serviceType: "Web development",
-    description: "Animated front-ends, headless and classic CMS builds and web apps, delivered white-label for creative and digital agencies.",
+    description: "Animated front-ends, headless and classic CMS builds and web apps for creative and digital agencies.",
     provider: { "@type": "Person", "@id": `${SITE}/#person`, name: "Pier Gorelli" },
     audience: { "@type": "BusinessAudience", audienceType: "Creative and digital agencies" },
     areaServed: ["ES", "IT", "EU"],
@@ -112,8 +112,8 @@ const schema = [
 ---
 
 <Base
-  title="White-Label Web Development for Agencies | Pier Gorelli"
-  description="Senior white-label web developer for creative agencies: GSAP and WebGL animation, Astro, WordPress and Drupal, built as designed. Based in Valencia."
+  title="Freelance Web Developer for Creative Agencies | Pier Gorelli"
+  description="Senior freelance web developer for creative agencies: GSAP and WebGL animation, Astro, WordPress and Drupal, built as designed. Based in Valencia."
   motion="showcase"
   schema={schema}
 >
@@ -125,13 +125,13 @@ const schema = [
     <p class="note">[Services / 01]</p>
     <h1 class="hero__title">
       <span class="display hero__human" data-hero-human data-bp="h1.human">Built as drawn.</span>
-      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">White-label web development for creative agencies: animated front-ends, Astro, WordPress and Drupal.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Web development for creative agencies: animated front-ends, Astro, WordPress and Drupal.</span>
     </h1>
     <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>19</span> tokens · <span data-gen-ms>1480</span> ms</p>
 
     <div class="hero__foot" data-hero-fade>
       <p class="lead">
-        You sold a concept that moves. I'm the senior developer who builds it without flattening the design, on your deadline, under your brand.
+        You sold a concept that moves. I'm the senior developer who builds it without flattening the design, on your deadline.
       </p>
       <dl class="spec" data-bp="dl.tolerances">
         <div><dt class="note">Lighthouse</dt><dd>95+ mobile</dd></div>
@@ -164,7 +164,7 @@ const schema = [
   <section class="section wrap">
     <header class="section-head">
       <span class="note note--ink">[02] What I build for agencies</span>
-      <span class="note">{builds.length} types · white-label</span>
+      <span class="note">{builds.length} types</span>
     </header>
     <div class="builds grid-12">
       <div class="builds__figure">
