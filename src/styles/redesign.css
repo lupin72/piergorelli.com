@@ -540,13 +540,19 @@ html[data-hover-off] .cursor__label { visibility: hidden; }
   /* accent pulled towards the sheet's text colour, so lime/orange stay legible on either theme */
   --pt-accent: color-mix(in oklab, var(--accent) 75%, var(--bg));
   position: fixed;
-  inset: 0;
+  inset: 0 0 auto;
+  /* sized on the large viewport: when the swap scrolls to top, mobile toolbars come back and a
+     dynamic-height sheet would shrink mid-transition, jolting the monogram upwards. The bottom
+     padding keeps the last row above the toolbars when they're showing. */
+  height: 100vh;
+  height: 100lvh;
   z-index: 98;
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-template-columns: minmax(0, 1fr); /* a long destination path must not widen the sheet */
   place-items: center;
   padding: 1.25rem var(--gutter);
+  padding-bottom: calc(1.25rem + 100lvh - 100svh);
   background: var(--ink);
   color: var(--bg);
   visibility: hidden;
