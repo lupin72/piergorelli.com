@@ -9,30 +9,30 @@ import { work } from "../../data/work";
 
 const SITE = "https://piergorelli.com";
 const PAGE = `${SITE}/services/web-development-for-agencies/`;
-const updated = new Date("2026-09-30");
+const updated = new Date("2026-10-05");
 
 const pains = [
-  { pain: "The concept moved in the pitch deck. The built site doesn't.", fix: "The riskiest motion is prototyped first, in the browser, and signed off by your designers before the build." },
-  { pain: "The freelancer vanished two weeks before launch.", fix: "One senior developer, a staging link from the start, a written plan and replies within 24 hours, Monday to Friday." },
-  { pain: "It looked great, then Lighthouse said 34.", fix: "Lighthouse 95+ is the target on my standard stacks (WordPress with Sage, Astro), agreed at kick-off and measured before launch. Every animation is profiled for smoothness before it ships." },
-  { pain: "The client's editors broke the layout in a week.", fix: "CMS models built around how the editors actually work, with guardrails and a training session." },
+  { pain: "The concept moved in the pitch deck. The built site doesn't.", fix: "I build the trickiest animation first, in the browser, and your designers sign it off before anything else." },
+  { pain: "The freelancer vanished two weeks before launch.", fix: "One senior developer, a staging link from day one, a written plan, and replies within 24 hours, Monday to Friday." },
+  { pain: "It looked great, then Lighthouse said 34.", fix: "On my usual stacks (WordPress with Sage and Astro) we aim for Lighthouse 95+. We agree that at kick-off and I measure it before launch. Every animation is tested for smoothness." },
+  { pain: "The client's editors broke the layout in a week.", fix: "I shape the CMS around how your client's editors actually work, add guardrails, and train them." },
 ];
 
 const builds = [
-  { n: "01", title: "Campaign & launch sites", body: "Scroll-driven storytelling, WebGL moments and page transitions for products, brands and events. Built to be shortlisted, and to load fast on a train." },
-  { n: "02", title: "Corporate & brand sites", body: "Multilingual, accessible sites that the client's team can run for years: design system in code, components your designers recognise." },
-  { n: "03", title: "Headless & classic CMS", body: "Astro with a headless CMS when speed and motion matter; WordPress or Drupal when editors, plugins or multi-site setups call for them." },
-  { n: "04", title: "Web apps & platforms", body: "Portals, configurators, booking and member areas on Laravel with Filament, or Angular, plus hybrid mobile apps with Ionic when one codebase is enough." },
-  { n: "05", title: "Takeovers & rescues", body: "Inherited a site nobody dares touch? A short audit first, then fixes, upgrades and a maintenance plan with clear priorities." },
-  { n: "06", title: "Prototypes for pitches", body: "A clickable, animated prototype of the key idea so your pitch shows the experience, not a video of it." },
+  { n: "01", title: "Campaign & launch sites", body: "Scroll stories, WebGL moments and page transitions for launches and events. Made to stand out, and to load fast on a train." },
+  { n: "02", title: "Corporate & brand sites", body: "Accessible, multilingual sites your client can run for years, built from components your designers will recognise." },
+  { n: "03", title: "Headless & classic CMS", body: "Astro with a headless CMS when speed and motion come first. WordPress or Drupal when the editors, plugins or multi-site setup need them." },
+  { n: "04", title: "Web apps & platforms", body: "Portals, configurators, bookings and member areas with Laravel and Filament, or Angular. Mobile apps with Ionic when one codebase is enough." },
+  { n: "05", title: "Takeovers & rescues", body: "Got a site nobody dares to touch? I start with a short audit, then fix it, upgrade it and keep it running." },
+  { n: "06", title: "Prototypes for pitches", body: "A clickable, animated prototype of the big idea, so your pitch shows the experience instead of a video of it." },
 ];
 
 // Easing lab: CSS only. Curves drawn in a 200×200 box (y flipped), control points from each cubic-bezier.
 const eases = [
   { id: "linear", name: "linear", use: "The fallback nobody chose", bezier: [0, 0, 1, 1] },
-  { id: "inout", name: "power4.inOut", use: "Page transitions, sheets", bezier: [0.76, 0, 0.24, 1] },
-  { id: "expo", name: "expo.out", use: "Reveals, headlines", bezier: [0.16, 1, 0.3, 1] },
-  { id: "back", name: "back.out", use: "Buttons, small UI", bezier: [0.34, 1.56, 0.64, 1] },
+  { id: "inout", name: "power4.inOut", use: "Page transitions", bezier: [0.76, 0, 0.24, 1] },
+  { id: "expo", name: "expo.out", use: "Headlines appearing", bezier: [0.16, 1, 0.3, 1] },
+  { id: "back", name: "back.out", use: "Buttons, small details", bezier: [0.34, 1.56, 0.64, 1] },
 ].map((e) => {
   const [x1, y1, x2, y2] = e.bezier;
   const p = (v: number) => +(v * 200).toFixed(1);
@@ -45,11 +45,11 @@ const eases = [
 const defaultEase = "expo";
 
 const steps = [
-  { n: "01", when: "Before the build", title: "Design review", body: "I go through your Figma files with the designers: what's hard to build, what motion needs a prototype, what the CMS must allow." },
-  { n: "02", when: "First", title: "Motion prototype", body: "The riskiest interactions built first, in the browser, so everyone judges the real thing." },
-  { n: "03", when: "Build", title: "Build on staging", body: "Components, templates and CMS on a staging link your team and the client can open any day." },
-  { n: "04", when: "Pre-launch", title: "QA", body: "Real devices, keyboard and screen readers, reduced motion, Lighthouse and cross-browser checks, with a written report." },
-  { n: "05", when: "Launch", title: "Handover", body: "Go-live, a clean repository, setup notes and a guide to the CMS for the editors. Ongoing care if you want it, no lock-in if you don't." },
+  { n: "01", when: "Before the build", title: "Design review", body: "Before writing any code, I go through the Figma files with your designers: what's hard to build, which animations need a prototype, and what the CMS has to handle." },
+  { n: "02", when: "First", title: "Motion prototype", body: "The boldest moments get built first as a working prototype, so everyone can see and feel them before we commit." },
+  { n: "03", when: "Build", title: "Build on staging", body: "Page by page, the site comes together on a private link that you and your client can check whenever you like." },
+  { n: "04", when: "Pre-launch", title: "QA", body: "Before launch, I test on real phones and browsers, with a keyboard and a screen reader, checking speed and reduced motion along the way. You get a written report of the results." },
+  { n: "05", when: "Launch", title: "Handover", body: "Go-live, clean code, setup notes and a CMS guide for your editors. I can look after the site afterwards, or your team can take it from there." },
 ];
 
 const stack = [
@@ -68,12 +68,12 @@ const reading = ["is-it-still-worth-developing-on-wordpress-in-2025", "10-tips-t
   .filter((p) => p !== undefined);
 
 const faqs = [
-  { q: "Do you work white-label for agencies?", a: "When the project needs it, yes. I work under NDA, inside your tools and processes, and your client can deal only with your agency. Code, documentation and handover can carry your brand." },
-  { q: "Can you build exactly what our designers drew?", a: "That's the point. I build from your Figma files and bring the designers into the review of every page. When something would hurt performance or accessibility, I say so early and propose an alternative that keeps the idea." },
-  { q: "Which animation tools do you use?", a: "GSAP with ScrollTrigger for most scroll and timeline work, native View Transitions for page changes, and light WebGL for backgrounds and hero moments. Everything respects reduced-motion settings and has a static fallback." },
-  { q: "Astro, WordPress or Drupal?", a: "Astro, often with a headless CMS, for fast, motion-heavy marketing sites. WordPress when the client's editors know it or need its plugins. Drupal for complex, multi-site or enterprise setups. I'll recommend one in the first call and explain why." },
-  { q: "How long does a project take?", a: "It depends on the scope, so I don't give a number before seeing the designs. About two weeks after the call and the brief, you get a written quote and a schedule with milestones, before we start." },
-  { q: "Do you maintain the sites after launch?", a: "If you want: updates, monitoring, small evolutions and support for your team as a monthly block of days, or billed as it comes up. If you'd rather take it in-house, the handover includes everything you need." },
+  { q: "Do you work white-label for agencies?", a: "When the project needs it, yes. I work under NDA, inside your tools and processes, and your client only ever deals with your agency. Code, documentation and handover can carry your brand." },
+  { q: "Can you build exactly what our designers drew?", a: "That's the whole point. I build from your Figma files and bring your designers into the review of every page. If something would hurt speed or accessibility, I flag it early and suggest an alternative that keeps the idea." },
+  { q: "Which animation tools do you use?", a: "GSAP with ScrollTrigger for most scroll and timeline work, native View Transitions between pages, and a touch of WebGL for backgrounds and hero moments. Every animation respects reduced-motion settings and has a static fallback." },
+  { q: "Astro, WordPress or Drupal?", a: "Astro, often with a headless CMS, for fast marketing sites with lots of motion. WordPress when your client's editors already know it or need its plugins. Drupal for complex, multi-site or enterprise setups. I'll recommend one on our first call and tell you why." },
+  { q: "How long does a project take?", a: "It depends on the scope, so I don't give a number before seeing the designs. Once I have the brief and the Figma files, you get a written quote and a schedule with milestones before any work starts." },
+  { q: "Do you maintain the sites after launch?", a: "If you'd like me to: updates, monitoring, small improvements and support for your team, either as a monthly block of days or billed as it comes up. If you'd rather take it in-house, the handover gives you everything you need." },
 ];
 
 const schema = [
@@ -114,7 +114,7 @@ const schema = [
 
 <Base
   title="Freelance Web Developer for Creative Agencies | Pier Gorelli"
-  description="Senior freelance web developer for creative agencies: GSAP and WebGL animation, Astro, WordPress and Drupal, built as designed. Based in Valencia."
+  description="Senior freelance web developer for creative agencies. Fast, accessible websites with motion, built with Astro, WordPress and Drupal. Based in Valencia."
   motion="showcase"
   schema={schema}
 >
@@ -126,19 +126,19 @@ const schema = [
     <p class="note">[Services / 02.1]</p>
     <h1 class="hero__title">
       <span class="display hero__human" data-hero-human data-bp="h1.human">Built as drawn.</span>
-      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Web development for creative agencies: animated front-ends, Astro, WordPress and Drupal.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">Web development for creative agencies. Animated sites, built on Astro, WordPress or Drupal.</span>
     </h1>
-    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>19</span> tokens · <span data-gen-ms>1480</span> ms</p>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>17</span> tokens · <span data-gen-ms>1480</span> ms</p>
 
     <div class="hero__foot" data-hero-fade>
       <p class="lead">
-        You sold a concept that moves. I'm the senior developer who builds it without flattening the design, on your deadline.
+        I help creative agencies turn designs into fast, cool and accessible websites.
       </p>
       <dl class="spec" data-bp="dl.tolerances">
         <div><dt class="note">Lighthouse</dt><dd>95+ target</dd></div>
-        <div><dt class="note">Motion</dt><dd>Profiled</dd></div>
+        <div><dt class="note">Motion</dt><dd>Tested for smoothness</dd></div>
         <div><dt class="note">Access</dt><dd>WCAG 2.1 AA</dd></div>
-        <div><dt class="note">Handover</dt><dd>Repo + CMS guide</dd></div>
+        <div><dt class="note">Handover</dt><dd>Code + CMS guide</dd></div>
       </dl>
     </div>
   </section>
@@ -149,7 +149,7 @@ const schema = [
       <span class="note note--ink">[01] Where agency builds break</span>
       <span class="note">Pain → fix</span>
     </header>
-    <h2 class="h2 claim" data-reveal="lines">The build should edit the implementation, not the idea.</h2>
+    <h2 class="h2 claim" data-reveal="lines">Your idea should survive the build.</h2>
     <ol class="pains">
       {pains.map((p, i) => (
         <li class="pain grid-12" data-reveal="up">
@@ -186,13 +186,13 @@ const schema = [
   <!-- ── 03 Easing lab ────────────────────────────────────── -->
   <section class="section wrap" aria-labelledby="lab-title">
     <header class="section-head">
-      <span class="note note--ink">[03] Motion, spec'd</span>
-      <span class="note">Try it · 0 KB of JavaScript</span>
+      <span class="note note--ink">[03] How motion feels</span>
+      <span class="note">Try it</span>
     </header>
     <div class="lab-intro grid-12">
       <h2 class="h2 lab-intro__title" id="lab-title" data-reveal="lines">Motion is designed, not guessed.</h2>
       <p class="lead lab-intro__text" data-reveal="up">
-        The difference between “it moves” and “it feels right” is a curve and a duration. I agree them with your designers as tokens, like colours and type, so every reveal on the site speaks the same language.
+        The difference between “it moves” and “it feels right” is often just a curve and a duration. I define those with your designers, like colour and type, so every interaction feels part of the same system.
       </p>
     </div>
 
@@ -242,7 +242,7 @@ const schema = [
       <span class="note note--ink">[04] How a build runs</span>
       <span class="note">5 steps · written schedule</span>
     </header>
-    <h2 class="h2 claim" data-reveal="lines">A staging link from the start. No black box.</h2>
+    <h2 class="h2 claim" data-reveal="lines">Watch the site take shape.</h2>
     <div class="seq__line" data-draw></div>
     <ol class="process grid-12 seq">
       {steps.map((s) => (
@@ -260,7 +260,7 @@ const schema = [
   <section class="section wrap">
     <header class="section-head">
       <span class="note note--ink">[05] Stack</span>
-      <span class="note">Chosen per project · no religion</span>
+      <span class="note">Picked for each project</span>
     </header>
     <dl class="stack-table">
       {stack.map((s) => (
@@ -290,7 +290,7 @@ const schema = [
       ))}
     </div>
     <p class="self lead" data-reveal="up">
-      The first one is the page you're reading, so you can inspect it right now.<span class="self__grid"> Press <kbd>⌥G</kbd> to see the grid.</span>
+      The first one is the site you're on right now, so feel free to look around.<span class="self__grid"> Press <kbd>⌥G</kbd> to see the grid.</span>
     </p>
   </section>
 
@@ -317,7 +317,7 @@ const schema = [
   <section class="section wrap">
     <header class="section-head">
       <span class="note note--ink">[08] FAQ</span>
-      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>30 Sep 2026</time></span>
+      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>05 Oct 2026</time></span>
     </header>
     <div class="faqs">
       {faqs.map((f) => (
