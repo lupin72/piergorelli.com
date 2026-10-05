@@ -57,6 +57,8 @@ function build() {
   });
   dialog.querySelector(".palette__close")!.addEventListener("click", () => dialog!.close());
   dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog!.close(); });
+  // Keep focus in the search: a tap on an option would move it to the dialog and drop the accent underline.
+  dialog.querySelector(".palette__list")!.addEventListener("mousedown", (e) => e.preventDefault());
   dialog.querySelector(".palette__list")!.addEventListener("click", (e) => {
     const li = (e.target as HTMLElement).closest<HTMLElement>("[data-i]");
     if (li) filtered[Number(li.dataset.i)]?.run();
