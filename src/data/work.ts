@@ -41,7 +41,7 @@ export const work: Work[] = [
     client: "Own studio · Valencia",
     year: "2026",
     stack: ["Astro", "GSAP", "WebGL"],
-    summary: "Blueprint concept, compile intro and View Transitions on showcase pages, a blog with almost no JavaScript. Lighthouse mobile, September 2026: 98 on the home, 99 on the blog.",
+    summary: "Blueprint concept, compile intro and View Transitions on showcase pages, plus a blog with almost no JavaScript. Lighthouse mobile, September 2026: 98 on the home, 99 on the blog.",
     visual: "blueprint",
   },
   {
@@ -50,7 +50,7 @@ export const work: Work[] = [
     client: "Ceramics manufacturer",
     year: "2026",
     stack: ["WordPress", "Blockstudio", "GSAP"],
-    summary: "Custom Blockstudio blocks the marketing team composes freely, GSAP motion that lets every surface and glaze take the stage, and a smart importer that turns the product catalogue into pages without manual entry.",
+    summary: "Custom Blockstudio blocks the marketing team can compose freely, GSAP motion that lets every surface and glaze take the stage, and a smart importer that turns the product catalogue into pages without manual entry.",
     visual: "tiles",
   },
   {
