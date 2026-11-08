@@ -49,11 +49,11 @@ const cases = ["coachmaitefinch", "retail-k", "ceramics-wordpress"].map((slug) =
 const maiteAfter = cases[0].shot!;
 
 // After: live site, Lighthouse desktop, median of 5 runs, 08/11/2026.
-// Before: still placeholders, the old site is no longer online to measure.
+// Before: saved copy of the old home page (12/10) served locally, same settings; the old site is no longer online.
 const maiteScores = [
-  { k: "Performance", before: "[00]", after: "97" },
-  { k: "Accessibility", before: "[00]", after: "96" },
-  { k: "Load time (LCP)", before: "[0.0 s]", after: "1.2 s" },
+  { k: "Performance", before: "70", after: "97" },
+  { k: "Accessibility", before: "77", after: "96" },
+  { k: "Load time (LCP)", before: "4.1 s", after: "1.2 s" },
 ];
 
 const faqs = [
@@ -178,6 +178,7 @@ const schema = [
         {maiteScores.map((r) => <tr><th scope="row">{r.k}</th><td>{r.before}</td><td>{r.after}</td></tr>)}
       </tbody>
     </table>
+    <p class="note ba__cap">Before: measured on a saved copy of the old home page, served locally. After: the live site. Median of five runs, 8 November 2026.</p>
   </section>
 
   <!-- ── 03 What you get ──────────────────────────────────── -->
