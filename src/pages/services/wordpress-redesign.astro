@@ -48,12 +48,12 @@ const terms = [
 const cases = ["coachmaitefinch", "retail-k", "ceramics-wordpress"].map((slug) => work.find((w) => w.slug === slug)!);
 const maiteAfter = cases[0].shot!;
 
-// After: live site, Lighthouse mobile, median of 5 runs, 08/11/2026.
+// After: live site, Lighthouse desktop, median of 5 runs, 08/11/2026.
 // Before: still placeholders, the old site is no longer online to measure.
 const maiteScores = [
-  { k: "Performance", before: "[00]", after: "72" },
+  { k: "Performance", before: "[00]", after: "97" },
   { k: "Accessibility", before: "[00]", after: "96" },
-  { k: "Load time (LCP)", before: "[0.0 s]", after: "6.5 s" },
+  { k: "Load time (LCP)", before: "[0.0 s]", after: "1.2 s" },
 ];
 
 const faqs = [
@@ -173,7 +173,7 @@ const schema = [
       <p class="note ba__cap">coachmaitefinch.com · Drag to compare the old home page with the new one.</p>
     </div>
     <table class="scores" data-reveal="up">
-      <thead><tr><th scope="col" class="note">Lighthouse on mobile</th><th scope="col" class="note">Before</th><th scope="col" class="note">After</th></tr></thead>
+      <thead><tr><th scope="col" class="note">Lighthouse on desktop</th><th scope="col" class="note">Before</th><th scope="col" class="note">After</th></tr></thead>
       <tbody>
         {maiteScores.map((r) => <tr><th scope="row">{r.k}</th><td>{r.before}</td><td>{r.after}</td></tr>)}
       </tbody>
