@@ -1,8 +1,10 @@
 /**
- * Work, told as anonymous field reports: no client names, links or screenshots (Pier has no
- * permission to publish them, see docs/content-facts.md). The visual is a blueprint drawing,
- * never a screenshot. Only piergorelli.com is a full case study.
+ * Work: named case studies where the client agreed, anonymous field reports everywhere else
+ * (see docs/content-facts.md for who can be named). A field report has no client name, link or
+ * screenshot, and its visual is a blueprint drawing.
  */
+import coachMaiteFinch from "../assets/work/coachmaitefinch.webp";
+
 export type Work = {
   slug: string;
   title: string;
@@ -12,10 +14,24 @@ export type Work = {
   summary: string;
   /** Only a full case study has a page; field reports stay cards. */
   href?: string;
-  visual: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" | "diagonals" | "captions" | "catalogue";
+  /** Named clients only: the live site and a screenshot of it, shown as the live layer in WorkStage. */
+  url?: string;
+  shot?: ImageMetadata;
+  /** Drawing for the service pages (WorkVisual). Not needed by a project shown only in the home stage. */
+  visual?: "orbit" | "bars" | "audit" | "blueprint" | "tiles" | "diary" | "diagonals" | "captions" | "catalogue";
 };
 
 export const work: Work[] = [
+  {
+    slug: "coachmaitefinch",
+    title: "coachmaitefinch.com, restyled",
+    client: "Maite Finch · Psychologist and coach, Valencia",
+    year: "2026",
+    stack: ["WordPress", "Sage", "GSAP", "Lenis"],
+    summary: "Every headline shares two typefaces, a plain sans and a green italic, on warm paper. A custom WordPress theme with GSAP and Lenis, for a practice built on conversation.",
+    url: "https://coachmaitefinch.com",
+    shot: coachMaiteFinch,
+  },
   {
     slug: "retail-k",
     title: "A retail site drawn from one letter",

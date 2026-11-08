@@ -5,11 +5,15 @@
  *   plot  — the blueprint traces itself ([data-p-draw] strokes, [data-p-in] labels)
  *   build — measures turn into material ([data-b-wipe], [data-b-clip], [data-b-type], [data-b-in], [data-b-dim], [data-b-move])
  *   live  — [data-live] wipes in over both and can be played with (buttons in the text column).
+ *           A named client has a real screenshot instead ([data-live-img]) that opens the live site.
  * Without JS, with reduced motion and before the script runs, only the live layer shows (it covers the others).
  * Desktop: the stage pins and shows one project at a time. Below 1024 px: cards that build as they scroll in.
  */
+import { Image } from "astro:assets";
 import type { Work } from "../../data/work";
 import { kPath, contours } from "../../lib/work-stage";
+// Traced from the live hero by tools/work/coachmaitefinch.mjs: 1 stage unit = 2 CSS px of the 1600×1000 screenshot.
+import maite from "../../data/work-stage/coachmaitefinch.json";
 
 interface Props { items: Work[] }
 const { items } = Astro.props;
@@ -35,6 +39,22 @@ const shots = [
 const cam = (i: number) => `IMG_04${12 + i}.jpg`;
 const seoName = (view: string) => `niche-keyword-product-${view}.jpg`;
 
+// coachmaitefinch.com: the site's own colours, so the build ends where the screenshot begins.
+const mf = { paper: "#f6f1ea", ink: "#22282a", green: "#2f5f5b", muted: "#4a5355" };
+const mfScribble = (() => {
+  const { x, y, w, h } = maite.scribble;
+  const px = (v: number) => +(x + (v * w) / 300).toFixed(1);
+  const py = (v: number) => +(y + (v * h) / 30).toFixed(1);
+  return `M${px(4)} ${py(20)}C${px(60)} ${py(8)} ${px(120)} ${py(6)} ${px(180)} ${py(12)}S${px(270)} ${py(22)} ${px(296)} ${py(9)}`;
+})();
+const mfSeal = { cx: maite.seal.box.x + maite.seal.box.w / 2, cy: maite.seal.box.y + maite.seal.box.h / 2, r: (78 * maite.seal.box.w) / 200 };
+const mfLines = [
+  { y: maite.baselines[0].y, label: "Instrument Sans · 133 px" },
+  { y: maite.baselines[1].y, label: "indent 161 · Serif Italic 143" },
+  { y: maite.baselines[2].y, label: "indent 54" },
+  { y: maite.baselines[3].y, label: "indent 296" },
+];
+
 const hills = contours();
 const lighthouse = [98, 100, 100, 100];
 ---
@@ -53,7 +73,7 @@ const lighthouse = [98, 100, 100, 100];
   </div>
 
   {items.map((w, i) => (
-    <div class="ws__item" data-ws-item={w.slug}>
+    <div class="ws__item" data-ws-item={w.slug} data-ws-url={w.url}>
       <div class="ws__text">
         <div class="ws__meta">
           <span class="note">{String(i + 1).padStart(2, "0")}{w.year && ` / ${w.year}`}</span>
@@ -66,12 +86,70 @@ const lighthouse = [98, 100, 100, 100];
           {w.slug === "retail-k" && <button type="button" class="btn btn--ghost" data-ws-try hidden>Next slide <span class="arrow" aria-hidden="true">→</span></button>}
           {w.slug === "seo-images" && <button type="button" class="btn btn--ghost" data-ws-try hidden>Rename another <span aria-hidden="true">↻</span></button>}
           {w.href && <a href={w.href} class="btn">Read the case study <span class="arrow" aria-hidden="true">→</span></a>}
+          {w.url && <a href={w.url} target="_blank" rel="noopener" class="btn">Visit the site <span class="arrow" aria-hidden="true">↗</span></a>}
         </div>
       </div>
 
       <div class="ws__art" aria-hidden="true">
         <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet">
           <Fragment set:html={grid(`wsg-${w.slug}`)} />
+
+          {w.slug === "coachmaitefinch" && (
+            <>
+              <defs>
+                {maite.words.map((word, i) => <path id={`ws-mf-${i}`} d={word.d} pathLength="1" />)}
+                <clipPath id="ws-mf-ink"><rect x="40" y="80" width="470" height="310" data-b-clip /></clipPath>
+              </defs>
+              <g class="plot">
+                <path d="M64 0V500M736 0V500" class="guide" data-p-in />
+                {mfLines.map((l) => <path d={`M40 ${l.y}H760`} class="guide" data-p-in />)}
+                {maite.baselines.slice(1).map((b) => <path d={`M${b.x} ${b.y - 62}V${b.y + 10}`} class="guide" data-p-in />)}
+                {maite.words.map((_, i) => <use href={`#ws-mf-${i}`} class="wire" data-p-draw />)}
+                <path d={mfScribble} class="wire" pathLength="1" data-p-draw />
+                <circle cx={mfSeal.cx} cy={mfSeal.cy} r={mfSeal.r} class="wire" pathLength="1" data-p-draw />
+                <rect x={maite.logo.x} y={maite.logo.y} width={maite.logo.w} height={maite.logo.h} class="guide" data-p-in />
+                {maite.navBoxes.map((b, i) => <rect x={b.x} y={b.y - 9} width={[34, 33, 46, 17][i]} height="12" class="guide" data-p-in />)}
+                <rect x={maite.book.box.x} y={maite.book.box.y} width={maite.book.box.w} height={maite.book.box.h} rx={maite.book.box.h / 2} class="wire" pathLength="1" data-p-draw />
+                <rect x={maite.cta.box.x} y={maite.cta.box.y} width={maite.cta.box.w} height={maite.cta.box.h} rx={maite.cta.box.h / 2} class="wire" pathLength="1" data-p-draw />
+                {maite.lead.map((l) => <rect x={l.x} y={l.y + 3} width={l.w} height="6" rx="3" class="bar" data-p-in />)}
+                <text x="64" y="58" class="lbl lbl--a" data-p-in>hero · 1600×1000</text>
+                {mfLines.map((l) => <text x="520" y={l.y - 5} class="lbl lbl--a" data-p-in>{l.label}</text>)}
+              </g>
+              <g class="build">
+                <rect width="800" height="500" fill={mf.paper} data-b-wipe />
+                {maite.words.map((_, i) => <use href={`#ws-mf-${i}`} fill="none" stroke={mf.ink} stroke-opacity=".3" data-b-in />)}
+                <g clip-path="url(#ws-mf-ink)">
+                  {maite.words.map((word, i) => <use href={`#ws-mf-${i}`} fill={word.em ? mf.green : mf.ink} />)}
+                  <path d={mfScribble} fill="none" stroke={maite.scribble.stroke} stroke-width={maite.scribble.width / 2} stroke-linecap="round" />
+                </g>
+                <image href={maite.logo.src} x={maite.logo.x} y={maite.logo.y} width={maite.logo.w} height={maite.logo.h} data-b-in />
+                {maite.nav.map((d) => <path d={d} fill={mf.ink} data-b-in />)}
+                <path d={`M64 ${maite.eyebrow.y - 2}H82`} stroke={mf.muted} data-b-in />
+                <path d={maite.eyebrow.d} fill={mf.muted} data-b-in />
+                <rect x={maite.book.box.x} y={maite.book.box.y} width={maite.book.box.w} height={maite.book.box.h} rx={maite.book.box.h / 2} fill={mf.ink} data-b-wipe />
+                <path d={maite.book.d} fill={mf.paper} data-b-in />
+                <g fill="none" stroke={mf.ink} data-b-in>
+                  <circle cx={maite.search.x + 4.2} cy={maite.search.y + 4.2} r="3.4" />
+                  <path d={`M${maite.search.x + 6.8} ${maite.search.y + 6.8}L${maite.search.x + 9.6} ${maite.search.y + 9.6}`} />
+                </g>
+                <path d={maite.menu.d} fill={mf.ink} data-b-in />
+                {maite.menu.bars.map((b) => <rect x={b.x} y={b.y} width={b.w} height="1" fill={mf.ink} data-b-in />)}
+                <path d={maite.seal.d} fill={mf.ink} data-b-in />
+                <path d={maite.seal.guillemets} fill={mf.green} data-b-in />
+                {maite.lead.map((l) => <rect x={l.x} y={l.y + 3} width={l.w} height="6" rx="3" fill={mf.muted} fill-opacity=".35" data-b-wipe />)}
+                <rect x={maite.cta.box.x} y={maite.cta.box.y} width={maite.cta.box.w} height={maite.cta.box.h} rx={maite.cta.box.h / 2} fill={mf.ink} data-b-wipe />
+                <path d={maite.cta.d} fill={mf.paper} data-b-in />
+                <path d={`M${maite.cta.arrow.x} ${maite.cta.arrow.y + 4}H${maite.cta.arrow.x + 8}M${maite.cta.arrow.x + 5} ${maite.cta.arrow.y + 1}l3 3l-3 3`} fill="none" stroke={mf.paper} data-b-in />
+                {maite.scroll && <path d={maite.scroll} fill={mf.muted} data-b-in />}
+                {[mf.paper, mf.ink, mf.green].map((c, i) => (
+                  <>
+                    <circle cx={528} cy={252 + i * 22} r="7" fill={c} stroke={mf.ink} stroke-opacity=".3" data-b-in />
+                    <text x="545" y={256 + i * 22} class="lbl lbl--paper" data-b-in>{c}</text>
+                  </>
+                ))}
+              </g>
+            </>
+          )}
 
           {w.slug === "retail-k" && (
             <>
@@ -242,10 +320,18 @@ const lighthouse = [98, 100, 100, 100];
               </g>
             </>
           )}
-          {w.slug !== "retail-k" && w.slug !== "seo-images" && w.slug !== "piergorelli-com" && (
+          {w.slug !== "coachmaitefinch" && w.slug !== "retail-k" && w.slug !== "seo-images" && w.slug !== "piergorelli-com" && (
             <text x="40" y="60" class="lbl">{w.title}</text>
           )}
         </svg>
+        {w.shot && (
+          <>
+            <div class="ws__shot" data-live-img>
+              <Image src={w.shot} alt="" widths={[800, 1200, 1800]} sizes="(min-width: 1024px) 66vw, 100vw" format="webp" quality={78} loading="lazy" decoding="async" />
+            </div>
+            <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet"><path d="M0 0V500" class="scan" data-live-scan /></svg>
+          </>
+        )}
       </div>
     </div>
   ))}
@@ -258,6 +344,9 @@ const lighthouse = [98, 100, 100, 100];
   .ws__item { display: flex; flex-direction: column-reverse; gap: 1.25rem; }
   .ws__art { position: relative; aspect-ratio: 8 / 5; background: var(--bg-raised); color: var(--ink); border-radius: 4px; overflow: hidden; }
   .ws__art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ws__shot { position: absolute; inset: 0; }
+  .ws__shot :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .ws__art[data-cursor="visit ↗"] { cursor: pointer; }
   .ws__meta { display: flex; justify-content: space-between; gap: 1rem; }
   .ws__title { margin-top: 0.9rem; }
   .ws__link { text-decoration: none; }
@@ -322,6 +411,7 @@ const lighthouse = [98, 100, 100, 100];
   .lbl--xs { font-size: 11px; }
   .lbl--lg { font-size: 15px; }
   .lbl--light { fill: #f4f4f0; fill-opacity: 1; }
+  .lbl--paper { fill: #22282a; fill-opacity: 0.62; }
   .lbl--on-acc { fill: var(--accent-ink); fill-opacity: 1; }
   .txt { font-family: var(--font-sans); font-size: 18px; fill: currentColor; }
   .txt--muted { fill: var(--muted); }

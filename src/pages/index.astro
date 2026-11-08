@@ -4,7 +4,7 @@ import WorkStage from "../components/rd/WorkStage.astro";
 import { work } from "../data/work";
 import { CAL_URL } from "../data/site";
 
-const homeWork = ["retail-k", "seo-images", "piergorelli-com"].map((slug) => work.find((w) => w.slug === slug)!);
+const homeWork = ["coachmaitefinch", "retail-k", "seo-images", "piergorelli-com"].map((slug) => work.find((w) => w.slug === slug)!);
 import { getPosts, pillarOf, postUrl, formatDate } from "../lib/blog";
 
 const posts = (await getPosts()).slice(0, 3);
@@ -136,9 +136,9 @@ const schema = [
   <section class="section wrap" id="work">
     <header class="section-head">
       <span class="note note--ink">[02] Selected work</span>
-      <span class="note">Field reports · client names under NDA</span>
+      <span class="note">Case studies and field reports</span>
     </header>
-    <p class="work__intro lead" data-reveal="up">Client work stays confidential. So here you'll see how each project was built, not whose it is.</p>
+    <p class="work__intro lead" data-reveal="up">Some clients I can name. The others stay confidential, so there you'll see how the project was built, not whose it is.</p>
     <WorkStage items={homeWork} />
   </section>
 

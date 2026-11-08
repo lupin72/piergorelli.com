@@ -43,6 +43,7 @@
     "@tailwindcss/typography": "^0.5.20",
     "@xpd/tailwind-3dtransforms": "^1.0.3",
     "axe-core": "^4.13.0",
+    "fontkit": "^2.0.4",
     "playwright-core": "^1.63.0"
   },
   "volta": {

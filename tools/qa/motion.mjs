@@ -52,6 +52,9 @@ await page.waitForTimeout(1500); await page.screenshot({ path: `${OUT}manifesto.
 
 // 4. Page transition home → service
 await page.goto(`${BASE}/?qa=transition`); await page.waitForTimeout(3000);
+// The link is below the pinned Work stage and stays hidden until its reveal runs: scroll to it first.
+await page.locator('a[href="/services/ai-for-agencies/"]').first().evaluate((el) => el.scrollIntoView({ block: "center" }));
+await page.waitForTimeout(2500);
 await page.click('a[href="/services/ai-for-agencies/"] >> nth=0');
 await page.waitForTimeout(700); await page.screenshot({ path: `${OUT}transition-mid.png` });
 await page.waitForTimeout(2500); await page.screenshot({ path: `${OUT}transition-after.png` });
