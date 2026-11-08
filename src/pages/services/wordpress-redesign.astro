@@ -6,6 +6,7 @@ import EstimateForm from "../../components/rd/EstimateForm.astro";
 import WorkVisual from "../../components/rd/WorkVisual.astro";
 import { work } from "../../data/work";
 import maiteBefore from "../../assets/work/coachmaitefinch-before.webp";
+import maiteAfter from "../../assets/work/coachmaitefinch-after.webp";
 
 const SITE = "https://piergorelli.com";
 const PAGE = `${SITE}/services/wordpress-redesign/`;
@@ -46,7 +47,6 @@ const terms = [
 ];
 
 const cases = ["coachmaitefinch", "retail-k", "ceramics-wordpress"].map((slug) => work.find((w) => w.slug === slug)!);
-const maiteAfter = cases[0].shot!;
 
 // After: live site, Lighthouse desktop, median of 5 runs, 08/11/2026.
 // Before: saved copy of the old home page (12/10) served locally, same settings; the old site is no longer online.
@@ -163,8 +163,8 @@ const schema = [
 
     <div data-reveal="up">
       <figure class="ba" data-ba>
-        <Image class="ba__after" src={maiteAfter} alt="New home page of coachmaitefinch.com: a large headline in a plain sans and a green italic on warm paper." widths={[800, 1200, 1600, 2000]} sizes="(min-width: 1500px) 1400px, 100vw" format="webp" quality={78} loading="lazy" decoding="async" />
-        <Image class="ba__before" src={maiteBefore} alt="Old home page of coachmaitefinch.com: a white page with a text menu and long paragraphs beside a photo of a room." widths={[800, 1200, 1600, 2000]} sizes="(min-width: 1500px) 1400px, 100vw" format="webp" quality={78} loading="lazy" decoding="async" />
+        <Image class="ba__after" src={maiteAfter} alt="New home page of coachmaitefinch.com: a large headline in a plain sans and a green italic on warm paper." widths={[800, 1200, 1600, 2400, 3200]} sizes="(min-width: 1500px) calc(100vw - 4rem), calc(100vw - 2rem)" format="webp" quality={86} loading="lazy" decoding="async" />
+        <Image class="ba__before" src={maiteBefore} alt="Old home page of coachmaitefinch.com: a white page with a text menu and long paragraphs beside a photo of a room." widths={[800, 1200, 1600, 2400, 3200]} sizes="(min-width: 1500px) calc(100vw - 4rem), calc(100vw - 2rem)" format="webp" quality={86} loading="lazy" decoding="async" />
         <span class="note ba__tag ba__tag--before" aria-hidden="true">Before</span>
         <span class="note ba__tag ba__tag--after" aria-hidden="true">After</span>
         <span class="ba__line" aria-hidden="true"><span class="ba__knob">↔</span></span>
