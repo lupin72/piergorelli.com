@@ -48,11 +48,12 @@ const terms = [
 const cases = ["coachmaitefinch", "retail-k", "ceramics-wordpress"].map((slug) => work.find((w) => w.slug === slug)!);
 const maiteAfter = cases[0].shot!;
 
-// Placeholders from the copy review: fill in before publishing.
+// After: live site, Lighthouse mobile, median of 5 runs, 08/11/2026.
+// Before: still placeholders, the old site is no longer online to measure.
 const maiteScores = [
-  { k: "Performance", before: "[00]", after: "[00]" },
-  { k: "Accessibility", before: "[00]", after: "[00]" },
-  { k: "Load time (LCP)", before: "[0.0 s]", after: "[0.0 s]" },
+  { k: "Performance", before: "[00]", after: "72" },
+  { k: "Accessibility", before: "[00]", after: "96" },
+  { k: "Load time (LCP)", before: "[0.0 s]", after: "6.5 s" },
 ];
 
 const faqs = [
