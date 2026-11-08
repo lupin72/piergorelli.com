@@ -60,6 +60,10 @@ function drawing(item: HTMLElement) {
     tl.fromTo(el, { attr: { transform: `translate(${x} ${y}) scale(${s})` } }, { attr: { transform: to }, duration: 0.55, ease: "power3.inOut" }, 0.9);
   });
 
+  // A real screenshot is HTML (lazy, responsive), so it wipes in with clip-path instead of an SVG clip.
+  q("[data-live-img]").forEach((el) => {
+    tl.fromTo(el, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.9, ease: "power3.inOut" }, 2);
+  });
   q("[data-live-clip]").forEach((r) => {
     tl.fromTo(r, { attr: { width: 0 } }, { attr: { width: 800 }, duration: 0.9, ease: "power3.inOut" }, 2);
   });
@@ -171,11 +175,25 @@ function hero(item: HTMLElement) {
   return () => { art.removeEventListener("pointermove", onMove); art.removeEventListener("pointerleave", onLeave); };
 }
 
-const LIVE: Record<string, { run: (item: HTMLElement) => () => void; cursor: string }> = {
+/** A real site: the whole screenshot opens it. Touch keeps to the button, a scrolling thumb must not open tabs. */
+function site(item: HTMLElement) {
+  const art = item.querySelector<HTMLElement>(".ws__art");
+  const url = item.dataset.wsUrl;
+  if (!art || !url || !matchMedia("(pointer: fine)").matches) return () => {};
+  const open = () => { if (art.dataset.cursor) window.open(url, "_blank", "noopener"); };
+  art.addEventListener("click", open);
+  return () => art.removeEventListener("click", open);
+}
+
+type Live = { run: (item: HTMLElement) => () => void; cursor: string };
+
+const LIVE: Record<string, Live> = {
   "retail-k": { run: retail, cursor: "drag ↔" },
   "seo-images": { run: seo, cursor: "rename ↻" },
   "piergorelli-com": { run: hero, cursor: "move the hill" },
 };
+const SITE: Live = { run: site, cursor: "visit ↗" };
+const liveOf = (item: HTMLElement): Live | undefined => (item.dataset.wsUrl ? SITE : LIVE[item.dataset.wsItem ?? ""]);
 
 /* ── stage ──────────────────────────────────────────────────── */
 
@@ -186,13 +204,18 @@ export function initWorkStage(lenis: Lenis): () => void {
   const arts = items.map((it) => it.querySelector<HTMLElement>(".ws__art"));
   const live = (i: number, on: boolean) => {
     const art = arts[i];
-    const cursor = LIVE[items[i].dataset.wsItem ?? ""]?.cursor;
+    const cursor = liveOf(items[i])?.cursor;
     if (!art || !cursor) return;
     if (on) art.dataset.cursor = cursor;
     else delete art.dataset.cursor;
   };
 
-  const offs = items.map((it) => LIVE[it.dataset.wsItem ?? ""]?.run(it) ?? (() => {}));
+  const offs = items.map((it) => liveOf(it)?.run(it) ?? (() => {}));
+  // Decode real screenshots now: the first paint of a big image, in the middle of the wipe, cost an 800 ms frame.
+  root.querySelectorAll<HTMLImageElement>("[data-live-img] img").forEach((img) => {
+    img.loading = "eager";
+    img.decode().catch(() => {});
+  });
   const buttons = root.querySelectorAll<HTMLButtonElement>("[data-ws-try]");
   buttons.forEach((b) => (b.hidden = false));
 

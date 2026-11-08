@@ -281,7 +281,7 @@ const schema = [
     <div class="cases grid-12">
       {cases.map((w, i) => (
         <article class:list={["case", `case--${i}`]} data-reveal="up">
-          <WorkVisual kind={w.visual} />
+          <WorkVisual kind={w.visual!} />
           <div class="case__meta note"><span>{w.year}</span><span>{w.stack.join(" · ")}</span></div>
           <h3 class="h3">{w.title}</h3>
           <p class="note">{w.client}</p>
