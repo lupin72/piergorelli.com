@@ -5,6 +5,7 @@ import Base from "../../layouts/Base.astro";
 import EstimateForm from "../../components/rd/EstimateForm.astro";
 import WorkVisual from "../../components/rd/WorkVisual.astro";
 import { work } from "../../data/work";
+import maiteBefore from "../../assets/work/coachmaitefinch-before.webp";
 
 const SITE = "https://piergorelli.com";
 const PAGE = `${SITE}/services/wordpress-redesign/`;
@@ -12,9 +13,9 @@ const updated = new Date("2026-11-08");
 
 const pains = [
   { pain: "It works. Nobody remembers it.", fix: "You get two different home pages, working, with your real content. Pick the one that feels like you, and I build the rest." },
-  { pain: "The agency quote had one digit too many.", fix: "You talk to the person doing the work. AI tools take the repetitive jobs, while I make the design decisions and check the result. That's why the sums come out differently." },
+  { pain: "The agency quote had one digit too many.", fix: "You talk to the person doing the work. AI tools take the repetitive jobs, while I make the design decisions and check the result. That's why most projects land between €900 and €2,500." },
   { pain: "A new design means starting from scratch.", fix: "Your pages, posts and images move to the new site, even if they were made with a page builder. Old addresses keep working or redirect, so links and search results still land somewhere." },
-  { pain: "On a phone, it takes a while.", fix: "Lighthouse on mobile: 100 for accessibility, best practices and SEO, 95+ for performance. It goes in the quote with its conditions, and I measure it on the live site." },
+  { pain: "On a phone, it takes a while.", fix: "95+ for mobile performance, measured on your live site and written into the quote. The details are in [05]." },
 ];
 
 const gets = [
@@ -27,8 +28,8 @@ const gets = [
 ];
 
 const steps = [
-  { n: "01", when: "Today", title: "Send your address", body: "Give me the URL and tell me what bothers you. You'll have a written estimate within 5 working days. No call needed." },
-  { n: "02", when: "Agreement", title: "Quote and deposit", body: "We agree what the quote covers and you pay 50%. Then you send me a copy of the site with personal data removed." },
+  { n: "01", when: "Today", title: "Send your address", body: "Give me the URL and tell me what bothers you. You'll have a written estimate within 3 working days. No call needed." },
+  { n: "02", when: "Agreement", title: "Quote and deposit", body: "We agree what the quote covers and you pay 50%. Then I need a copy of your site. If you don't know how to make one, give me temporary access and I'll make it myself, removing personal data before I work on it." },
   { n: "03", when: "Design", title: "Two home pages", body: "Two working ideas on a private link. Open them when you like and show them to whoever you like. You pick one." },
   { n: "04", when: "Build", title: "The whole site", body: "I build the theme, move your content, and test it with a keyboard, a screen reader and real phones." },
   { n: "05", when: "Launch", title: "Handover", body: "We go live in the way we agree. I measure the live site against what we wrote down, you pay the other 50%, and the guide and code are yours." },
@@ -40,20 +41,27 @@ const terms = [
   { k: "If neither design convinces you", v: "After the round of changes, we stop. You get half your deposit back and I keep the prototypes." },
   { k: "If your site isn't what we thought", v: "When the copy of your site is very different from what you described, I update the quote before starting. You can say no and get your whole deposit back." },
   { k: "After launch", v: "Defects in the theme are fixed for free for 60 days. Updates and new plugins aren't included. After that I can look after the site, as a monthly block of days or billed as it comes up." },
-  { k: "What's yours", v: "The design you chose is yours alone, with a perpetual licence for the theme. The building blocks I reuse between projects stay mine. Unless you tell me otherwise, I can show your site as an example of my work." },
+  { k: "What's yours", v: "The design you chose is yours alone, with a perpetual licence for the theme. The building blocks I reuse between projects stay mine. I'd like to show your site as an example of my work, and you can say no." },
   { k: "AI", v: "I use AI tools for repetitive work. Concept, design and final checks are mine. Anything sent to an outside service has personal data removed first." },
 ];
 
 const cases = ["coachmaitefinch", "retail-k", "ceramics-wordpress"].map((slug) => work.find((w) => w.slug === slug)!);
 
+// Placeholders from the copy review: fill in before publishing.
+const maiteScores = [
+  { k: "Performance", before: "[00]", after: "[00]" },
+  { k: "Accessibility", before: "[00]", after: "[00]" },
+  { k: "Load time (LCP)", before: "[0.0 s]", after: "[0.0 s]" },
+];
+
 const faqs = [
-  { q: "How much does it cost?", a: "It depends on your site: ten pages and a thousand pages are different jobs. Send me the address and you'll have a written estimate within 5 working days, at no cost." },
+  { q: "How much does it cost?", a: "Most redesigns land between €900 and €2,500. Where yours falls depends on the site: ten pages and a thousand pages are different jobs. Send me the address and you'll have a written estimate within 3 working days, at no cost." },
   { q: "How long does it take?", a: "It depends on the same things. You get a written schedule with the quote, before you pay anything." },
   { q: "My site is built with Elementor or Divi. Is that a problem?", a: "No. A new theme can't take over those pages on its own, so I rebuild them as normal WordPress blocks. The work goes in the quote." },
   { q: "Can I still edit the site myself?", a: "Yes, with the normal WordPress editor and blocks designed for your site. The guide shows you how." },
   { q: "Will I lose my Google rankings?", a: "I can't promise positions, and nobody honestly can. I keep your addresses or redirect them, and the new site is built to be easy for search engines to read." },
-  { q: "Do you need my passwords?", a: "Not to start: I only need your address. Once we've agreed, I need a copy of the site with personal data removed. How the new site goes online, we decide together." },
-  { q: "What about online shops or member areas?", a: "Those are bigger jobs, and the speed promise may change. Send me the address anyway and I'll tell you in the estimate whether it makes sense." },
+  { q: "Do you need my passwords?", a: "Not to start: I only need your address. Once we've agreed, I need a copy of the site. You can send it yourself, or give me temporary access and I'll make it, then you can change the password. How the new site goes online, we decide together." },
+  { q: "What about online shops or member areas?", a: "Those are bigger jobs, so they usually cost more than the range above, and the speed promise may change. Send me the address anyway and I'll tell you in the estimate whether it makes sense." },
 ];
 
 const schema = [
@@ -85,10 +93,10 @@ const schema = [
 ];
 ---
 
-<!-- Not launched yet: noindex, out of the sitemap (astro.config.mjs) and not linked anywhere until the pilots are done. -->
+<!-- Not launched yet: noindex and out of the sitemap (astro.config.mjs) until the pilots are done. -->
 <Base
   title="WordPress Redesign for Small Businesses | Pier Gorelli"
-  description="A custom WordPress redesign for small businesses. Two working home pages to choose from, your content moved over, speed and accessibility in writing."
+  description="A custom WordPress redesign for small businesses, usually €900 to €2,500. Two working home pages to choose from, your content moved over, speed and accessibility in writing."
   motion="showcase"
   schema={schema}
   noindex
@@ -103,13 +111,14 @@ const schema = [
       <span class="display hero__human" data-hero-human data-bp="h1.human">From Well… to WOW.</span>
       <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">WordPress redesign for small businesses.</span>
     </h1>
-    <p class="note" data-hero-fade><span class="note--accent">◆</span> machine · generated · <span data-gen-tokens>8</span> tokens · <span data-gen-ms>1480</span> ms</p>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> fig. 00 · before → after · 1 site · 2 concepts</p>
 
     <div class="hero__foot" data-hero-fade>
       <p class="lead">
         If an agency quote has ever made you close the tab, keep reading. I redesign WordPress sites for businesses that deserve a great one and don't have agency money.
       </p>
       <dl class="spec" data-bp="dl.tolerances">
+        <div><dt class="note">Typical cost</dt><dd>€900 to €2,500</dd></div>
         <div><dt class="note">Designs</dt><dd>2 to choose from</dd></div>
         <div><dt class="note">Speed</dt><dd>95+ on mobile</dd></div>
         <div><dt class="note">Access</dt><dd>WCAG 2.2 AA</dd></div>
@@ -180,7 +189,7 @@ const schema = [
           <div class="flip__seam"></div>
         </div>
       </div>
-      <p class="note flip__cap">An illustration, not a client's site.</p>
+      <p class="note flip__cap">An illustration, not a client's site. Real before-and-afters are in [06].</p>
     </div>
   </section>
 
@@ -248,12 +257,30 @@ const schema = [
       {cases.map((w, i) => (
         <article class:list={["case", `case--${i}`]} data-reveal="up">
           {w.shot
-            ? <Image class="case__shot" src={w.shot} alt="Home page of coachmaitefinch.com: a large headline in a plain sans and a green italic on warm paper." widths={[800, 1200, 1600]} sizes="(min-width: 900px) 58vw, 100vw" format="webp" quality={78} loading="lazy" decoding="async" />
+            ? (
+              <figure class="ba" data-ba>
+                <Image class="case__shot" src={w.shot} alt="New home page of coachmaitefinch.com: a large headline in a plain sans and a green italic on warm paper." widths={[800, 1200, 1600]} sizes="(min-width: 900px) 58vw, 100vw" format="webp" quality={78} loading="lazy" decoding="async" />
+                <Image class="ba__before" src={maiteBefore} alt="Old home page of coachmaitefinch.com: a white page with a text menu and long paragraphs beside a photo of a room." widths={[800, 1200, 1600]} sizes="(min-width: 900px) 58vw, 100vw" format="webp" quality={78} loading="lazy" decoding="async" />
+                <span class="note ba__tag ba__tag--before" aria-hidden="true">Before</span>
+                <span class="note ba__tag ba__tag--after" aria-hidden="true">After</span>
+                <span class="ba__line" aria-hidden="true"><span class="ba__knob">↔</span></span>
+                <input class="ba__range" type="range" min="0" max="100" value="50" data-cursor="select" aria-label="Comparison of the old and new home page. Use the left and right arrow keys to move the divider." />
+              </figure>
+            )
             : <WorkVisual kind={w.visual!} />}
+          {w.shot && <p class="note">Drag to compare the old home page with the new one.</p>}
           <div class="case__meta note"><span>{w.year}</span><span>{w.stack.join(" · ")}</span></div>
           <h3 class="h3">{w.title}</h3>
           <p class="note">{w.client}</p>
           <p class="case__summary">{w.summary}</p>
+          {w.shot && (
+            <table class="scores">
+              <thead><tr><th scope="col" class="note">Lighthouse on mobile</th><th scope="col" class="note">Before</th><th scope="col" class="note">After</th></tr></thead>
+              <tbody>
+                {maiteScores.map((r) => <tr><th scope="row">{r.k}</th><td>{r.before}</td><td>{r.after}</td></tr>)}
+              </tbody>
+            </table>
+          )}
           {w.url && <a href={w.url} class="link case__link" target="_blank" rel="noopener">Visit the site <span aria-hidden="true">↗</span></a>}
         </article>
       ))}
@@ -280,7 +307,7 @@ const schema = [
   <section class="section wrap cta" id="estimate">
     <header class="section-head">
       <span class="note note--ink">[08] Next</span>
-      <span class="note">5 working days</span>
+      <span class="note">3 working days</span>
     </header>
     <div class="cta__grid grid-12">
       <h2 class="display cta__title" data-reveal="lines">Show me the site.</h2>
@@ -292,6 +319,20 @@ const schema = [
     </div>
   </section>
 </Base>
+
+<script>
+  function setupCompare() {
+    document.querySelectorAll<HTMLElement>("[data-ba]").forEach((ba) => {
+      const range = ba.querySelector<HTMLInputElement>('input[type="range"]');
+      if (!range || ba.dataset.ready) return;
+      ba.dataset.ready = "1";
+      const move = () => ba.style.setProperty("--pos", `${range.value}%`);
+      range.addEventListener("input", move);
+      move();
+    });
+  }
+  document.addEventListener("astro:page-load", setupCompare);
+</script>
 
 <style>
   /* Hero */
@@ -305,8 +346,9 @@ const schema = [
   .hero__cta { align-self: start; }
   .spec { display: grid; grid-template-columns: repeat(2, minmax(9rem, 1fr)); min-width: min(100%, 22rem); border-top: 1px solid var(--line); }
   .spec div { display: flex; justify-content: space-between; gap: 1rem; padding-block: 0.7rem; border-bottom: 1px solid var(--line); }
-  .spec div:nth-child(odd) { padding-right: 1rem; box-shadow: inset -1px 0 var(--line); }
-  .spec div:nth-child(even) { padding-left: 1rem; }
+  .spec div:first-child { grid-column: 1 / -1; }
+  .spec div:nth-child(even) { padding-right: 1rem; box-shadow: inset -1px 0 var(--line); }
+  .spec div:nth-child(odd):not(:first-child) { padding-left: 1rem; }
 
   .claim { max-width: 18ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
 
@@ -416,7 +458,25 @@ const schema = [
   .case--0 { grid-column: 1 / span 7; }
   .case--1 { grid-column: 9 / span 4; margin-top: 30%; }
   .case--2 { grid-column: 3 / span 6; }
-  .case__shot { width: 100%; height: auto; box-shadow: 0 0 0 1px var(--line); }
+  .case__shot { display: block; width: 100%; height: auto; box-shadow: 0 0 0 1px var(--line); }
+
+  /* Before/after: the old page sits on top and is clipped at --pos. The range input covers the figure. */
+  .ba { --pos: 50%; position: relative; margin: 0; overflow: hidden; }
+  .ba__before { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+  .ba__tag { position: absolute; top: 0.75rem; padding: 0.2rem 0.5rem; background: var(--bg); color: var(--ink); }
+  .ba__tag--before { left: 0.75rem; }
+  .ba__tag--after { right: 0.75rem; }
+  .ba__line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: var(--ink); pointer-events: none; }
+  .ba__knob { position: absolute; top: 50%; left: 50%; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 999px; background: var(--ink); color: var(--bg); transform: translate(-50%, -50%); }
+  .ba:has(.ba__range:focus-visible) .ba__knob { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+  .ba__range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; appearance: none; -webkit-appearance: none; background: none; cursor: ew-resize; touch-action: pan-y; }
+  .ba__range::-webkit-slider-thumb { -webkit-appearance: none; width: 2.75rem; height: 100vh; }
+  .ba__range::-moz-range-thumb { width: 2.75rem; height: 100vh; border: 0; }
+
+  .scores { width: 100%; border-collapse: collapse; }
+  .scores th, .scores td { padding-block: 0.6rem; border-bottom: 1px solid var(--line); font-weight: 400; text-align: right; }
+  .scores th:first-child { text-align: left; }
+  .scores thead th { border-top: 1px solid var(--line); }
   .case__meta { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.5rem; }
   .case__summary { color: var(--muted); max-width: 44ch; }
   .case__link { align-self: start; }
