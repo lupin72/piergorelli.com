@@ -1,4 +1,4 @@
-// Screenshots of /services/wordpress-redesign/: light/dark, desktop/mobile, Well/WOW states, animated hero.
+// Screenshots of /services/wordpress-redesign/: light/dark, desktop/mobile, before/after slider, animated hero.
 // Needs `astro preview` (default :4330). Usage: node tools/qa/wpredesign-shots.mjs · QA_URL to change the server.
 import { chromium } from "playwright-core";
 
@@ -27,11 +27,9 @@ for (const [w, h, theme] of [[1440, 900, "light"], [1440, 900, "dark"], [390, 84
   const label = `wp-${w}-${theme}`;
   await page.screenshot({ path: `${out}/${label}.png`, fullPage: true });
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
-  const flip = page.locator(".flip");
-  await flip.screenshot({ path: `${out}/${label}-well.png` });
-  await page.locator("label:has(#flip-wow)").click();
-  await page.waitForTimeout(300);
-  await flip.screenshot({ path: `${out}/${label}-wow.png` });
+  await page.locator("[data-ba]").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(800);
+  await page.locator("[data-ba]").screenshot({ path: `${out}/${label}-compare.png` });
   console.log(label, "overflow", overflow, "errors", errors.length ? errors : 0);
   await ctx.close();
 }
@@ -62,18 +60,20 @@ for (const [w, h, theme] of [[1440, 900, "light"], [1440, 900, "dark"], [390, 84
   await ctx.close();
 }
 
-// With motion: the hero after its intro, and the WOW wipe halfway and at the end.
+// With motion: the hero after its intro, and dragging the before/after slider.
 const { ctx, page, errors } = await open(1440, 900, "light", "no-preference");
 await page.waitForTimeout(4500);
 await page.screenshot({ path: `${out}/wp-hero-motion.png` });
-const flip = page.locator(".flip");
-await flip.scrollIntoViewIfNeeded();
+const ba = page.locator("[data-ba]");
+await ba.scrollIntoViewIfNeeded();
 await page.waitForTimeout(1800);
-await page.locator("label:has(#flip-wow)").click();
-await page.waitForTimeout(450);
-await flip.screenshot({ path: `${out}/wp-wipe-mid.png` });
-await page.waitForTimeout(2200);
-await flip.screenshot({ path: `${out}/wp-wipe-end.png` });
+const box = await ba.boundingBox();
+await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.5);
+await page.mouse.down();
+await page.mouse.move(box.x + box.width * 0.8, box.y + box.height * 0.5, { steps: 8 });
+await page.mouse.up();
+console.log("drag", await ba.evaluate((e) => e.style.getPropertyValue("--pos")));
+await ba.screenshot({ path: `${out}/wp-compare-drag.png` });
 console.log("motion errors", errors.length ? errors : 0);
 await ctx.close();
 
