@@ -42,11 +42,12 @@ for (const w of widths) {
       await page.goto(base + path, { waitUntil: "networkidle" });
       await page.waitForTimeout(wait);
       await page.addScriptTag({ content: axeSource });
-      const res = await page.evaluate(() =>
+      const res = await page.evaluate((values) =>
         window.axe.run(document, {
-          runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"] },
+          runOnly: { type: "tag", values },
           resultTypes: ["violations"],
         }),
+        ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", ...(process.env.QA_WCAG22 ? ["wcag22aa"] : []), "best-practice"],
       );
       for (const v of res.violations) {
         const entry = found.get(v.id) ?? { impact: v.impact, help: v.help, tags: v.tags, nodes: new Map() };

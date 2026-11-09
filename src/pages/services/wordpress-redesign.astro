@@ -1,0 +1,399 @@
+---
+import { Image } from "astro:assets";
+import { CAL_URL } from "../../data/site";
+import Base from "../../layouts/Base.astro";
+import EstimateForm from "../../components/rd/EstimateForm.astro";
+import WorkVisual from "../../components/rd/WorkVisual.astro";
+import { work } from "../../data/work";
+import maiteBefore from "../../assets/work/coachmaitefinch-before.webp";
+import maiteAfter from "../../assets/work/coachmaitefinch-after.webp";
+
+const SITE = "https://piergorelli.com";
+const PAGE = `${SITE}/services/wordpress-redesign/`;
+const updated = new Date("2026-11-08");
+
+const pains = [
+  { pain: "It works. Nobody remembers it.", fix: "You get two different home pages, working, with your real content. Pick the one that feels like you, and I build the rest." },
+  { pain: "The quote had one digit too many.", fix: "You talk to the person doing the work. AI tools take the repetitive jobs, while I make the design decisions and check the result. That's why a redesign starts from €1,500." },
+  { pain: "A new design means starting from scratch.", fix: "Your pages, posts and images move to the new site, even if they were made with a page builder. Old addresses keep working or redirect, so links and search results still land somewhere." },
+  { pain: "On a phone, it takes a while.", fix: "95+ for mobile performance, measured on your live site and written into the quote. The details are in [05]." },
+];
+
+const gets = [
+  { n: "01", title: "Two home pages", body: "Two different ideas, built and working on desktop and phone, using your real content. You choose one and we do a round of changes." },
+  { n: "02", title: "A theme made for you", body: "A custom WordPress theme built with Sage. You edit it with the normal WordPress block editor, using blocks designed for your site." },
+  { n: "03", title: "Your content, moved", body: "Pages, posts and images come across to the new structure. Text and photos stay as they are, tidied up where they need it. If new photos would make the difference, I'll tell you." },
+  { n: "04", title: "Accessibility you can check", body: "The pages and forms I create follow WCAG 2.2 AA, and you get the test report." },
+  { n: "05", title: "A guide to your site", body: "How to use it without breaking it, inside WordPress and as a PDF. Colours, fonts and blocks are documented for whoever works on it next." },
+  { n: "06", title: "The code, too", body: "You get the finished theme and its source code. I can look after the site afterwards, or someone else can." },
+];
+
+const steps = [
+  { n: "01", when: "Today", title: "Send your address", body: "Give me the URL and tell me what bothers you. You'll have a written estimate within 3 working days. No call needed." },
+  { n: "02", when: "Agreement", title: "Quote and deposit", body: "We agree what the quote covers and you pay 50%. Then I need a copy of your site. If you don't know how to make one, give me temporary access and I'll make it myself, removing personal data before I work on it." },
+  { n: "03", when: "Design", title: "Two home pages", body: "Two working ideas on a private link. Open them when you like and show them to whoever you like. You pick one." },
+  { n: "04", when: "Build", title: "The whole site", body: "I build the theme, move your content, and test it with a keyboard, a screen reader and real phones." },
+  { n: "05", when: "Launch", title: "Handover", body: "We go live in the way we agree. I measure the live site against what we wrote down, you pay the other 50%, and the guide and code are yours." },
+];
+
+const terms = [
+  { k: "Speed", v: "Lighthouse on mobile: 100 for accessibility, best practices and SEO, 95+ for performance. The quote lists the pages and how I measure them: the median of five runs, on your live site. It needs decent hosting, light analytics and a cookie banner that stays out of the way. You can keep Google Tag Manager and plugins or embeds like booking, chat or maps, but the performance promise doesn't cover the part they add. If we miss the target, I keep working at no charge. If something you need makes the target impossible, I'll show you why and we'll agree what changes." },
+  { k: "Accessibility", v: "WCAG 2.2 AA on the pages and forms I create, tested and documented in a report. Content moved from your old site gets cleaned up, but I can't promise it meets the standard. This is a promise about quality, and it isn't legal cover." },
+  { k: "If neither design convinces you", v: "After the round of changes, we stop. You get half your deposit back and I keep the prototypes." },
+  { k: "If your site isn't what we thought", v: "When the copy of your site is very different from what you described, I update the quote before starting. You can say no and get your whole deposit back." },
+  { k: "After launch", v: "Defects in the theme are fixed for free for 60 days. A defect is something that doesn't work as agreed in the quote. Changes, new features, updates and new plugins aren't included. After that I can look after the site, as a monthly block of days or billed as it comes up." },
+  { k: "What's yours", v: "The design you chose is yours alone, with a perpetual licence for the theme. The building blocks I reuse between projects stay mine. I'd like to show your site as an example of my work, and you can say no." },
+  { k: "AI", v: "I use AI tools for repetitive work. Concept, design and final checks are mine. Anything sent to an outside service has personal data removed first." },
+];
+
+const cases = ["coachmaitefinch", "retail-k", "ceramics-wordpress"].map((slug) => work.find((w) => w.slug === slug)!);
+
+// After: live site, Lighthouse desktop, median of 5 runs, 08/11/2026.
+// Before: saved copy of the old home page (12/10) served locally, same settings; the old site is no longer online.
+const maiteScores = [
+  { k: "Performance", before: "70", after: "97" },
+  { k: "Accessibility", before: "77", after: "96" },
+  { k: "Load time (LCP)", before: "4.1 s", after: "1.2 s" },
+];
+
+const faqs = [
+  { q: "How much does it cost?", a: "Redesigns start from €1,500. Where yours lands depends on the site: ten pages and a thousand pages are different jobs. Send me the address and you'll have a written estimate within 3 working days, at no cost." },
+  { q: "How long does it take?", a: "It depends on the same things. You get a written schedule with the quote, before you pay anything." },
+  { q: "My site is built with Elementor or Divi. Is that a problem?", a: "No. A new theme can't take over those pages on its own, so I rebuild them as normal WordPress blocks. The work goes in the quote." },
+  { q: "Can I still edit the site myself?", a: "Yes, with the normal WordPress editor and blocks designed for your site. The guide shows you how." },
+  { q: "Will I lose my Google rankings?", a: "I can't promise positions, and nobody honestly can. I keep your addresses or redirect them, and the new site is built to be easy for search engines to read." },
+  { q: "Do you need my passwords?", a: "Not to start: I only need your address. Once we've agreed, I need a copy of the site. You can send it yourself, or give me temporary access and I'll make it, then you can change the password. How the new site goes online, we decide together." },
+  { q: "What about online shops or member areas?", a: "Those are bigger jobs, so they cost more than a standard redesign, and the speed promise may change. Send me the address anyway and I'll tell you in the estimate whether it makes sense." },
+];
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${PAGE}#service`,
+    name: "WordPress redesign for small businesses",
+    serviceType: "WordPress redesign",
+    description: "A custom WordPress redesign: two working home pages to choose from, existing content moved over, speed and accessibility targets in writing.",
+    provider: { "@type": "Person", "@id": `${SITE}/#person`, name: "Pier Gorelli" },
+    audience: { "@type": "BusinessAudience", audienceType: "Small businesses and independent professionals" },
+    url: PAGE,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${SITE}/services/` },
+      { "@type": "ListItem", position: 3, name: "WordPress redesign", item: PAGE },
+    ],
+  },
+];
+---
+
+<!-- Not launched yet: noindex and out of the sitemap (astro.config.mjs) until the pilots are done. -->
+<Base
+  title="WordPress Redesign for Small Businesses | Pier Gorelli"
+  description="A custom WordPress redesign for small businesses, from €1,500. Two working home pages to choose from, your content moved over, speed and accessibility in writing."
+  motion="showcase"
+  schema={schema}
+  noindex
+>
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="hero wrap" data-hero>
+    <nav class="note crumbs" aria-label="Breadcrumb">
+      <a href="/" class="link">Home</a> / <a href="/services/" class="link">Services</a> / <span class="note--ink">WordPress redesign</span>
+    </nav>
+    <p class="note">[Services / 02.4]</p>
+    <h1 class="hero__title">
+      <span class="display hero__human" data-hero-human data-bp="h1.human">From Well… to WOW.</span>
+      <span class="h2 hero__machine" data-hero-generate data-bp="h1.machine">WordPress redesign for small businesses.</span>
+    </h1>
+    <p class="note" data-hero-fade><span class="note--accent">◆</span> fig. 00 · before → after · 1 site · 2 concepts</p>
+
+    <div class="hero__foot" data-hero-fade>
+      <p class="lead">
+        If a quote has ever made you close the tab, keep reading. I redesign WordPress sites for businesses that deserve a great one and don't have a big budget.
+      </p>
+      <dl class="spec" data-bp="dl.tolerances">
+        <div><dt class="note">Price</dt><dd>From €1,500</dd></div>
+        <div><dt class="note">Designs</dt><dd>2 to choose from</dd></div>
+        <div><dt class="note">Speed</dt><dd>95+ on mobile</dd></div>
+        <div><dt class="note">Access</dt><dd>WCAG 2.2 AA</dd></div>
+        <div><dt class="note">After launch</dt><dd>60 days of fixes</dd></div>
+      </dl>
+    </div>
+    <a href="#estimate" class="btn hero__cta" data-hero-fade>Get an estimate <span class="arrow" aria-hidden="true">↓</span></a>
+  </section>
+
+  <!-- ── 01 Problem ───────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[01] Well…</span>
+      <span class="note">Sound familiar?</span>
+    </header>
+    <h2 class="h2 claim" data-reveal="lines">Fine is the problem.</h2>
+    <ol class="pains">
+      {pains.map((p, i) => (
+        <li class="pain grid-12" data-reveal="up">
+          <span class="note pain__n">0{i + 1}</span>
+          <p class="h3 pain__text">{p.pain}</p>
+          <p class="pain__fix"><span class="note note--accent">fix →</span> {p.fix}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 02 Well / WOW ────────────────────────────────────── -->
+  <section class="section wrap" aria-labelledby="compare-title">
+    <header class="section-head">
+      <span class="note note--ink">[02] …to WOW</span>
+      <span class="note">Try it</span>
+    </header>
+    <div class="compare-intro grid-12">
+      <h2 class="h2 compare-intro__title" id="compare-title" data-reveal="lines">Same practice. Better first impression.</h2>
+      <p class="lead compare-intro__text" data-reveal="up">
+        Your business doesn't change. The type, the rhythm, the way the page moves and how quickly it turns up all do.
+      </p>
+    </div>
+
+    <div data-reveal="up">
+      <figure class="ba" data-ba>
+        <Image class="ba__after" src={maiteAfter} alt="New home page of coachmaitefinch.com: a large headline in a plain sans and a green italic on warm paper." widths={[800, 1200, 1600, 2400, 3200]} sizes="(min-width: 1500px) calc(100vw - 4rem), calc(100vw - 2rem)" format="webp" quality={86} loading="lazy" decoding="async" />
+        <Image class="ba__before" src={maiteBefore} alt="Old home page of coachmaitefinch.com: a white page with a text menu and long paragraphs beside a photo of a room." widths={[800, 1200, 1600, 2400, 3200]} sizes="(min-width: 1500px) calc(100vw - 4rem), calc(100vw - 2rem)" format="webp" quality={86} loading="lazy" decoding="async" />
+        <span class="note ba__tag ba__tag--before" aria-hidden="true">Before</span>
+        <span class="note ba__tag ba__tag--after" aria-hidden="true">After</span>
+        <span class="ba__line" aria-hidden="true"><span class="ba__knob">↔</span></span>
+        <input class="ba__range" type="range" min="0" max="100" value="50" data-cursor="select" aria-label="Comparison of the old and new home page. Use the left and right arrow keys to move the divider." />
+      </figure>
+      <p class="note ba__cap">coachmaitefinch.com · Drag to compare the old home page with the new one.</p>
+    </div>
+    <table class="scores" data-reveal="up">
+      <thead><tr><th scope="col" class="note">Lighthouse on desktop</th><th scope="col" class="note">Before</th><th scope="col" class="note">After</th></tr></thead>
+      <tbody>
+        {maiteScores.map((r) => <tr><th scope="row">{r.k}</th><td>{r.before}</td><td>{r.after}</td></tr>)}
+      </tbody>
+    </table>
+    <p class="note ba__cap">Before: measured on a saved copy of the old home page, served locally. After: the live site. Median of five runs, 8 November 2026.</p>
+  </section>
+
+  <!-- ── 03 What you get ──────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[03] What you get</span>
+      <span class="note">{gets.length} things</span>
+    </header>
+    <ol class="gets grid-12">
+      {gets.map((g) => (
+        <li class="get" data-reveal="up">
+          <span class="note note--accent">{g.n}</span>
+          <h3 class="h3">{g.title}</h3>
+          <p>{g.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 04 Process ───────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[04] How it works</span>
+      <span class="note">5 steps · 2 payments</span>
+    </header>
+    <h2 class="h2 claim" data-reveal="lines">It starts with your address.</h2>
+    <div class="seq__line" data-draw></div>
+    <ol class="process grid-12 seq">
+      {steps.map((s) => (
+        <li class="step" data-reveal="up">
+          <span class="step__n seq__n">{s.n}</span>
+          <span class="note">{s.when}</span>
+          <h3 class="step__title">{s.title}</h3>
+          <p>{s.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- ── 05 In writing ────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[05] In writing</span>
+      <span class="note">All of it goes in the contract</span>
+    </header>
+    <h2 class="h2 claim" data-reveal="lines">The small print, in large print.</h2>
+    <dl class="terms">
+      {terms.map((t) => (
+        <div class="term grid-12" data-reveal="up">
+          <dt class="h3">{t.k}</dt>
+          <dd>{t.v}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- ── 06 Proof ─────────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[06] Proof</span>
+      <span class="note">Case studies and field reports</span>
+    </header>
+    <div class="cases grid-12">
+      {cases.map((w, i) => (
+        <article class:list={["case", `case--${i}`]} data-reveal="up">
+          {w.shot
+            ? <Image class="case__shot" src={w.shot} alt="Home page of coachmaitefinch.com: a large headline in a plain sans and a green italic on warm paper." widths={[800, 1200, 1600]} sizes="(min-width: 900px) 58vw, 100vw" format="webp" quality={78} loading="lazy" decoding="async" />
+            : <WorkVisual kind={w.visual!} />}
+          <div class="case__meta note"><span>{w.year}</span><span>{w.stack.join(" · ")}</span></div>
+          <h3 class="h3">{w.title}</h3>
+          <p class="note">{w.client}</p>
+          <p class="case__summary">{w.summary}</p>
+          {w.url && <a href={w.url} class="link case__link" target="_blank" rel="noopener">Visit the site <span aria-hidden="true">↗</span></a>}
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── 07 FAQ ───────────────────────────────────────────── -->
+  <section class="section wrap">
+    <header class="section-head">
+      <span class="note note--ink">[07] FAQ</span>
+      <span class="note">Updated · <time datetime={updated.toISOString().slice(0, 10)}>08 Nov 2026</time></span>
+    </header>
+    <div class="faqs">
+      {faqs.map((f) => (
+        <details class="faq" data-reveal="up">
+          <summary><span class="h3">{f.q}</span><span class="faq__icon" aria-hidden="true"></span></summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <!-- ── 08 CTA ───────────────────────────────────────────── -->
+  <section class="section wrap cta" id="estimate">
+    <header class="section-head">
+      <span class="note note--ink">[08] Next</span>
+      <span class="note">3 working days</span>
+    </header>
+    <div class="cta__grid grid-12">
+      <h2 class="display cta__title" data-reveal="lines">Show me the site.</h2>
+      <div class="cta__form"><EstimateForm /></div>
+      <p class="cta__alt" data-reveal="up">
+        <span class="note">Rather talk first?</span>
+        <a href={CAL_URL} class="btn btn--ghost" target="_blank" rel="noopener">Book a 30-min call <span class="arrow">↗</span></a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  function setupCompare() {
+    document.querySelectorAll<HTMLElement>("[data-ba]").forEach((ba) => {
+      const range = ba.querySelector<HTMLInputElement>('input[type="range"]');
+      if (!range || ba.dataset.ready) return;
+      ba.dataset.ready = "1";
+      const move = () => ba.style.setProperty("--pos", `${range.value}%`);
+      range.addEventListener("input", move);
+      move();
+    });
+  }
+  document.addEventListener("astro:page-load", setupCompare);
+</script>
+
+<style>
+  /* Hero */
+  .hero { min-height: 92svh; display: flex; flex-direction: column; justify-content: end; gap: 1.25rem; padding-top: 7rem; padding-bottom: 2rem; }
+  .crumbs { margin-bottom: auto; }
+  .hero__title { display: flex; flex-direction: column; gap: 0.35em; font-weight: 500; }
+  .hero__human { display: block; margin-left: -0.05em; }
+  .hero__machine { display: block; }
+  .hero__foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 1.5rem 3rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .hero__foot .lead { max-width: 40ch; color: var(--muted); }
+  .hero__cta { align-self: start; }
+  .spec { display: grid; grid-template-columns: repeat(2, minmax(9rem, 1fr)); min-width: min(100%, 22rem); border-top: 1px solid var(--line); }
+  .spec div { display: flex; justify-content: space-between; gap: 1rem; padding-block: 0.7rem; border-bottom: 1px solid var(--line); }
+  .spec div:first-child { grid-column: 1 / -1; }
+  .spec div:nth-child(even) { padding-right: 1rem; box-shadow: inset -1px 0 var(--line); }
+  .spec div:nth-child(odd):not(:first-child) { padding-left: 1rem; }
+
+  .claim { max-width: 18ch; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+
+  /* Pains */
+  .pains { border-top: 1px solid var(--line); }
+  .pain { align-items: baseline; row-gap: 0.75rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
+  .pain__n { grid-column: 1; }
+  .pain__text { grid-column: 2 / span 6; }
+  .pain__fix { grid-column: 9 / -1; color: var(--muted); }
+  @media (max-width: 767px) { .pain__n, .pain__text, .pain__fix { grid-column: 1 / -1; } }
+
+  /* Real before/after */
+  .compare-intro { row-gap: 1.5rem; align-items: end; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+  .compare-intro__title { grid-column: 1 / span 7; max-width: 16ch; }
+  .compare-intro__text { grid-column: 9 / -1; color: var(--muted); max-width: 40ch; }
+  @media (max-width: 899px) { .compare-intro__title, .compare-intro__text { grid-column: 1 / -1; } }
+
+  /* What you get */
+  .gets { row-gap: 0; border-top: 1px solid var(--line); }
+  .get { grid-column: span 4; display: flex; flex-direction: column; gap: 0.6rem; padding-block: 1.75rem 2.25rem; border-bottom: 1px solid var(--line); }
+  .get p { color: var(--muted); max-width: 36ch; }
+  @media (max-width: 899px) { .get { grid-column: span 2; } }
+  @media (max-width: 599px) { .get { grid-column: 1 / -1; } }
+
+  /* Process */
+  @media (min-width: 1100px) { .process { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  .step { --mark-y: calc(0.45rem + 0.72rem * 1.4 + 0.6rem + var(--step-1) * 0.475); display: flex; flex-direction: column; gap: 0.6rem; }
+  .step__title { font-size: var(--step-1); letter-spacing: -0.02em; }
+  .step p { color: var(--muted); max-width: 30ch; }
+  .step__n { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; margin-bottom: 0.5rem; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-family: var(--font-mono); font-size: 0.85rem; }
+
+  /* In writing */
+  .terms { border-top: 1px solid var(--line); }
+  .term { align-items: baseline; row-gap: 0.75rem; padding-block: 1.75rem; border-bottom: 1px solid var(--line); }
+  .term dt { grid-column: 1 / span 5; }
+  .term dd { grid-column: 7 / -1; color: var(--muted); max-width: 60ch; }
+  @media (max-width: 899px) { .term dt, .term dd { grid-column: 1 / -1; } }
+
+  /* Proof */
+  .cases { row-gap: clamp(3rem, 6vw, 5rem); }
+  .case { display: flex; flex-direction: column; gap: 0.75rem; }
+  .case--0 { grid-column: 1 / span 7; }
+  .case--1 { grid-column: 9 / span 4; margin-top: 30%; }
+  .case--2 { grid-column: 3 / span 6; }
+  .case__shot { display: block; width: 100%; height: auto; box-shadow: 0 0 0 1px var(--line); }
+
+  /* Before/after: the old page sits on top and is clipped at --pos. The range input covers the figure. */
+  .ba { --pos: 50%; position: relative; margin: 0; overflow: hidden; aspect-ratio: 8 / 5; box-shadow: 0 0 0 1px var(--line); }
+  @media (min-width: 900px) { .ba { aspect-ratio: 2 / 1; } }
+  .ba__after { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .ba__cap { margin-top: 0.75rem; }
+  .ba__before { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+  .ba__tag { position: absolute; top: 0.75rem; padding: 0.2rem 0.5rem; background: var(--bg); color: var(--ink); }
+  .ba__tag--before { left: 0.75rem; }
+  .ba__tag--after { right: 0.75rem; }
+  .ba__line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: var(--ink); pointer-events: none; }
+  .ba__knob { position: absolute; top: 50%; left: 50%; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 999px; background: var(--ink); color: var(--bg); transform: translate(-50%, -50%); }
+  .ba:has(.ba__range:focus-visible) .ba__knob { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+  .ba__range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; appearance: none; -webkit-appearance: none; background: none; cursor: ew-resize; touch-action: pan-y; }
+  .ba__range::-webkit-slider-thumb { -webkit-appearance: none; width: 2.75rem; height: 100vh; }
+  .ba__range::-moz-range-thumb { width: 2.75rem; height: 100vh; border: 0; }
+
+  .scores { width: 100%; margin-top: clamp(1.5rem, 3vw, 2.5rem); border-collapse: collapse; }
+  .scores th, .scores td { padding-block: 0.6rem; border-bottom: 1px solid var(--line); font-weight: 400; text-align: right; }
+  .scores th:first-child { text-align: left; }
+  .scores thead th { border-top: 1px solid var(--line); }
+  .case__meta { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.5rem; }
+  .case__summary { color: var(--muted); max-width: 44ch; }
+  .case__link { align-self: start; }
+  @media (max-width: 899px) { .case--0, .case--1, .case--2 { grid-column: 1 / -1; margin-top: 0; } }
+
+  /* CTA */
+  .cta__grid { row-gap: 2.5rem; }
+  .cta__title { grid-column: 1 / -1; max-width: 10ch; }
+  .cta__form { grid-column: 1 / span 7; }
+  .cta__alt { grid-column: 9 / -1; display: flex; flex-direction: column; align-items: start; gap: 0.75rem; }
+  @media (max-width: 899px) { .cta__form, .cta__alt { grid-column: 1 / -1; } }
+</style>

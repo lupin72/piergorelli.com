@@ -1,0 +1,202 @@
+---
+/**
+ * Entry point of the WordPress redesign offer: site address + email → written estimate.
+ * Netlify form "wordpress-estimate". Without JS it posts natively and lands on /contact/thanks/.
+ * Validation follows BriefForm: inline text errors tied to the field with aria-invalid + aria-describedby.
+ */
+---
+
+<div class="estimate-wrap">
+  <form
+    class="estimate"
+    name="wordpress-estimate"
+    method="POST"
+    action="/contact/thanks/"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+    data-estimate
+  >
+    <input type="hidden" name="form-name" value="wordpress-estimate" />
+    <p class="estimate__hp" hidden>
+      <label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+    </p>
+
+    <div class="field" data-reveal="up">
+      <label for="e-url" class="field__label">
+        <span class="note note--accent" aria-hidden="true">01</span> <span class="note note--ink">Your site's address</span> <span class="note">Required</span>
+      </label>
+      <input id="e-url" name="url" class="field__input" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" pattern="\S+\.\S+" required placeholder="yourbusiness.com" />
+      <p class="field__error note" id="e-url-error" data-error-for="e-url" hidden>Please enter your site's address, like yourbusiness.com.</p>
+    </div>
+
+    <div class="field" data-reveal="up">
+      <label for="e-email" class="field__label">
+        <span class="note note--accent" aria-hidden="true">02</span> <span class="note note--ink">Your email</span> <span class="note">Required</span>
+      </label>
+      <input id="e-email" name="email" type="email" class="field__input" autocomplete="email" required placeholder="you@yourbusiness.com" />
+      <p class="field__error note" id="e-email-error" data-error-for="e-email" hidden>Please enter a valid email address, like you@yourbusiness.com.</p>
+    </div>
+
+    <div class="field" data-reveal="up">
+      <label for="e-message" class="field__label">
+        <span class="note note--accent" aria-hidden="true">03</span> <span class="note note--ink">What bothers you about it?</span> <span class="note">Optional</span>
+      </label>
+      <textarea id="e-message" name="message" class="field__input field__input--area" rows="3" placeholder="It looks old, it's slow on phones, nobody calls…"></textarea>
+    </div>
+
+    <div class="checks" data-reveal="up">
+      <label class="check">
+        <input type="checkbox" id="e-terms" name="terms" value="accepted" required />
+        <span class="check__box" aria-hidden="true"></span>
+        <span>I agree that my data is used only to reply to me, as described in the <a href="/privacy-policy/" class="link link--inline">privacy policy</a>. <span class="note">Required</span></span>
+      </label>
+      <p class="field__error note" id="e-terms-error" data-error-for="e-terms" hidden>Please accept the privacy terms to send your request.</p>
+    </div>
+
+    <div class="estimate__submit" data-reveal="up">
+      <button type="submit" class="btn" data-estimate-send>Get my estimate <span class="arrow">→</span></button>
+      <p class="note">Written estimate within 3 working days</p>
+    </div>
+    <p class="estimate__error" data-estimate-error hidden role="alert">
+      Something went wrong on the way. You can write to
+      <a href="mailto:me@piergorelli.com" class="link link--inline">me@piergorelli.com</a> with your site's address instead.
+    </p>
+  </form>
+
+  <div class="estimate__done" data-estimate-done hidden tabindex="-1">
+    <p class="note note--accent">200 OK · request received</p>
+    <p class="h2">Thanks. I'll take a look.</p>
+    <p class="lead estimate__done-body">
+      Your written estimate will reach <strong data-estimate-email>your inbox</strong> within 3 working days.
+    </p>
+  </div>
+</div>
+
+<script>
+  function setupEstimate() {
+    const form = document.querySelector<HTMLFormElement>("[data-estimate]");
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = "1";
+
+    const send = form.querySelector<HTMLButtonElement>("[data-estimate-send]");
+    const error = form.querySelector<HTMLElement>("[data-estimate-error]");
+    const done = document.querySelector<HTMLElement>("[data-estimate-done]");
+
+    form.noValidate = true;
+    const required = [...form.querySelectorAll<HTMLInputElement>("[required]")];
+    const showError = (el: HTMLInputElement, on: boolean) => {
+      const msg = form.querySelector<HTMLElement>(`[data-error-for="${el.id}"]`);
+      if (!msg) return;
+      msg.hidden = !on;
+      if (on) {
+        el.setAttribute("aria-invalid", "true");
+        el.setAttribute("aria-describedby", msg.id);
+      } else {
+        el.removeAttribute("aria-invalid");
+        el.removeAttribute("aria-describedby");
+      }
+    };
+    const invalid = (el: HTMLInputElement) => !el.checkValidity() || (el.type !== "checkbox" && !el.value.trim());
+    required.forEach((el) =>
+      el.addEventListener(el.type === "checkbox" ? "change" : "input", () => {
+        if (el.getAttribute("aria-invalid")) showError(el, invalid(el));
+      }),
+    );
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const bad = required.filter(invalid);
+      required.forEach((el) => showError(el, bad.includes(el)));
+      if (bad.length) {
+        bad[0].focus();
+        return;
+      }
+      if (error) error.hidden = true;
+      if (send) send.disabled = true;
+      try {
+        const body = new URLSearchParams([...new FormData(form)].map(([k, v]) => [k, String(v)]));
+        const res = await fetch("/", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: body.toString(),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+
+        const email = document.querySelector("[data-estimate-email]");
+        if (email) email.textContent = (form.elements.namedItem("email") as HTMLInputElement).value.trim();
+        form.hidden = true;
+        if (done) {
+          done.hidden = false;
+          done.focus();
+        }
+      } catch {
+        if (error) error.hidden = false;
+      } finally {
+        if (send) send.disabled = false;
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupEstimate);
+</script>
+
+<style>
+  .estimate { display: flex; flex-direction: column; }
+  .estimate__hp { display: none; }
+  .field { position: relative; padding: 1.25rem 0 0; border-top: 1px solid var(--line); }
+  .field__label { display: grid; grid-template-columns: 2.5rem 1fr auto; gap: 0.5rem; width: 100%; margin-bottom: 0.4rem; }
+  .field__input {
+    width: 100%;
+    padding: 0.4rem 0 1.25rem;
+    background: none;
+    border: 0;
+    outline: 0;
+    border-radius: 0;
+    font-size: var(--step-2);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .field__input::placeholder { color: var(--muted); }
+  .field__input--area { font-size: var(--step-1); letter-spacing: -0.015em; line-height: 1.35; resize: vertical; min-height: 6rem; }
+  .field::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -1px;
+    height: 2px;
+    background: var(--accent-text);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-2) var(--ease-in-out);
+  }
+  .field:focus-within::after { transform: scaleX(1); }
+  .field:focus-within .field__label .note--ink { color: var(--accent-text); }
+  .field:has([aria-invalid="true"]) .field__label .note:last-child { color: var(--danger); }
+  .field__error { margin: -0.6rem 0 1.1rem; color: var(--danger); text-transform: none; font-size: 0.8rem; }
+  .field__error::before { content: "✗ "; content: "✗ " / ""; }
+  .checks .field__error { margin: 0 0 0 2.15rem; }
+
+  @media (max-width: 767px) {
+    .field__label { grid-template-columns: 2rem 1fr auto; }
+    .field__input { font-size: var(--step-1); padding: 0.5rem 0 1.1rem; }
+    .field__input::placeholder { font-size: var(--step-0); letter-spacing: 0; }
+  }
+
+  .checks { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem 0; border-top: 1px solid var(--line); }
+  .check { position: relative; display: grid; grid-template-columns: 1.25rem 1fr; gap: 0.9rem; align-items: start; color: var(--muted); cursor: pointer; }
+  .check input { position: absolute; opacity: 0; width: 1.5rem; height: 1.5rem; margin: 0; cursor: pointer; }
+  .check__box { width: 1.25rem; height: 1.25rem; margin-top: 0.15rem; box-shadow: inset 0 0 0 1px var(--control-line); transition: background var(--dur-1) var(--ease-out), box-shadow var(--dur-1); }
+  .check input:checked + .check__box { background: var(--accent-text); box-shadow: inset 0 0 0 1px var(--accent-text), inset 0 0 0 4px var(--bg); }
+  .check input:focus-visible + .check__box { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+  .check:has(input:checked) { color: var(--ink); }
+
+  .estimate__submit { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .estimate__submit .btn[disabled] { opacity: 0.6; pointer-events: none; }
+  .estimate__error { margin-top: 1.25rem; color: var(--danger); }
+
+  .estimate__done { display: flex; flex-direction: column; gap: 1.25rem; align-items: start; padding-top: 1.25rem; border-top: 1px solid var(--accent); outline: 0; }
+  .estimate__done-body { max-width: 40ch; color: var(--muted); }
+  .estimate__done-body strong { color: var(--ink); font-weight: 500; }
+</style>

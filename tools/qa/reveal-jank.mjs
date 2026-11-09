@@ -11,7 +11,7 @@ import { chromium } from "playwright-core";
 const BASE = process.argv[2] ?? "http://localhost:4321";
 const browser = await chromium.launch({ channel: "chrome", headless: true });
 
-const PATHS = ["/", "/services/", "/services/ai-for-agencies/", "/services/web-development-for-agencies/", "/about/", "/contact/"];
+const PATHS = ["/", "/services/", "/services/ai-for-agencies/", "/services/web-development-for-agencies/", "/services/wordpress-redesign/", "/about/", "/contact/"];
 for (const [path, theme] of PATHS.flatMap((p) => ["light", "dark"].map((t) => [p, t]))) {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.addInitScript((t) => { localStorage.setItem("pg-theme", t); sessionStorage.setItem("pg-preloaded", "1"); }, theme);

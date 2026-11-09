@@ -1,5 +1,6 @@
 ---
 import { CAL_URL } from "../../data/site";
+import AwwwardsBadge from "./AwwwardsBadge.astro";
 
 const year = new Date().getFullYear();
 const stamp = [["Cookies", 0], ["Banners", 0], ["Ads", 0]] as const;
@@ -79,6 +80,8 @@ const cols = [
       <a href="/accessibility/" class="link">Accessibility</a>
     </nav>
   </div>
+
+  <AwwwardsBadge />
 </footer>
 
 <style>
@@ -191,7 +194,8 @@ const cols = [
   .legal-links { display: flex; gap: 1.25rem; }
   @media (max-width: 767px) {
     /* Stacked: legal links first as one row, then the signature on two clean lines. */
-    .footer-bottom { flex-direction: column; gap: 1rem; padding-bottom: env(safe-area-inset-bottom); }
+    /* padding-right: room for the Awwwards ribbon, which hangs in the bottom-right corner on phones. */
+    .footer-bottom { flex-direction: column; gap: 1rem; padding-right: 2.5rem; padding-bottom: env(safe-area-inset-bottom); }
     .legal-links { order: -1; flex-wrap: wrap; column-gap: 1.5rem; row-gap: 0.5rem; }
     .copy { flex-direction: column; color: var(--muted); }
     .copy span + span::before { content: none; }
